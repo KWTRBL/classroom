@@ -50,8 +50,9 @@ option {
 }
 
 #Webname{
-    padding-left: 3%;
+    padding-left: 5%;
     padding-top: 8%;
+    font-size: 230%;
 }
 
 li a {
@@ -159,9 +160,9 @@ ul {
     width:35%;
     height: 8%;
     text-align: right;
-    margin-bottom: 5%;
+    margin-bottom: 10%;
     margin-left: 15%;
-    margin-top: 40%;
+    margin-top: 45%;
     color: black;
 }
 
