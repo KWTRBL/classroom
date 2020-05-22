@@ -1,0 +1,167 @@
+body{
+    width: 100%;
+}
+table, th, td,#setstatus {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: center;
+}
+table{
+    width: 112%;
+}
+th{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+select{
+    text-align: center;
+    text-align-last: center;
+    font-size: 15px;
+    padding-left: 40px;
+    border-radius: 10px;
+    width:60%;
+}
+option {
+    text-align: center;
+    text-align-last: center;
+}
+
+#mode{
+    background-color:#E0EDF5 ;
+	width: 20%;
+    float: left;
+    position: fixed;
+}
+
+#detail{
+    position: relative;
+    left: 20%;
+    margin-left: 2%;
+}
+
+#All{
+    display: flex;
+}
+
+#Webname{
+    padding-left: 5%;
+    padding-top: 8%;
+    font-size: 230%;
+}
+
+li a {
+    color:var(--textcolor,black);
+    float: right;
+    padding: 10px;
+    width: 150%;
+    margin: 10px;
+    margin-top: 0px;
+    text-decoration: none;
+    text-align: left;
+    transition: background 0.3s ease 0.3s,color 0.3s ease 0.3s;
+    font-size: 20px;
+}
+
+/* Change the link color on hover */
+li a:hover {
+    --color:#009900;
+    --textcolor:white;
+}
+
+ul {
+    float: right;
+    list-style-type: none;
+    margin: 0;
+    padding-top: 7%;
+    padding-left: 45%;
+}
+
+#ProfilePic{
+    align-items: center;
+    padding-left: 33%;
+    padding-top: 5%;
+
+    width: 70%;
+    height: 60%;
+}
+
+.SearchPic{
+    width: 17px;
+    height: 17px;
+}
+
+.btn {
+    background-color: white;
+    border-color: darkgrey;
+    color: black;
+    padding: 2px 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Darker background on mouse-over */
+  .btn:hover {
+    background-color: gray;
+  }
+
+.editbtn{
+    position: relative;
+    left: 83%;
+    margin-left: 5px;
+    background-color: #A9CCE3;
+    width: 15%;
+}
+
+#depart{
+    display: flex;
+}
+
+.departname{
+    position: relative;
+    right: 17%;
+    margin-left: 10px;
+    color: whitesmoke;
+}
+
+#search{
+    position: relative;
+    left: 65%;
+    padding-top: 2%;
+}
+
+#header{
+    display: flex;
+}
+#title{
+    padding-top: 6%;
+}
+.icon{
+    width: 16%;
+    height: 16%;
+    padding-right: 3%;
+    float: left;
+}
+
+.logoutbtn{
+    width:35%;
+    height: 8%;
+    text-align: right;
+    margin-bottom: 10%;
+    margin-left: 15%;
+    margin-top: 45%;
+    color: black;
+}
+
+.logoutpic{
+    width: 20px;
+    height: 24px;
+    padding-right: 3%;
+    padding-left: 3%;
+    float: left;
+    padding-top: 7%;
+    padding-bottom: 5%;
+}
