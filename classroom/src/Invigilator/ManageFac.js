@@ -40,8 +40,8 @@ function MannageFacc(){
                 </div>
             </div>
             
-            <div class="depart">
-                <Form className="departname">
+            <div className="datee">
+                <Form className="testdate">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                         <Form.Control as="select" size="sm">
                             <option value="0">วันที่/เวลา</option>
@@ -51,11 +51,13 @@ function MannageFacc(){
                         </Form.Control>
                     </Form.Group>
                 </Form>
-                <Button variant="secondary" className="editbtn">แก้ไข</Button>
-                <Button variant="secondary" className="editbtn">จัดผู้คุมสอบ</Button>
+                <div id="buttonedit">
+                    <Button variant="secondary" className="editbtn">แก้ไข</Button>
+                    <Button variant="secondary" className="editbtn">จัดผู้คุมสอบ</Button>
+                </div>
             </div>
             
-            <table>
+            <table className="Mantable">
                 <thead>
                     <tr>
                         <th>รหัสวิชา</th>
@@ -140,6 +142,21 @@ function MannageFacc(){
                         <td>อาจารย์ AA</td>
                     </tr>
                     <tr>
+                        <td>xxxxx</td>
+                        <td>วิชา A (3D)</td>
+                        <td>401</td>
+                        <td>20</td>
+                        <td>A</td>
+                        <td>อาจารย์ AA</td>
+                    </tr>
+                    <tr>
+                        <td>xxxxx</td>
+                        <td>วิชา A (3D)</td>
+                        <td>401</td>
+                        <td>20</td>
+                        <td>A</td>
+                        <td>อาจารย์ AA</td>
+                    </tr><tr>
                         <td>xxxxx</td>
                         <td>วิชา A (3D)</td>
                         <td>401</td>

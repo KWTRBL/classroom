@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Panda from './pic/Panda.png';
 import Button from 'react-bootstrap/Button';
 import Search from './pic/search.png';
@@ -9,7 +8,6 @@ import download from './pic/download.png'
 import logout from './pic/logout.png'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
-import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ListFac.css';
@@ -68,7 +66,7 @@ function Listt(){
                 </h3>
             </div>
             
-            <table bordered>
+            <table bordered className="listteaname">
                 <thead>
                     <tr>
                         <th>รายชื่ออาจารย์</th>
@@ -77,7 +75,7 @@ function Listt(){
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="inviName">อาจารย์ AAA</td>
+                        <td class="inviName">อาจารย์ AAA xxxxxxx</td>
                         <td>
                             <Form.Group controlId="exampleForm.SelectCustomSizeSm" className="statuss">
                                 <Form.Control as="select" size="sm">
@@ -324,7 +322,6 @@ function Listt(){
             </table>
         </div>
     </div>
-      
     );
   }
 
