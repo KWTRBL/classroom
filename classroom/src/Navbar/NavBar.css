@@ -1,0 +1,67 @@
+.sidenav{
+    background-color: #E0EDF5;
+    width: 20%;
+    height: 100%;
+    position: absolute;
+}
+.link{
+    font-size: 2vw;
+    color: #707070;
+}
+.link:hover{
+    text-decoration-line: none;
+    color: #707070;
+    font-weight: bold;
+}
+.navtitle{
+    float: left;
+    position: absolute;
+    left: 9%;
+    top: 3%;
+}
+.navclass{
+    color: #707070;
+    font-size: 2.5vw;
+}
+.navmanage{
+    color: #707070;
+    font-size: 2.5vw;
+}
+.detailnav{
+    position: absolute;
+    top: 40%;
+    left: 9%;
+}
+.logout{
+    position: absolute;
+    top: 90%;
+    left: 55%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.logouticon{
+    width: 20%;
+    height: 20%;
+}
+.search{
+    position: absolute;
+    left: 80%;
+    top: 3%;
+    width: 15%;
+}
+.SearchPic{
+    width: 17px;
+    height: 17px;
+}
+.searchbtn {
+    background-color: white;
+    border-color: darkgrey;
+    color: black;
+    padding: 2px 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  /* Darker background on mouse-over */
+.searchbtn:hover {
+    background-color: gray;
+}

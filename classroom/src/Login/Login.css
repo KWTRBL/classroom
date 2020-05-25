@@ -1,0 +1,35 @@
+.formLogin{
+    width: 23%;
+    float: left;
+    position: absolute;
+    left: 9%;
+    top: 30%;
+}
+.btlogin{
+    float: right;
+    background-color: #A9CCE3;
+    color:#393939;
+    border-color: #A9CCE3;
+}
+.title{
+    float: left;
+    position: absolute;
+    left: 9%;
+    top: 10%;
+}
+.login_logo{
+    width: 60%;
+    height: 100%;
+    float: right;
+    opacity: 0.85;
+    position: absolute;
+    right: 0;
+}
+#classroom{
+    color: #707070;
+    font-size: 3vw;   
+}
+#manage{
+    color:#A9CCE3 ;
+    font-size: 3vw;
+}
