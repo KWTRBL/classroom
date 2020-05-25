@@ -3,6 +3,7 @@ import logout from './logout.png';
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Search from './search.png';
+import imageCr from './ImageCr.png'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,6 +40,7 @@ function Navbar() {
             </InputGroup.Append>
         </InputGroup>
       </div>
+      <img src={imageCr} className="profilePic"/>
     </div>
   );
 }
