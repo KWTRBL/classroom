@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Panda from './pic/Panda.png';
 import Button from 'react-bootstrap/Button';
 import Search from './pic/search.png';
@@ -9,7 +8,6 @@ import download from './pic/download.png'
 import logout from './pic/logout.png'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
-import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ManageFac.css';
@@ -53,11 +51,11 @@ function MannageFacc(){
                         </Form.Control>
                     </Form.Group>
                 </Form>
-                <Button variant="secondary" className="editbtn">จัดผู้คุมสอบ</Button>
                 <Button variant="secondary" className="editbtn">แก้ไข</Button>
+                <Button variant="secondary" className="editbtn">จัดผู้คุมสอบ</Button>
             </div>
             
-            <table bordered>
+            <table>
                 <thead>
                     <tr>
                         <th>รหัสวิชา</th>
