@@ -8,7 +8,7 @@ function E12Ex() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">ME</h2>
+        <h2 class="state">E12</h2>
     </div>
   );
 }

@@ -8,7 +8,7 @@ function HMEx() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">E12</h2>
+        <h2 class="state">HM</h2>
     </div>
   );
 }
