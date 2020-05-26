@@ -1,14 +1,20 @@
 body{
     width: 100%;
+    color: #707070;
+}
+.listteaname{
+    float: left;
+    position: absolute;
+    left: 25%;
+    top: 31%;
 }
 .listteaname{
     border-collapse: separate;
     border-spacing: 0;
-    min-width: 200%;
+    min-width: 73%;
     text-align: center;
-    width: 200%;
+    width: 73%;
     padding: 0;
-    border: none;
 }
 .listteaname tr th,.listteaname tr td {
   border-right: 1px solid #bbb;
@@ -58,71 +64,6 @@ option {
     text-align: center;
     text-align-last: center;
 }
-
-#mode{
-    background-color:#E0EDF5 ;
-	width: 20%;
-    float: left;
-    position: fixed;
-}
-
-#detail{
-    position: relative;
-    left: 20%;
-    margin-left: 2%;
-}
-
-#All{
-    display: flex;
-}
-
-#Webname{
-    padding-left: 5%;
-    padding-top: 8%;
-    font-size: 230%;
-}
-
-li a {
-    color:var(--textcolor,black);
-    float: right;
-    padding: 10px;
-    width: 150%;
-    margin: 10px;
-    margin-top: 0px;
-    text-decoration: none;
-    text-align: left;
-    transition: background 0.3s ease 0.3s,color 0.3s ease 0.3s;
-    font-size: 20px;
-}
-
-/* Change the link color on hover */
-li a:hover {
-    --color:#009900;
-    --textcolor:white;
-}
-
-ul {
-    float: right;
-    list-style-type: none;
-    margin: 0;
-    padding-top: 7%;
-    padding-left: 45%;
-}
-
-#ProfilePic{
-    align-items: center;
-    padding-left: 33%;
-    padding-top: 5%;
-
-    width: 70%;
-    height: 60%;
-}
-
-.SearchPic{
-    width: 17px;
-    height: 17px;
-}
-
 .btn {
     background-color: white;
     border-color: darkgrey;
@@ -137,11 +78,11 @@ ul {
     background-color: gray;
   }
 
-#depart{
-    display: flex;
-}
 #departlabel{
     float: left;
+    position: absolute;
+    left: 25%;
+    top: 20%;
     padding-top: 2%;
 }
 .departname{
@@ -155,50 +96,4 @@ ul {
     width: 50%;
     height: 20%;
     margin-left: 25%;
-}
-#dropdown-basic{
-    color: black;
-}
-.Dropdown{
-    background-color: whitesmoke;
-    color: whitesmoke;
-}
-
-#search{
-    position: relative;
-    left: 100%;
-    padding-top: 2%;
-}
-
-#header{
-    display: flex;
-}
-#title{
-    padding-top: 6%;
-}
-.icon{
-    width: 16%;
-    height: 16%;
-    padding-right: 3%;
-    float: left;
-}
-
-.logoutbtn{
-    width:35%;
-    height: 8%;
-    text-align: right;
-    margin-bottom: 10%;
-    margin-left: 15%;
-    margin-top: 45%;
-    color: black;
-}
-
-.logoutpic{
-    width: 20px;
-    height: 24px;
-    padding-right: 3%;
-    padding-left: 3%;
-    float: left;
-    padding-top: 7%;
-    padding-bottom: 5%;
 }

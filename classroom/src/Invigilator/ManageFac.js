@@ -1,12 +1,6 @@
 import React from 'react';
-import Panda from './pic/Panda.png';
+import Nav from '../Navbar/NavIn'
 import Button from 'react-bootstrap/Button';
-import Search from './pic/search.png';
-import contact from './pic/contact (1).png';
-import manageinvi from './pic/content.png';
-import download from './pic/download.png'
-import logout from './pic/logout.png'
-import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Form from 'react-bootstrap/Form'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,32 +8,10 @@ import './ManageFac.css';
 
 function MannageFacc(){
     return (
-    <div id="All">
-        <div id="mode">
-            <h1 id="Webname">Classroom <br></br>Management</h1>
-            <img src={Panda} id="ProfilePic"/>
-            <div>
-                <ul class="menu">
-                    <li><a href=""><img src={contact} class="icon"/>รายชื่ออาจารย์</a></li>
-                    <li><a href=""><img src={manageinvi} class="icon"/>จัดอาจารย์คุมสอบ</a></li>
-                    <li><a href=""><img src={download} class="icon"/>Download เอกสาร</a></li>
-                </ul>
-            </div>
-            <Button variant="light" className="logoutbtn"><img src={logout} class="logoutpic"/>Logout</Button>
-        </div>
+    <div>
+        <Nav/>
+        <h2 class="state">จัดผู้คุมสอบ</h2>
         <div id="detail">
-            <div id="header">
-                <h1 id="title">จัดผู้คุมสอบ</h1>
-                <div id="search">
-                    <InputGroup size="sm" className="mb-3">
-                        <FormControl placeholder="Search" aria-label="Small" aria-describedby="basic-addon2"/>
-                        <InputGroup.Append>
-                            <Button variant="outline-secondary" className="searchbtn"><img src={Search} className="SearchPic"/></Button>
-                        </InputGroup.Append>
-                    </InputGroup>
-                </div>
-            </div>
-            
             <div className="datee">
                 <Form className="testdate">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">

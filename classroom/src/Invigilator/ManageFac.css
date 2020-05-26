@@ -1,6 +1,7 @@
 body{
     width: 100%;
 }
+
 .Mantable{
     border-collapse: separate;
     border-spacing: 0;
@@ -8,11 +9,8 @@ body{
     text-align: center;
     width: 175%;
     padding: 0;
-    border: none;
 }
-td,th{
-    border: none;
-}
+
 .Mantable tr th,.Mantable tr td {
   border-right: 1px solid #bbb;
   border-bottom: 1px solid #bbb;
@@ -60,68 +58,11 @@ option {
     text-align-last: center;
 }
 
-#mode{
-    background-color:#E0EDF5 ;
-	width: 20%;
-    float: left;
-    position: fixed;
-}
-
 #detail{
-    position: relative;
+    position: absolute;
     left: 20%;
+    top: 20%;
     margin-left: 2%;
-}
-
-#All{
-    display: flex;
-}
-
-#Webname{
-    padding-left: 5%;
-    padding-top: 8%;
-    font-size: 230%;
-}
-
-li a {
-    color:var(--textcolor,black);
-    float: right;
-    padding: 10px;
-    width: 150%;
-    margin: 10px;
-    margin-top: 0px;
-    text-decoration: none;
-    text-align: left;
-    transition: background 0.3s ease 0.3s,color 0.3s ease 0.3s;
-    font-size: 20px;
-}
-
-/* Change the link color on hover */
-li a:hover {
-    --color:#009900;
-    --textcolor:white;
-}
-
-ul {
-    float: right;
-    list-style-type: none;
-    margin: 0;
-    padding-top: 7%;
-    padding-left: 45%;
-}
-
-#ProfilePic{
-    align-items: center;
-    padding-left: 33%;
-    padding-top: 5%;
-
-    width: 70%;
-    height: 60%;
-}
-
-.SearchPic{
-    width: 17px;
-    height: 17px;
 }
 
 .btn {
@@ -161,43 +102,4 @@ ul {
     margin-left: 15px;
     color: whitesmoke;
     width: 40%;
-}
-
-#search{
-    position: relative;
-    left: 100%;
-    padding-top: 2%;
-}
-
-#header{
-    display: flex;
-}
-#title{
-    padding-top: 6%;
-}
-.icon{
-    width: 16%;
-    height: 16%;
-    padding-right: 3%;
-    float: left;
-}
-
-.logoutbtn{
-    width:35%;
-    height: 8%;
-    text-align: right;
-    margin-bottom: 10%;
-    margin-left: 15%;
-    margin-top: 45%;
-    color: black;
-}
-
-.logoutpic{
-    width: 20px;
-    height: 24px;
-    padding-right: 3%;
-    padding-left: 3%;
-    float: left;
-    padding-top: 7%;
-    padding-bottom: 5%;
 }
