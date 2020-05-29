@@ -3,7 +3,10 @@ import logout from './logout.png';
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Search from './search.png';
-import imageCr from './ImageIn.png'
+import imageCr from './ImageIn.png';
+import contact from './contact.png';
+import content from './content.png';
+import download from './download.png';
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,15 +20,14 @@ function Navbar() {
               <h2 class="navmanage">Management</h2>
           </div>
           <div class="detailnav">
-            <Link class="link" to="/ListFac">รายชื่อผู้คุมสอบ</Link >
+            <Link class="link" to="/ListFac"><img src={contact} className="iconlink"/> รายชื่อผู้คุมสอบ</Link >
             <br></br>
-            <Link class="link" to="/ManageFac">จัดผู้คุมสอบ</Link >
+            <Link class="link" to="/ManageFac"><img src={content} className="iconlink"/> จัดผู้คุมสอบ</Link >
             <br></br>
-            <Link class="link" to="/DownlodeIn">Downlodeเอกสาร</Link >
+            <Link class="link" to="/DownloadIn"><img src={download} className="iconlink"/> Downloadเอกสาร</Link >
           </div>
           <Button variant="light" className="logout">
-            <img src={logout} className="logouticon" alt="logout" />
-            Logout
+            <img src={logout} className="logouticon" alt="logout" /> Logout
           </Button>
       </div>
       <div className="search">

@@ -1,0 +1,87 @@
+body{
+    width: 100%;
+}
+
+.Crtable{
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 150%;
+    text-align: center;
+    width: 175%;
+    padding: 0;
+}
+
+.Crtable tr th,.Extable tr td {
+  border-right: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  padding: 5px;
+}
+.Crtable tr th:first-child,
+.Crtable tr td:first-child {
+  border-left: 1px solid #bbb;
+}
+.Crtable tr th {
+  background: #eee;
+  border-top: 1px solid #bbb;
+}
+
+/* top-left border-radius */
+.Crtable tr:first-child th:first-child {
+  border-top-left-radius: 6px;
+}
+
+/* top-right border-radius */
+.Crtable tr:first-child th:last-child {
+  border-top-right-radius: 6px;
+}
+
+/* bottom-left border-radius */
+.Crtable tr:nth-last-child(2) td:first-child {
+  border-bottom-left-radius: 6px;
+}
+
+/* bottom-right border-radius */
+.Crtable tr:last-child td:last-child {
+  border-bottom-right-radius: 6px;
+}
+
+select{
+    text-align: center;
+    text-align-last: center;
+    font-size: 15px;
+    padding-left: 40px;
+    border-radius: 10px;
+    width:60%;
+}
+option {
+    text-align: center;
+    text-align-last: center;
+}
+
+#detailCr{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    margin-left: 2%;
+    width: 43%;
+}
+
+.dateCr{
+    display: flex;
+}
+#buttoneditCr{
+    position: relative;
+    left: 90%;
+    margin-left: 10px;
+    display: flex;
+    width: 40%;
+    height: 10%;
+}
+
+.testdateCr{
+    position: relative;
+    left: 91%;
+    margin-left: 15px;
+    color: whitesmoke;
+    width: 40%;
+}

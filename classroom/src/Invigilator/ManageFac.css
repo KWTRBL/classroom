@@ -65,20 +65,7 @@ option {
     margin-left: 2%;
 }
 
-.btn {
-    background-color: white;
-    border-color: darkgrey;
-    color: black;
-    padding: 2px 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
   
-  /* Darker background on mouse-over */
-  .btn:hover {
-    background-color: gray;
-  }
-
 .datee{
     display: flex;
 }
@@ -91,8 +78,12 @@ option {
     height: 10%;
 }
 .editbtn{
+    color: black;
+    padding: 2px 4px;
+    font-size: 16px;
     margin-left: 5px;
     background-color: #A9CCE3;
+    border-color: #A9CCE3 ;
     width: 80%;
 }
 

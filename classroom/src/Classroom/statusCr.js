@@ -33,7 +33,7 @@ function statusCr() {
             </Form>
         </div>
         <div class="tableStatus">
-            <table>
+            <table className="tablecss">
                 <tr>
                     <th id="roomCr">ห้อง</th>
                     <th id="stateCr">สถานะ</th>

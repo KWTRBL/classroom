@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Search from './search.png';
 import imageCr from './ImageCr.png'
+import build from './hotel.png'
+import download from './download.png'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,19 +19,18 @@ function Navbar() {
               <h2 class="navmanage">Management</h2>
           </div>
           <div class="detailnav">
-            <Link class="link" to="/statusCr">สถานะการใช้ห้อง</Link >
+            <Link class="link" to="/statusCr"><img src={build} className="iconlink"/> สถานะการใช้ห้อง</Link >
             <br></br>
-            <Link class="link" to="/E12Cr">E12</Link >
+            <Link class="link" to="/E12Cr"><img src={build} className="iconlink"/> E12</Link >
             <br></br>
-            <Link class="link" to="/MECr">Me</Link >
+            <Link class="link" to="/MECr"><img src={build} className="iconlink"/> Me</Link >
             <br></br>
-            <Link class="link" to="/HMCr">Hm</Link >
+            <Link class="link" to="/HMCr"><img src={build} className="iconlink"/> Hm</Link >
             <br></br>
-            <Link class="link" to="/DownlodeCr">Downlodeเอกสาร</Link >
+            <Link class="link" to="/DownloadCr"><img src={download} className="iconlink"/> Downloadเอกสาร</Link >
           </div>
           <Button variant="light" className="logout">
-            <img src={logout} className="logouticon" alt="logout" />
-            Logout
+            <img src={logout} className="logouticon" alt="logout" /> Logout
           </Button>
       </div>
       <div className="search">

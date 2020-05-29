@@ -35,7 +35,7 @@ body{
   border-top-right-radius: 6px;
 }
 
-.Extable tr:last-child td:first-child,tr:nth-child(even) td:first-child {
+.Extable tr:nth-child(even) td:first-child {
     border-bottom-left-radius: 0px;
     padding-left: 0px;
     border-left: none;
@@ -50,63 +50,48 @@ body{
 .Extable tr:last-child td:last-child {
   border-bottom-right-radius: 6px;
 }
-
 select{
-    text-align: center;
-    text-align-last: center;
-    font-size: 15px;
-    padding-left: 40px;
-    border-radius: 10px;
-    width:60%;
+  text-align: center;
+  text-align-last: center;
+  font-size: 15px;
+  padding-left: 40px;
+  border-radius: 10px;
+  width:60%;
 }
 option {
-    text-align: center;
-    text-align-last: center;
+  text-align: center;
+  text-align-last: center;
 }
 
 #detailEx{
-    position: absolute;
-    left: 20%;
-    top: 20%;
-    margin-left: 2%;
-    width: 43%;
+  position: absolute;
+  left: 20%;
+  top: 20%;
+  margin-left: 2%;
+  width: 43%;
 }
-
-.btn {
-    background-color: white;
-    border-color: darkgrey;
-    color: black;
-    padding: 2px 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  /* Darker background on mouse-over */
-  .btn:hover {
-    background-color: gray;
-  }
 
 .dateEx{
-    display: flex;
+  display: flex;
 }
 #buttoneditEx{
-    position: relative;
-    left: 90%;
-    margin-left: 10px;
-    display: flex;
-    width: 40%;
-    height: 10%;
+  position: relative;
+  left: 90%;
+  margin-left: 10px;
+  display: flex;
+  width: 40%;
+  height: 10%;
 }
 .editbtn{
-    margin-left: 5px;
-    background-color: #A9CCE3;
-    width: 80%;
+  margin-left: 5px;
+  background-color: #A9CCE3;
+  width: 80%;
 }
 
 .testdateEx{
-    position: relative;
-    left: 91%;
-    margin-left: 15px;
-    color: whitesmoke;
-    width: 40%;
+  position: relative;
+  left: 91%;
+  margin-left: 15px;
+  color: whitesmoke;
+  width: 40%;
 }

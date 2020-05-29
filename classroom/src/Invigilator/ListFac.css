@@ -64,19 +64,6 @@ option {
     text-align: center;
     text-align-last: center;
 }
-.btn {
-    background-color: white;
-    border-color: darkgrey;
-    color: white;
-    padding: 2px 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  /* Darker background on mouse-over */
-  .btn:hover {
-    background-color: gray;
-  }
 
 #departlabel{
     float: left;
