@@ -21,11 +21,11 @@ function Navbar() {
           <div class="detailnav">
             <Link class="link" to="/statusEx"><img src={build} className="iconlink"/> สถานะการใช้ห้อง</Link >
             <br></br>
-            <Link class="link" to="/E12Ex"><img src={build} className="iconlink"/> E12</Link >
+            <Link class="link" to="/E12Ex"><img src={build} className="iconlink"/> อาคาร 12 ชั้น</Link >
             <br></br>
-            <Link class="link" to="/MEEx"><img src={build} className="iconlink"/> Me</Link >
+            <Link class="link" to="/MEEx"><img src={build} className="iconlink"/> ตึกเครื่องกล</Link >
             <br></br>
-            <Link class="link" to="/HMEx"><img src={build} className="iconlink"/> Hm</Link >
+            <Link class="link" to="/HMEx"><img src={build} className="iconlink"/> ตึก HM</Link >
             <br></br>
             <Link class="link" to="/DownloadEx"><img src={download} className="iconlink"/> Downloadเอกสาร</Link >
           </div>

@@ -8,19 +8,19 @@ function statusEx() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">สถานะการใช้ห้อง</h2>
+        <h1 class="state">สถานะการใช้ห้อง</h1>
         <div class="filterCr">
             <h3 class="build">ตึก </h3>
             <Form className="formbuild">
-                <Form.Control as="select">
+                <Form.Control as="select" size="sm">
                     <option>E12</option>
                     <option>Me</option>
                     <option>Hm</option>
                 </Form.Control>
             </Form>
-            <h3 class="floor">ชั้น</h3>
+            <h3 class="floor">ชั้น</h3 >
             <Form className="formfloor">
-                <Form.Control as="select">
+                <Form.Control as="select" size="sm">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
 .sidenav{
     background-color: #E0EDF5;
     width: 20%;
@@ -18,6 +19,7 @@
     position: absolute;
     left: 9%;
     top: 3%;
+    font-family: 'Nunito', sans-serif;
 }
 .navclass{
     color: #707070;

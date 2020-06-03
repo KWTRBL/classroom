@@ -9,7 +9,7 @@ function E12Cr() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">จัดห้องเรียน E12</h2>
+        <h1 class="state">จัดห้องเรียนอาคาร 12 ชั้น</h1>
         <div id="detailCr">
             <div className="dateCr">
                 <Form className="testdateCr">

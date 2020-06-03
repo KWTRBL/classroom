@@ -8,7 +8,7 @@ function HMEx() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">จัดห้องสอบ HM</h2>
+        <h1 class="state">จัดห้องสอบตึก HM</h1>
         <div id="detailEx">
             <div className="dateEx">
                 <Form className="testdateEx">

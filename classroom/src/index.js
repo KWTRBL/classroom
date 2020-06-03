@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 //import App from './App';
 import Login from './Login/Login';
 import SelectCrEx from './SelectCrEx/SelectCrEX';
@@ -19,6 +18,7 @@ import ListFac from './Invigilator/ListFac'
 import ManageFac from './Invigilator/ManageFac'
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter,Route} from 'react-router-dom';
+import './index.css';
 
 
 const AppWithRouter = () => (

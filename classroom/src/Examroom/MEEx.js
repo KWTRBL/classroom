@@ -8,7 +8,7 @@ function MEEx() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">จัดห้องสอบ ME</h2>
+        <h1 class="state">จัดห้องสอบตึก ME</h1>
         <div id="detailEx">
             <div className="dateEx">
                 <Form className="testdateEx">

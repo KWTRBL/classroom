@@ -8,19 +8,19 @@ function statusCr() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">สถานะการใช้ห้อง</h2>
+        <h1 class="state">สถานะการใช้ห้อง</h1>
         <div class="filterCr">
-            <h3 class="build">ตึก </h3>
+            <h4 class="build">ตึก </h4>
             <Form className="formbuild">
-                <Form.Control as="select">
-                    <option>E12</option>
-                    <option>Me</option>
-                    <option>Hm</option>
+                <Form.Control as="select" size="sm">
+                    <option>อาคาร 12 ชั้น</option>
+                    <option>ตึกเครื่องกล</option>
+                    <option>ตึก HM</option>
                 </Form.Control>
             </Form>
-            <h3 class="floor">ชั้น</h3>
+            <h4 class="floor">ชั้น</h4>
             <Form className="formfloor">
-                <Form.Control as="select">
+                <Form.Control as="select" size="sm">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -42,7 +42,7 @@ function statusCr() {
                     <td>401</td>
                     <td >
                         <Form className="formCr">
-                            <Form.Control as="select">
+                            <Form.Control as="select" >
                                 <option>ใช้ได้</option>
                                 <option>ใช้ไม่ได้</option>
                             </Form.Control>

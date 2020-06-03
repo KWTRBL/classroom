@@ -9,7 +9,7 @@ function E12Ex() {
   return (
     <div >
         <Nav/>
-        <h2 class="state">จัดห้องสอบ E12</h2>
+        <h1 class="state">จัดห้องสอบอาคาร 12 ชั้น</h1>
         <div id="detailEx">
             <div className="dateEx">
                 <Form className="testdateEx">

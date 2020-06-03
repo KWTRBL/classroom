@@ -1,13 +1,14 @@
 .tableStatus{
     float: left;
     position: absolute;
-    left: 25%;
-    top: 31%;
+    left: 22%;
+    top: 29%;
+    text-align: center;
 }
 .state{
     position: absolute;
     left: 25%;
-    top:3%;
+    top:5%;
     color: #707070;
     font-weight: bold;
 }
@@ -52,10 +53,10 @@ table {
     border-bottom-right-radius: 6px;
   }
 #roomCr{
-    width: 50vw;
+    width: 52vw;
 }
 #stateCr{
-    width: 20vw;
+    width: 23vw;
 }
 .formCr{
     margin-left: 2vw;
@@ -69,24 +70,24 @@ table {
     float: left;
     position: absolute;
     left: 25%;
-    top: 24%;
+    top: 22%;
 }
 .floor{
     float: left;
     position: absolute;
-    left: 36%;
-    top: 24%;
+    left: 39%;
+    top: 22%;
 }
 .formbuild{
     float: left;
     position: absolute;
     left: 28%;
-    top: 24%;
-    width: 7%;
+    top: 22%;
+    width: 10%;
 }
 .formfloor{
     float: left;
     position: absolute;
-    left: 39%;
-    top: 24%;
+    left: 42%;
+    top: 22%;
 }
