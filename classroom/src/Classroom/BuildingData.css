@@ -1,3 +1,7 @@
+body{
+  width: 100%;
+}
+
 .tableStatus{
     float: left;
     position: absolute;
@@ -7,7 +11,7 @@
 }
 .state{
     position: absolute;
-    left: 25%;
+    left: 22%;
     top:5%;
     color: #707070;
     font-weight: bold;
@@ -52,42 +56,59 @@ table {
   table tr:last-child td:last-child {
     border-bottom-right-radius: 6px;
   }
-#roomCr{
-    width: 52vw;
-}
-#stateCr{
-    width: 23vw;
-}
-.formCr{
-    margin-left: 2vw;
-    margin-right: 2vw;
+
+.Crtable{
+
+    border-spacing: 0;
+    min-width: 150%;
     text-align: center;
+    width: 175%;
+    padding: 0;
 }
-.filterCr{
-    color: #707070;
+
+select{
+    text-align: center;
+    text-align-last: center;
+    font-size: 15px;
+    padding-left: 40px;
+    border-radius: 10px;
+    width:60%;
 }
-.build{
-    float: left;
+option {
+    text-align: center;
+    text-align-last: center;
+}
+
+#detail{
     position: absolute;
-    left: 25%;
-    top: 22%;
+    left: 20%;
+    top: 20%;
+    margin-left: 2%;
+    width: 43%;
 }
-.floor{
-    float: left;
-    position: absolute;
-    left: 39%;
-    top: 22%;
+
+.date{
+    display: flex;
 }
-.formbuild{
-    float: left;
-    position: absolute;
-    left: 28%;
-    top: 22%;
-    width: 10%;
+#buttonedit{
+    position: relative;
+    left: 90%;
+    margin-left: 10px;
+    display: flex;
+    width: 40%;
+    height: 10%;
 }
-.formfloor{
-    float: left;
-    position: absolute;
-    left: 42%;
-    top: 22%;
+.editbtn{
+  margin-left: 5px;
+  background-color: #A9CCE3;
+  width: 80%;
+  border-color: #A9CCE3;
+  color: #707070;
+}
+.testdate{
+    position: relative;
+    left: 91%;
+    margin-left: 15px;
+    color: whitesmoke;
+    width: 40%;
 }

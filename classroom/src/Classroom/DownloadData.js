@@ -3,16 +3,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
-import './HMCr.css';
 
-function HMCr() {
+function DownloadData() {
   return (
-  <div >
+    <div >
         <Nav/>
-        <h1 class="state">จัดห้องเรียนตึก HM</h1>
-        <div id="detailCr">
-            <div className="dateCr">
-                <Form className="testdateCr">
+        <h1 class="state">โหลดข้อมูลตารางสอน</h1>
+        <div id="detail">
+            <div className="date">
+                <Form className="testdate">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                         <Form.Control as="select" size="sm">
                             <option value="0">วันที่/เวลา</option>
@@ -29,7 +28,7 @@ function HMCr() {
                         </Form.Control>
                     </Form.Group>
                 </Form>
-                <div id="buttoneditCr">
+                <div id="buttonedit">
                     <Button variant="secondary" className="editbtn">แก้ไข</Button>
                     <Button variant="secondary" className="editbtn">จัดห้อง</Button>
                 </div>
@@ -94,4 +93,4 @@ function HMCr() {
   );
 }
 
-export default HMCr;
+export default DownloadData;

@@ -3,16 +3,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
-import './E12Cr.css';
 
-function E12Cr() {
+function SpecialCr() {
   return (
     <div >
         <Nav/>
-        <h1 class="state">จัดห้องเรียนอาคาร 12 ชั้น</h1>
-        <div id="detailCr">
-            <div className="dateCr">
-                <Form className="testdateCr">
+        <h1 class="state">กำหนดห้องเรียนกรณีพิเศษ</h1>
+        <div id="detail">
+            <div className="date">
+                <Form className="testdate">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                         <Form.Control as="select" size="sm">
                             <option value="0">วันที่/เวลา</option>
@@ -29,7 +28,7 @@ function E12Cr() {
                         </Form.Control>
                     </Form.Group>
                 </Form>
-                <div id="buttoneditCr">
+                <div id="buttonedit">
                     <Button variant="secondary" className="editbtn">แก้ไข</Button>
                     <Button variant="secondary" className="editbtn">จัดห้อง</Button>
                 </div>
@@ -94,4 +93,4 @@ function E12Cr() {
   );
 }
 
-export default E12Cr;
+export default SpecialCr;

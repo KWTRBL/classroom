@@ -19,15 +19,19 @@ function Navbar() {
               <h2 class="navmanage">Management</h2>
           </div>
           <div class="detailnav">
-            <Link class="link" to="/statusCr"><img src={build} className="iconlink"/> สถานะการใช้ห้อง</Link >
+            <Link class="link" to="/BuildingData"><img src={build} className="iconlink"/> ข้อมูลอาคารเรียน</Link >
             <br></br>
-            <Link class="link" to="/E12Cr"><img src={build} className="iconlink"/> อาคาร 12 ชั้น</Link >
+            <Link class="link" to="/ClassroomData"><img src={build} className="iconlink"/> ข้อมูลห้องเรียน</Link >
             <br></br>
-            <Link class="link" to="/MECr"><img src={build} className="iconlink"/> ตึกเครื่องกล</Link >
+            <Link class="link" to="/DownloadData"><img src={build} className="iconlink"/> โหลดข้อมูลตารางสอน</Link >
             <br></br>
-            <Link class="link" to="/HMCr"><img src={build} className="iconlink"/> ตึก HM</Link >
+            <Link class="link" to="/ManageGroup"><img src={build} className="iconlink"/> จัดจำนวนนักศึกษาแต่ละกลุ่ม</Link >
             <br></br>
-            <Link class="link" to="/DownloadCr"><img src={download} className="iconlink"/> Downloadเอกสาร</Link >
+            <Link class="link" to="/SpecialCr"><img src={build} className="iconlink"/> กำหนดห้องเรียนกรณีพิเศษ</Link >
+            <br></br>
+            <Link class="link" to="/ManageCr"><img src={build} className="iconlink"/> จัดห้องเรียน</Link >
+            <br></br>
+            <Link class="link" to="/DownloadFile"><img src={download} className="iconlink"/> จัดพิมพ์เอกสาร</Link >
           </div>
           <Button variant="light" className="logout">
             <img src={logout} className="logouticon" alt="logout" /> Logout
