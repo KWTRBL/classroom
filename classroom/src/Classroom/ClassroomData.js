@@ -31,9 +31,9 @@ function ClassroomData() {
                 <Form className="testdate">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                         <Form.Control as="select" size="sm">
-                            <option value="0">อาคาร12ชั้น</option>
-                            <option value="1">ตึกเครื่องกล</option>
-                            <option value="2">อาคารเฉลิมพระเกียรติ7ชั้น</option>
+                            <option value="0">1</option>
+                            <option value="1">2</option>
+                            <option value="2">3</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>

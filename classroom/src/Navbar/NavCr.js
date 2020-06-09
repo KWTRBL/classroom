@@ -32,6 +32,8 @@ function Navbar() {
             <br></br>
             <Link class="link" to="/SpecialCr"><img src={managepic} className="iconlink" alt="SpecialCrpic"/> กำหนดห้องเรียนกรณีพิเศษ</Link >
             <br></br>
+            <Link class="link" to="/ManageZone"><img src={managepic} className="iconlink" alt="ManageZonepic"/> แบ่งZoneห้องเรียนแต่ละภาควิชา</Link >
+            <br></br>
             <Link class="link" to="/ManageCr"><img src={managepic} className="iconlink" alt="ManageCrpic"/> จัดห้องเรียน</Link >
             <br></br>
             <Link class="link" to="/DownloadFile"><img src={download} className="iconlink" alt="Downloadpic"/> จัดพิมพ์เอกสาร</Link >

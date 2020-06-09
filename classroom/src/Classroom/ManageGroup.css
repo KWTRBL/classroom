@@ -1,0 +1,10 @@
+.groupfil1{
+    font-size: 1.75vw;
+    position: absolute;
+    color: #707070;
+}
+.groupfildetail1{
+    display: flex;
+    position: relative;
+    left: 16%;
+}

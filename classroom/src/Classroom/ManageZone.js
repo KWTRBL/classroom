@@ -6,50 +6,28 @@ import Nav from '../Navbar/NavCr'
 import editbt from './icon/edit.png';
 import deletebt from './icon/trash.png';
 import addbt from './icon/plus.png';
-import './ManageGroup.css';
-
-function ManageGroup() {
+function ManageZone() {
   return (
     <div >
         <Nav/>
-        <h1 class="state">จัดจำนวนนักศึกษาแต่ละกลุ่ม</h1>
+        <h1 class="state">แบ่ง Zone ห้องเรียนแต่ละภาควิชา</h1>
         <div id="detail">
-            <h4 className="groupfil1">หลักสูตร</h4>
-            <div className="groupfildetail1">
-                <Form className="testdate">
-                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                        <Form.Control as="select" size="sm">
-                            <option value="0">เครื่องกล</option>
-                            <option value="1">คอมพิวเตอร์</option>
-                            <option value="2">อาหาร</option>
-                            <option value="3">ดนตรี</option>
-                            <option value="4">อุตสาหการ</option>
-                            <option value="5">ไฟฟ้า</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form>
-            </div>
-            
             <table className="Crtable">
                 <thead>
                     <tr>
-                        <th>รหัสวิชา</th>
-                        <th>ชื่อวิชา</th>
-                        <th>กลุ่ม</th>
-                        <th>เวลาเรียน</th>
-                        <th>จำนวนนศ.</th>
+                        <th>รหัสอาคาร</th>
+                        <th>อาคารเรียน</th>
+                        <th>จำนวนชั้นทั้งหมด</th>
                         <th>แก้ไขข้อมูล</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td >xxxxx</td>
-                        <td >วิชา A</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>40</td>
+                        <td>E12</td>
+                        <td>อาคาร 12 ชั้น</td>
+                        <td>12</td>
                         <td>
-                        <Button variant="secondary" className="editdata"> 
+                            <Button variant="secondary" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
                             <Button variant="secondary" className="deletedata">
@@ -58,13 +36,11 @@ function ManageGroup() {
                         </td>
                     </tr>
                     <tr>
-                        <td >xxxxx</td>
-                        <td >วิชา A</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>40</td>
+                        <td>ME</td>
+                        <td>ตึกเครื่องกล</td>
+                        <td>4</td>
                         <td>
-                        <Button variant="secondary" className="editdata"> 
+                            <Button variant="secondary" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
                             <Button variant="secondary" className="deletedata">
@@ -73,13 +49,11 @@ function ManageGroup() {
                         </td>
                     </tr>
                     <tr>
-                        <td >xxxxx</td>
-                        <td >วิชา A</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>40</td>
+                        <td >7ชั้น</td>
+                        <td >อาคารเฉลิมพระเกียรติ 7 ชั้น</td>
+                        <td>7</td>
                         <td>
-                        <Button variant="secondary" className="editdata"> 
+                            <Button variant="secondary" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
                             <Button variant="secondary" className="deletedata">
@@ -88,8 +62,6 @@ function ManageGroup() {
                         </td>
                     </tr>
                     <tr>
-                      <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -99,7 +71,6 @@ function ManageGroup() {
                             </Button>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
@@ -107,4 +78,4 @@ function ManageGroup() {
   );
 }
 
-export default ManageGroup;
+export default ManageZone;
