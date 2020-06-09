@@ -32,7 +32,7 @@
 .detailnav{
     position: absolute;
     top: 40%;
-    left: 9%;
+    left: 6%;
 }
 .logout{
     position: absolute;
@@ -72,7 +72,7 @@
     top: 18% ;
     left: 5%;
     width: 10vw;
-    height: 10vw;
+    height: auto;
 }
 .iconlink{
     width: 10%;

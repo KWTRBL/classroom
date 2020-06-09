@@ -1,0 +1,27 @@
+.date{
+    display: flex;
+}
+.buildfil1{
+    font-size: 1.75vw;
+    position: absolute;
+    color: #707070;
+}
+.buildfildetail1{
+    display: flex;
+    position: absolute;
+    left: 21%;
+}
+.buildfildetail2{
+    display: flex;
+    position: relative;
+    left: 62%;
+}
+.buildfil2{
+    font-size: 1.75vw;
+    position: absolute;
+    color: #707070;
+    left: 55%;
+}
+.statusroom{
+    margin-top: 15px;
+}

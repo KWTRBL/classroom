@@ -86,10 +86,6 @@ option {
     margin-left: 2%;
     width: 43%;
 }
-
-.date{
-    display: flex;
-}
 #buttonedit{
     position: relative;
     left: 90%;
@@ -98,6 +94,24 @@ option {
     width: 40%;
     height: 10%;
 }
+.editdata{
+  margin-left: 5px;
+  background-color: #A9CCE3;
+  border-color: #A9CCE3;
+  color: #707070;
+}
+.deletedata{
+  margin-left: 5px;
+  background-color: #A9CCE3;
+  border-color: #A9CCE3;
+  color: #707070;
+}
+.adddata{
+  margin-left: 5px;
+  background-color: #A9CCE3;
+  border-color: #A9CCE3;
+  color: #707070;
+}
 .editbtn{
   margin-left: 5px;
   background-color: #A9CCE3;
@@ -105,10 +119,4 @@ option {
   border-color: #A9CCE3;
   color: #707070;
 }
-.testdate{
-    position: relative;
-    left: 91%;
-    margin-left: 15px;
-    color: whitesmoke;
-    width: 40%;
-}
+
