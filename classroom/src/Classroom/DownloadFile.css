@@ -1,0 +1,18 @@
+.DLdayfil{
+    display: flex;
+    position: relative;
+    left: 143%;
+    font-size: 1.5vw;
+    color: #707070;
+    margin-right: 10px;
+}
+.selectDLday{
+    display: flex;
+    position: relative;
+    left: 143%;
+    width: 30%;
+}
+.dlicon{
+    width: 30%;
+    height: 30%;
+}

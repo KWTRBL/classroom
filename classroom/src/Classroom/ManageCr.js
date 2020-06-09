@@ -3,6 +3,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
+import editbt from './icon/edit.png';
+import deletebt from './icon/trash.png';
+import './ManageCr.css'
 
 function ManageCr() {
   return (
@@ -10,81 +13,108 @@ function ManageCr() {
         <Nav/>
         <h1 class="state">จัดห้องเรียน</h1>
         <div id="detail">
-            <div className="date">
-                <Form className="testdate">
+            <div className="filter">
+                <h5 className="departManfil">ภาควิชา</h5>
+                <Form className="selectdepart">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                         <Form.Control as="select" size="sm">
-                            <option value="0">วันที่/เวลา</option>
-                            <option value="1">จันทร์/ 9.00-12.00</option>
-                            <option value="2">จันทร์/ 13.00-16.00</option>
-                            <option value="3">อังคาร/ 9.00-12.00</option>
-                            <option value="4">อังคาร/ 13.00-16.00</option>
-                            <option value="5">พุธ/ 9.00-12.00</option>
-                            <option value="6">พุธ/ 13.00-16.00</option>
-                            <option value="7">พฤหัสบดี/ 9.00-12.00</option>
-                            <option value="8">พฤหัสบดี/ 13.00-16.00</option>
-                            <option value="9">ศุกร์/ 9.00-12.00</option>
-                            <option value="10">ศุกร์/ 13.00-16.00</option>
+                        <option value="1">วิศวกรรมโทรคมนาคม</option>
+                        <option value="2">วิศวกรรมไฟฟ้า</option>
+                        <option value="3">วิศวกรรมอิเล็กทรอนิกส์</option>
+                        <option value="4">วิศวกรรมระบบควบคุม</option>
+                        <option value="5">วิศวกรรมคอมพิวเตอร์</option>
+                        <option value="6">วิศวกรรมเครื่องกล</option>
+                        <option value="7">วิศวกรรมการวัดคุม</option>
+                        <option value="8">วิศวกรรมโยธา</option>
+                        <option value="9">วิศวกรรมเกษตร</option>
+                        <option value="10">วิศวกรรมเคมี</option>
+                        <option value="11">วิศวกรรมอาหาร</option>
+                        <option value="12">วิศวกรรมอุตสาหการ</option>
+                        <option value="13">วิศวกรรมชีวการแพทย์</option>
+                        <option value="14">สำนักงานบริหารหลักสูตรวิศวกรรมสหวิทยาการนานาชาติ</option>
+                        </Form.Control>
+                    </Form.Group>
+                </Form>
+                <h5 className="departManfil2">สาขาวิชา</h5>
+                <Form className="selectdepart">
+                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
+                        <Form.Control as="select" size="sm">
+                        <option value="1">วิศวกรรมโทรคมนาคม</option>
+                        <option value="2">วิศวกรรมไฟฟ้า</option>
+                        <option value="3">วิศวกรรมอิเล็กทรอนิกส์</option>
+                        <option value="4">วิศวกรรมระบบควบคุม</option>
+                        <option value="5">วิศวกรรมคอมพิวเตอร์</option>
+                        <option value="6">วิศวกรรมเครื่องกล</option>
+                        <option value="7">วิศวกรรมการวัดคุม</option>
+                        <option value="8">วิศวกรรมโยธา</option>
+                        <option value="9">วิศวกรรมเกษตร</option>
+                        <option value="10">วิศวกรรมเคมี</option>
+                        <option value="11">วิศวกรรมอาหาร</option>
+                        <option value="12">วิศวกรรมอุตสาหการ</option>
+                        <option value="13">วิศวกรรมชีวการแพทย์</option>
+                        <option value="14">สำนักงานบริหารหลักสูตรวิศวกรรมสหวิทยาการนานาชาติ</option>
+                        </Form.Control>
+                    </Form.Group>
+                </Form>
+                <h5 className="dayfil">วันที่เรียน</h5>
+                <Form className="selectday">
+                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
+                        <Form.Control as="select" size="sm">
+                        <option value="1">จันทร์</option>
+                        <option value="2">อังคาร</option>
+                        <option value="3">พุธ</option>
+                        <option value="4">พฤหัสบดี</option>
+                        <option value="5">ศุกร์</option>
+                        </Form.Control>
+                    </Form.Group>
+                </Form>
+                <h5 className="periodTimefil">ช่วงเวลาที่เรียน</h5>
+                <Form className="selectime">
+                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
+                        <Form.Control as="select" size="sm">
+                        <option value="1">เช้า</option>
+                        <option value="2">บ่าย</option>
+                        <option value="3">ค่ำ</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>
                 <div id="buttonedit">
-                    <Button variant="secondary" className="editbtn">แก้ไข</Button>
                     <Button variant="secondary" className="editbtn">จัดห้อง</Button>
                 </div>
             </div>
             
             <table className="Crtable">
-                <thead>
+                <thead className="titleManTable">
                     <tr>
+                        <th>รหัสวิชา</th>
+                        <th>ชื่อวิชา</th>
+                        <th>กลุ่ม</th>
+                        <th>เวลาเรียน</th>
+                        <th>อาคารเรียน</th>
                         <th>ห้อง</th>
                         <th>จำนวนที่นั่ง</th>
-                        <th>รหัสวิชา</th>
-                        <th>วิชาที่เรียน</th>
-                        <th>อาจารย์ผู้สอน</th>
                         <th>จำนวนนศ.</th>
+                        <th>แก้ไขข้อมูล</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="dataManTable">
                     <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                      <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
+                        <td >01006004</td>
+                        <td >INDUSTRIAL TRAINING</td>
+                        <td>1</td>
+                        <td>9.00-12.00</td>
+                        <td>อาคารเฉลิมพระเกียรติ 7 ชั้น (HM)</td>
+                        <td>401</td>
+                        <td>100</td>
+                        <td>40</td>
+                        <td>
+                            <Button variant="secondary" className="editdata"> 
+                                    <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                </Button>
+                            <Button variant="secondary" className="deletedata">
+                                    <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                            </Button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

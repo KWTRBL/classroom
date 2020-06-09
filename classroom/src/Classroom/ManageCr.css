@@ -1,0 +1,43 @@
+.filter{
+    display: flex;
+    width: 170%;
+}
+.option{
+    font-size: 0.25vw;
+}
+.departManfil{
+    font-size: 1.35vw;
+    color: #707070;
+    margin-right: 2px;
+    width: 11%;
+}
+.selectdepart{
+    width: 30%;
+    margin-right: 8px;
+    
+}
+.departManfil2{
+    font-size: 1.35vw;
+    color: #707070;
+    margin-right: 0px;
+    width: 13%;
+}
+.dayfil{
+    font-size: 1.35vw;
+    width: 13%;
+    color: #707070;
+}
+.selectday{
+    margin-right: 8px;
+    width: 14%;
+}
+.periodTimefil{
+    font-size: 1.35vw;
+    width: 20%;
+    color: #707070;
+    margin-right: 2px;
+}
+.selectime{
+    margin-right: 8px;
+    width: 11%;
+}

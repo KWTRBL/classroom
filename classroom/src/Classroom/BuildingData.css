@@ -58,7 +58,6 @@ table {
   }
 
 .Crtable{
-
     border-spacing: 0;
     min-width: 150%;
     text-align: center;
@@ -88,11 +87,11 @@ option {
 }
 #buttonedit{
     position: relative;
-    left: 90%;
     margin-left: 10px;
+    left: 5%;
     display: flex;
-    width: 40%;
-    height: 10%;
+    width: 25%;
+    height: 3%;
 }
 .editdata{
   margin-left: 5px;

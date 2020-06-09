@@ -3,6 +3,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
+import DownloadPic from './icon/downloadfile.png';
+import './DownloadFile.css'
 
 function DownloadFile() {
   return (
@@ -11,80 +13,35 @@ function DownloadFile() {
         <h1 class="state">จัดพิมพ์เอกสาร</h1>
         <div id="detail">
             <div className="date">
-                <Form className="testdate">
+                <h5 className="DLdayfil">วันที่เรียน</h5>
+                <Form className="selectDLday">
                     <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                         <Form.Control as="select" size="sm">
-                            <option value="0">วันที่/เวลา</option>
-                            <option value="1">จันทร์/ 9.00-12.00</option>
-                            <option value="2">จันทร์/ 13.00-16.00</option>
-                            <option value="3">อังคาร/ 9.00-12.00</option>
-                            <option value="4">อังคาร/ 13.00-16.00</option>
-                            <option value="5">พุธ/ 9.00-12.00</option>
-                            <option value="6">พุธ/ 13.00-16.00</option>
-                            <option value="7">พฤหัสบดี/ 9.00-12.00</option>
-                            <option value="8">พฤหัสบดี/ 13.00-16.00</option>
-                            <option value="9">ศุกร์/ 9.00-12.00</option>
-                            <option value="10">ศุกร์/ 13.00-16.00</option>
+                            <option value="1">ทั้งหมด</option>
+                            <option value="1">จันทร์</option>
+                            <option value="2">อังคาร</option>
+                            <option value="3">พุธ</option>
+                            <option value="4">พฤหัสบดี</option>
+                            <option value="5">ศุกร์</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>
-                <div id="buttonedit">
-                    <Button variant="secondary" className="editbtn">แก้ไข</Button>
-                    <Button variant="secondary" className="editbtn">จัดห้อง</Button>
-                </div>
             </div>
             
             <table className="Crtable">
                 <thead>
                     <tr>
-                        <th>ห้อง</th>
-                        <th>จำนวนที่นั่ง</th>
-                        <th>รหัสวิชา</th>
-                        <th>วิชาที่เรียน</th>
-                        <th>อาจารย์ผู้สอน</th>
-                        <th>จำนวนนศ.</th>
+                        <th>เอกสาร</th>
+                        <th>Download</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                      <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td >401</td>
-                        <td >100</td>
-                        <td>xxxxx</td>
-                        <td>วิชา A (3D)</td>
-                        <td>อาจารย์ AA</td>
-                        <td>20</td>
+                        <td >จัดห้องเรียนอาคาร 12 ชั้น</td>
+                        <td >
+                        <Button variant="light" className="downloadfilebtn">
+                            <img src={DownloadPic} className="dlicon" alt="download" /></Button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
