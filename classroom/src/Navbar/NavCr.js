@@ -17,8 +17,9 @@ import './NavBar.css';
 function Navbar() {
   return (
     <div>
-      <div>
+      <div className="headerkmitl">
           <img src={kmitl} className="Logokmitl" alt="kmitlpic"/>
+          <div className="linetop"></div>
       </div>
       <div id="mySidenav" class="sidenav">
           <div class="navtitle">
@@ -46,14 +47,6 @@ function Navbar() {
           <Button variant="light" className="logout">
             <img src={logout} className="logouticon" alt="logout" /> Logout
           </Button>
-      </div>
-      <div className="search">
-        <InputGroup size="sm" className="mb-3">
-            <FormControl placeholder="Search" aria-label="Small" aria-describedby="basic-addon2"/>
-            <InputGroup.Append>
-                <Button variant="outline-secondary" className="searchbtn"><img src={Search} className="SearchPic" alt="Searchpic"/></Button>
-            </InputGroup.Append>
-        </InputGroup>
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ function Login() {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password" />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="btlogin" >
+                <Button variant="light" type="submit" className="btlogin" >
                     Login
                 </Button>
             </Form>

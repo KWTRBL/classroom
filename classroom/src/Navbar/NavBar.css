@@ -4,10 +4,10 @@
     width: 20%;
     height: 100%;
     position: fixed;
-    top: 20%;
+    top: 12%;
 }
 .link{
-    font-size: 1.25vw;
+    font-size: 1.2vw;
     color: #707070;
 }
 .link:hover{
@@ -19,7 +19,7 @@
     float: left;
     position: absolute;
     left: 9%;
-    top: 3%;
+    top: 2%;
     font-family: 'Nunito', sans-serif;
 }
 .navclass{
@@ -27,18 +27,20 @@
     font-size: 2.5vw;
 }
 .navmanage{
+    position: absolute;
+    top: 55%;
     color: #707070;
     font-size: 2.5vw;
 }
 .detailnav{
     position: absolute;
-    top: 40%;
+    top: 30%;
     left: 6%;
     line-height: 2.2;
 }
 .logout{
     position: absolute;
-    top: 90%;
+    top: 80%;
     left: 55%;
     padding-left: 2%;
     padding-right: 2%;
@@ -71,9 +73,9 @@
 }
 .profilePic{
     position: fixed;
-    top: 38% ;
+    top: 25% ;
     left: 5%;
-    width: 10vw;
+    width: 8vw;
     height: auto;
 }
 .iconlink{
@@ -83,7 +85,21 @@
 .Logokmitl{
     width: 20%;
     height: auto;
-    position: absolute;
-    top: 5%;
+    position: fixed;
+    top: 3%;
     left: 2%;
+}
+.linetop{
+    background-color: #660101;
+    position: fixed;
+    top: 12%;
+    width: 100%;
+    padding: 3px;
+}
+.headerkmitl{
+    background-color: white;
+    width: 100%;
+    height: 12%;
+    position: fixed;
+    z-index: 2;
 }
