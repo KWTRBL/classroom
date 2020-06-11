@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
 .sidenav{
-    background-color: #E0EDF5;
+    background-color: #EAD4D0;
     width: 20%;
     height: 100%;
     position: fixed;
+    top: 20%;
 }
 .link{
     font-size: 1.25vw;
@@ -33,6 +34,7 @@
     position: absolute;
     top: 40%;
     left: 6%;
+    line-height: 2.2;
 }
 .logout{
     position: absolute;
@@ -69,7 +71,7 @@
 }
 .profilePic{
     position: fixed;
-    top: 18% ;
+    top: 38% ;
     left: 5%;
     width: 10vw;
     height: auto;
@@ -77,4 +79,11 @@
 .iconlink{
     width: 10%;
     height: 10%;
+}
+.Logokmitl{
+    width: 20%;
+    height: auto;
+    position: absolute;
+    top: 5%;
+    left: 2%;
 }

@@ -9,6 +9,7 @@ import datapic from './docs.png'
 import grouppic from './book.png'
 import managepic from './content.png'
 import download from './download.png'
+import kmitl from './logokmitl.png'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,11 +17,15 @@ import './NavBar.css';
 function Navbar() {
   return (
     <div>
+      <div>
+          <img src={kmitl} className="Logokmitl" alt="kmitlpic"/>
+      </div>
       <div id="mySidenav" class="sidenav">
           <div class="navtitle">
               <h2 class="navclass">Classroom</h2>
               <h2 class="navmanage">Management</h2>
           </div>
+          <img src={imageCr} className="profilePic" alt="profilepic"/>
           <div class="detailnav">
             <Link class="link" to="/BuildingData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลอาคารเรียน</Link >
             <br></br>
@@ -50,7 +55,6 @@ function Navbar() {
             </InputGroup.Append>
         </InputGroup>
       </div>
-      <img src={imageCr} className="profilePic" alt="profilepic"/>
     </div>
   );
 }
