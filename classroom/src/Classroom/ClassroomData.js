@@ -6,6 +6,7 @@ import Nav from '../Navbar/NavCr'
 import editbt from './icon/edit.png';
 import deletebt from './icon/trash.png';
 import addbt from './icon/plus.png';
+import Foot from '../Navbar/FooterCr'
 import './ClassroomData.css';
 
 function ClassroomData() {
@@ -67,10 +68,10 @@ function ClassroomData() {
                             </Form>
                         </td>
                         <td>
-                            <Button variant="secondary" className="editdata"> 
+                            <Button variant="light" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
-                            <Button variant="secondary" className="deletedata">
+                            <Button variant="light" className="deletedata">
                                 <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
                             </Button>
                         </td>
@@ -91,10 +92,10 @@ function ClassroomData() {
                             </Form>
                         </td>
                         <td>
-                            <Button variant="secondary" className="editdata"> 
+                            <Button variant="light" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
-                            <Button variant="secondary" className="deletedata">
+                            <Button variant="light" className="deletedata">
                                 <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
                             </Button>
                         </td>
@@ -115,10 +116,10 @@ function ClassroomData() {
                             </Form>
                         </td>
                         <td>
-                            <Button variant="secondary" className="editdata"> 
+                            <Button variant="light" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
-                            <Button variant="secondary" className="deletedata">
+                            <Button variant="light" className="deletedata">
                                 <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
                             </Button>
                         </td>
@@ -130,13 +131,14 @@ function ClassroomData() {
                         <td></td>
                         <td></td>
                         <td>
-                            <Button variant="secondary" className="adddata">
+                            <Button variant="light" className="adddata">
                                 <img src={addbt} className="addicon" alt="add" /> เพิ่ม
                             </Button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <Foot/>
         </div>
     </div>
   );

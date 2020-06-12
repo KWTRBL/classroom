@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
+import Foot from '../Navbar/FooterCr'
 import DownloadPic from './icon/downloadfile.png';
 import './DownloadFile.css'
 
@@ -45,6 +46,7 @@ function DownloadFile() {
                     </tr>
                 </tbody>
             </table>
+            <Foot/>
         </div>
     </div>
   );

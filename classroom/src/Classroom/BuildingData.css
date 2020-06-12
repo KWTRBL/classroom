@@ -83,28 +83,46 @@ option {
   height: 3%;
 }
 .editdata{
-margin-left: 5px;
-background-color: #A9CCE3;
-border-color: #A9CCE3;
-color: #707070;
+  margin-left: 5px;
+  color:#393939;
+  border-color: #707070;
+  border-width: thin;
+  box-shadow:0.5px 0.5px 1px #707070;
 }
 .deletedata{
-margin-left: 5px;
-background-color: #A9CCE3;
-border-color: #A9CCE3;
-color: #707070;
+  margin-left: 5px;
+  color:#393939;
+  border-color: #707070;
+  border-width: thin;
+  box-shadow:0.5px 0.5px 1px #707070;
 }
 .adddata{
-margin-left: 5px;
-background-color: #A9CCE3;
-border-color: #A9CCE3;
-color: #707070;
+  margin-left: 5px;
+  color:#393939;
+  border-color: #707070;
+  border-width: thin;
+  width: 35%;
+  height: auto;
+  box-shadow:0.5px 0.5px 1px #707070;
 }
-.editbtn{
-margin-left: 5px;
-background-color: #A9CCE3;
-width: 80%;
-border-color: #A9CCE3;
-color: #707070;
+.managebtn{
+  margin-left: 5px;
+  width: 80%;
+  color:#393939;
+  border-color: #707070;
+  border-width: thin;
+  box-shadow:0.5px 0.5px 1px #707070;
 }
 
+.editicon{
+  width: 30%;
+  height: auto;
+}
+.deleteicon{
+  width: 33%;
+  height: auto;
+}
+.addicon{
+  width: 23%;
+  height: auto;
+}

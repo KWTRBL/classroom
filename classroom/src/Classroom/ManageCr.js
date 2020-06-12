@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
+import Foot from '../Navbar/FooterCr'
 import editbt from './icon/edit.png';
 import deletebt from './icon/trash.png';
 import './ManageCr.css'
@@ -79,7 +80,7 @@ function ManageCr() {
                     </Form.Group>
                 </Form>
                 <div id="buttonedit">
-                    <Button variant="secondary" className="editbtn">จัดห้อง</Button>
+                    <Button variant="light" className="managebtn">จัดห้อง</Button>
                 </div>
             </div>
             
@@ -108,16 +109,17 @@ function ManageCr() {
                         <td>100</td>
                         <td>40</td>
                         <td>
-                            <Button variant="secondary" className="editdata"> 
+                            <Button variant="light" className="editdata"> 
                                     <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                                 </Button>
-                            <Button variant="secondary" className="deletedata">
+                            <Button variant="light" className="deletedata">
                                     <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
                             </Button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <Foot/>
         </div>
     </div>
   );

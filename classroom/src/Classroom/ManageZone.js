@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
+import Foot from '../Navbar/FooterCr'
 import editbt from './icon/edit.png';
 import deletebt from './icon/trash.png';
 import addbt from './icon/plus.png';
@@ -93,10 +94,10 @@ function ManageZone() {
                             </Form>
                         </td>
                         <td>
-                            <Button variant="secondary" className="editdata"> 
+                            <Button variant="light" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" /> แก้ไข
                             </Button>
-                            <Button variant="secondary" className="deletedata">
+                            <Button variant="light" className="deletedata">
                                 <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
                             </Button>
                         </td>
@@ -107,13 +108,14 @@ function ManageZone() {
                         <td></td>
                         <td></td>
                         <td>
-                            <Button variant="secondary" className="adddata">
+                            <Button variant="light" className="adddata">
                                 <img src={addbt} className="addicon" alt="add" /> เพิ่ม
                             </Button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <Foot/>
         </div>
     </div>
   );
