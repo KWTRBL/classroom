@@ -1,25 +1,17 @@
 .updatetitle{
-    font-size: 1.75vw;
-    position: relative;
     color: #707070;
 }
 .getReg{
-    font-size: 2.25vw;
-    position: absolute;
-    top: 260%;
-    left: 25%;
     color:#393939;
     border-color: #707070;
-    border-width: thin;
-    box-shadow:0.5px 0.5px 1px #707070;
 }
 .getFile{
-    font-size: 2.25vw;
-    position: absolute;
-    top: 260%;
-    left: 100%;
     color:#393939;
     border-color: #707070;
-    border-width: thin;
-    box-shadow:0.5px 0.5px 1px #707070;
+}
+.typetitle{
+    color: #707070;
+}
+.updata{
+    color: #393939;
 }
