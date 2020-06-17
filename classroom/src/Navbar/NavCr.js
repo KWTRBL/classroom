@@ -3,7 +3,7 @@ import logout from './logout.png';
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Search from './search.png';
-import imageCr from './ImageCr.png'
+import imageCr from './Image 4.png'
 import build from './hotel.png'
 import datapic from './docs.png'
 import grouppic from './book.png'
@@ -20,13 +20,16 @@ function Navbar() {
       <div className="headerkmitl">
           <img src={kmitl} className="Logokmitl" alt="kmitlpic"/>
           <div className="linetop"></div>
+          <Button variant="light" className="logout">Logout</Button>
+          <p className="username">พี่วรรณ</p>
+          <img src={imageCr} className="profilePic" alt="profilepic"/>
+          
       </div>
       <div id="mySidenav" class="sidenav">
           <div class="navtitle">
               <h2 class="navclass">Classroom</h2>
               <h2 class="navmanage">Management</h2>
           </div>
-          <img src={imageCr} className="profilePic" alt="profilepic"/>
           <div class="detailnav">
             <Link class="link" to="/BuildingData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลอาคารเรียน</Link >
             <br></br>
@@ -44,9 +47,6 @@ function Navbar() {
             <br></br>
             <Link class="link" to="/DownloadFile"><img src={download} className="iconlink" alt="Downloadpic"/> จัดพิมพ์เอกสาร</Link >
           </div>
-          <Button variant="light" className="logout">
-            <img src={logout} className="logouticon" alt="logout" /> Logout
-          </Button>
       </div>
     </div>
   );

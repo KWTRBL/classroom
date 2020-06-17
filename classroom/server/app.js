@@ -2,8 +2,25 @@ const express = require('express') // เรียกใช้ Express
 const mysql = require('mysql') // เรียกใช้ mysql
 var cors = require('cors');
 var bodyParser = require('body-parser');
-
+const fs = require('fs');
 var port = process.env.PORT || 7777;
+const csv = require('fast-csv');
+const multer = require('multer');
+
+
+global.__basedir = __dirname;
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, __basedir + '/uploads/')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname)
+    }
+});
+
+const upload = multer({ storage: storage });
 
 const db = mysql.createConnection({   // config ค่าการเชื่อมต่อฐานข้อมูล
     host: 'localhost',
@@ -17,7 +34,7 @@ const app = express() // สร้าง Object เก็บไว้ในต�
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended: true
+    extended: true
 }));
 // Select Data
 app.get('/users', (req, res) => {   // Router เวลาเรียกใช้งาน
@@ -30,8 +47,49 @@ app.get('/users', (req, res) => {   // Router เวลาเรียกใช�
     })
 })
 
+
+
+function importCsvData2MySQL(filePath) {
+    let stream = fs.createReadStream(filePath);
+    let csvData = [];
+    let csvStream = csv
+        .parse()
+        .on("data", function (data) {
+            csvData.push(data);
+        })
+        .on("end", function () {
+            // Remove Header ROW
+            csvData.shift();
+
+
+
+            // Open the MySQL connection
+
+
+            let query = 'INSERT INTO customer (id, address, name, age) VALUES ?';
+            db.query(query, [csvData], (error, response) => {
+                console.log(error || response);
+            });
+
+
+
+            // delete file after saving to MySQL database
+            // -> you can comment the statement to see the uploaded CSV file.
+            fs.unlinkSync(filePath)
+        });
+
+    stream.pipe(csvStream);
+}
+
+app.post('/uploadfile', upload.single("uploadfile"), (req, res) => {
+    importCsvData2MySQL(__basedir + '/uploads/' + req.file.filename);
+    res.json({
+        'msg': 'File uploaded/import successfully!', 'file': req.file
+    });
+});
+
 app.listen(port, () => {     // 
-    console.log('start port '+port)
+    console.log('start port ' + port)
 })
 
 

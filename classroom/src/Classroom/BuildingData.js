@@ -71,6 +71,16 @@ export default class BuildingData extends Component {
                                 </tr>
                                 )
                         }
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <Button variant="light" className="adddata">
+                                        <img src={addbt} className="addicon" alt="add" /> เพิ่ม
+                                    </Button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <Foot/>
