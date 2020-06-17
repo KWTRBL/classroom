@@ -1,9 +1,10 @@
 .state{
   position: absolute;
   left: 22%;
-  top:15%;
+  top:12%;
   color: #707070;
   font-weight: bold;
+  font-size: 2.3vw;
 }
 table {
   border-collapse: separate;
@@ -28,22 +29,22 @@ table tr th {
 
 /* top-left border-radius */
 table tr:first-child th:first-child {
-  border-top-left-radius: 6px;
+  border-top-left-radius: 2.5px;
 }
 
 /* top-right border-radius */
 table tr:first-child th:last-child {
-  border-top-right-radius: 6px;
+  border-top-right-radius: 2.5px;
 }
 
 /* bottom-left border-radius */
 table tr:last-child td:first-child {
-  border-bottom-left-radius: 6px;
+  border-bottom-left-radius: 2.5px;
 }
 
 /* bottom-right border-radius */
 table tr:last-child td:last-child {
-  border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 2.5px;
 }
 
 .Crtable{
@@ -52,15 +53,20 @@ table tr:last-child td:last-child {
   text-align: center;
   width: 175%;
   padding: 0;
+  font-size: 1vw;
 }
 
 select{
   text-align: center;
   text-align-last: center;
-  font-size: 15px;
-  padding-left: 40px;
-  border-radius: 10px;
+  font-size: 1vw;
   width:60%;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  color: #707070;
+  border-radius: 1px;
+  border-width: thin;
+  border-color: #707070;
 }
 option {
   text-align: center;
@@ -70,38 +76,40 @@ option {
 #detail{
   position: absolute;
   left: 20%;
-  top: 30%;
+  top: 22%;
   margin-left: 2%;
   width: 43%;
 }
 #buttonedit{
   position: relative;
   margin-left: 10px;
-  left: 5%;
+  left: 4%;
   display: flex;
-  width: 25%;
-  height: 3%;
+  width: 10%;
+  height: 2%;
+  margin-top: -0.5%;
 }
 .editdata{
   margin-left: 5px;
   color:#393939;
-  border-color: #707070;
-  border-width: thin;
-  box-shadow:0.5px 0.5px 1px #707070;
+  padding: 5px;
+  width: 30px;
+  height: auto;
 }
 .deletedata{
   margin-left: 5px;
   color:#393939;
-  border-color: #707070;
-  border-width: thin;
-  box-shadow:0.5px 0.5px 1px #707070;
+  padding: 5px;
+  width: 30px;
+  height: auto;
 }
 .adddata{
   margin-left: 5px;
+  margin-top: 3%;
   color:#393939;
   border-color: #707070;
   border-width: thin;
-  width: 35%;
+  width: 40px;
   height: auto;
   box-shadow:0.5px 0.5px 1px #707070;
 }
@@ -109,20 +117,34 @@ option {
   margin-left: 5px;
   width: 80%;
   color:#393939;
+  font-size: 1vw;
   border-color: #707070;
   border-width: thin;
   box-shadow:0.5px 0.5px 1px #707070;
 }
 
 .editicon{
-  width: 30%;
+  width: 70%;
   height: auto;
 }
 .deleteicon{
-  width: 33%;
+  width: 70%;
   height: auto;
 }
 .addicon{
-  width: 23%;
+  width: 80%;
   height: auto;
+}
+
+.Buildtable th:nth-of-type(1){
+  width: 20%;
+}
+.Buildtable th:nth-of-type(2){
+  width: 40%;
+}
+.Buildtable th:nth-of-type(3){
+  width: 10%;
+}
+.Buildtable th:nth-of-type(4){
+  width: 13%;
 }

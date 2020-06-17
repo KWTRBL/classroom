@@ -18,31 +18,23 @@ function ClassroomData() {
             <h4 className="buildfil1">อาคารเรียน</h4>
             <h4 className="buildfil2">ชั้น</h4>
             <div className="buildfildetail1">
-                <Form className="testdate">
-                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                        <Form.Control as="select" size="sm">
-                            <option value="0">อาคาร12ชั้น</option>
-                            <option value="1">ตึกเครื่องกล</option>
-                            <option value="2">อาคารเฉลิมพระเกียรติ7ชั้น</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form>
+                <select>
+                    <option value="0">อาคาร 12 ชั้น</option>
+                    <option value="1">ตึกเครื่องกล</option>
+                    <option value="2">อาคารเฉลิมพระเกียรติ7ชั้น</option>
+                </select>
             </div>
             <div className="buildfildetail2">
-                <Form className="testdate">
-                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                        <Form.Control as="select" size="sm">
-                            <option value="0">1</option>
-                            <option value="1">2</option>
-                            <option value="2">3</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form>
+                <select>
+                    <option value="0">1</option>
+                    <option value="1">2</option>
+                    <option value="2">3</option>
+                </select>
             </div>
             
             <table className="Crtable">
                 <thead>
-                    <tr>
+                    <tr className="Classroomtable">
                         <th>รหัสอาคาร</th>
                         <th>อาคารเรียน</th>
                         <th>รหัสห้อง</th>
@@ -58,21 +50,20 @@ function ClassroomData() {
                         <td>E12-401</td>
                         <td>100</td>
                         <td>
-                            <Form className="statusroom">
-                                <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                                    <Form.Control as="select" size="sm">
-                                        <option value="0">ใช้ได้</option>
-                                        <option value="1">ใช้ไม่ได้</option>
-                                    </Form.Control>
-                                </Form.Group>
+                            <Form>
+                                <Form.Check 
+                                    type="switch"
+                                    id="custom-switch"
+                                    label=""
+                                />
                             </Form>
                         </td>
                         <td>
                             <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                             <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
                     </tr>
@@ -82,21 +73,20 @@ function ClassroomData() {
                         <td>E12-402</td>
                         <td>100</td>
                         <td>
-                            <Form className="statusroom">
-                                <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                                    <Form.Control as="select" size="sm">
-                                        <option value="0">ใช้ได้</option>
-                                        <option value="1">ใช้ไม่ได้</option>
-                                    </Form.Control>
-                                </Form.Group>
+                            <Form>
+                                <Form.Check 
+                                    type="switch"
+                                    id="custom-switch2"
+                                    label=""
+                                />
                             </Form>
                         </td>
                         <td>
                             <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                             <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
                     </tr>
@@ -106,38 +96,28 @@ function ClassroomData() {
                         <td>E12-403</td>
                         <td>100</td>
                         <td>
-                            <Form className="statusroom">
-                                <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                                    <Form.Control as="select" size="sm">
-                                        <option value="0">ใช้ได้</option>
-                                        <option value="1">ใช้ไม่ได้</option>
-                                    </Form.Control>
-                                </Form.Group>
+                            <Form>
+                                <Form.Check 
+                                    type="switch"
+                                    id="custom-switch3"
+                                    label=""
+                                />
                             </Form>
                         </td>
                         <td>
                             <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                             <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
-                            </Button>
-                        </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <Button variant="light" className="adddata">
-                                <img src={addbt} className="addicon" alt="add" /> เพิ่ม
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <Button variant="light" className="adddata">
+                <img src={addbt} className="addicon" alt="add" />
+            </Button>
             <Foot/>
         </div>
     </div>

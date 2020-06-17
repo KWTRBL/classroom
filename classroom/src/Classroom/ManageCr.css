@@ -1,43 +1,40 @@
 .filter{
     display: flex;
     width: 170%;
+    height: 5%;
 }
 .option{
     font-size: 0.25vw;
 }
-.departManfil{
-    font-size: 1.35vw;
-    color: #707070;
-    margin-right: 2px;
-    width: 11%;
-}
 .selectdepart{
-    width: 30%;
+    width: 40%;
     margin-right: 8px;
-    
+    margin-bottom: 2%;
 }
 .departManfil2{
-    font-size: 1.35vw;
+    font-size: 1.5vw;
     color: #707070;
     margin-right: 0px;
-    width: 13%;
+    width: 9.5%;
 }
 .dayfil{
-    font-size: 1.35vw;
-    width: 13%;
+    font-size: 1.5vw;
+    width: 10%;
     color: #707070;
 }
 .selectday{
     margin-right: 8px;
     width: 14%;
+    margin-bottom: 2%;
 }
 .periodTimefil{
-    font-size: 1.35vw;
-    width: 21%;
+    font-size: 1.5vw;
+    width: 15%;
     color: #707070;
     margin-right: 2px;
 }
 .selectime{
     margin-right: 8px;
     width: 11%;
+    margin-bottom: 2%;
 }

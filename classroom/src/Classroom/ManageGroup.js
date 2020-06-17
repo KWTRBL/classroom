@@ -17,23 +17,27 @@ function ManageGroup() {
         <div id="detail">
             <h4 className="groupfil1">หลักสูตร</h4>
             <div className="groupfildetail1">
-                <Form className="testdate">
-                    <Form.Group controlId="exampleForm.SelectCustomSizeSm">
-                        <Form.Control as="select" size="sm">
-                            <option value="0">เครื่องกล</option>
-                            <option value="1">คอมพิวเตอร์</option>
-                            <option value="2">อาหาร</option>
-                            <option value="3">ดนตรี</option>
-                            <option value="4">อุตสาหการ</option>
-                            <option value="5">ไฟฟ้า</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form>
+                <select>
+                    <option value="1">วิศวกรรมโทรคมนาคม</option>
+                    <option value="2">วิศวกรรมไฟฟ้า</option>
+                    <option value="3">วิศวกรรมอิเล็กทรอนิกส์</option>
+                    <option value="4">วิศวกรรมระบบควบคุม</option>
+                    <option value="5">วิศวกรรมคอมพิวเตอร์</option>
+                    <option value="6">วิศวกรรมเครื่องกล</option>
+                    <option value="7">วิศวกรรมการวัดคุม</option>
+                    <option value="8">วิศวกรรมโยธา</option>
+                    <option value="9">วิศวกรรมเกษตร</option>
+                    <option value="10">วิศวกรรมเคมี</option>
+                    <option value="11">วิศวกรรมอาหาร</option>
+                    <option value="12">วิศวกรรมอุตสาหการ</option>
+                    <option value="13">วิศวกรรมชีวการแพทย์</option>
+                    <option value="14">สำนักงานบริหารหลักสูตรวิศวกรรมสหวิทยาการนานาชาติ</option>
+                </select>
             </div>
             
             <table className="Crtable">
                 <thead>
-                    <tr>
+                    <tr className="Managegrouptable">
                         <th>รหัสวิชา</th>
                         <th>ชื่อวิชา</th>
                         <th>กลุ่ม</th>
@@ -51,10 +55,10 @@ function ManageGroup() {
                         <td>40</td>
                         <td>
                         <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                             <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
                     </tr>
@@ -66,10 +70,10 @@ function ManageGroup() {
                         <td>40</td>
                         <td>
                         <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                             <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
                     </tr>
@@ -81,28 +85,18 @@ function ManageGroup() {
                         <td>40</td>
                         <td>
                         <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                             <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
                     </tr>
-                    <tr>
-                      <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <Button variant="light" className="adddata">
-                                <img src={addbt} className="addicon" alt="add" /> เพิ่ม
-                            </Button>
-                        </td>
-                    </tr>
-
                 </tbody>
             </table>
+            <Button variant="light" className="adddata">
+                <img src={addbt} className="addicon" alt="add" />
+            </Button>
             <Foot/>
         </div>
     </div>

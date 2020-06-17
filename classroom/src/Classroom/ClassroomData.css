@@ -2,27 +2,51 @@
     display: flex;
 }
 .buildfil1{
-    font-size: 1.75vw;
+    font-size: 1.5vw;
     position: absolute;
     color: #707070;
 }
 .buildfildetail1{
-    width: 30%;
     display: flex;
     position: absolute;
-    left: 21%;
+    left: 18%;
+}
+.buildfildetail1 select{
+    width: 100%;
+}
+.buildfildetail2 select{
+    width: 10%;
 }
 .buildfildetail2{
     display: flex;
     position: relative;
-    left: 62%;
+    left: 56%;
+    margin-bottom: 2%;
 }
 .buildfil2{
-    font-size: 1.75vw;
+    font-size: 1.5vw;
     position: absolute;
     color: #707070;
-    left: 55%;
+    left: 50%;
 }
 .statusroom{
     margin-top: 15px;
+}
+.Classroomtable th:nth-of-type(1){
+    width: 13%;
+}
+.Classroomtable th:nth-of-type(2){
+    width: 30%;
+}
+.Classroomtable th:nth-of-type(3){
+    width: 10%;
+}
+.Classroomtable th:nth-of-type(4){
+    width: 8%;
+}
+.Classroomtable th:nth-of-type(5){
+    width: 8%;
+}
+.Classroomtable th:nth-of-type(6){
+    width: 10%;
 }

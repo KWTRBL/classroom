@@ -46,7 +46,7 @@ export default class BuildingData extends Component {
                 <div id="detail">
                     <table className="Crtable">
                         <thead>
-                            <tr>
+                            <tr className="Buildtable">
                                 <th>รหัสอาคาร</th>
                                 <th>อาคารเรียน</th>
                                 <th>จำนวนชั้นทั้งหมด</th>
@@ -62,27 +62,20 @@ export default class BuildingData extends Component {
                                 <td>{data.building_full_name}</td>
                                 <td>
                                     <Button variant="light" className="editdata"> 
-                                        <img src={editbt} className="editicon" alt="edit" /> แก้ไข
+                                        <img src={editbt} className="editicon" alt="edit" />
                                     </Button>
                                     <Button variant="light" className="deletedata">
-                                        <img src={deletebt} className="deleteicon" alt="delete" /> ลบ
+                                        <img src={deletebt} className="deleteicon" alt="delete" />
                                     </Button>
                                 </td>
                                 </tr>
                                 )
                         }
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <Button variant="light" className="adddata">
-                                        <img src={addbt} className="addicon" alt="add" /> เพิ่ม
-                                    </Button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
+                    <Button variant="light" className="adddata">
+                        <img src={addbt} className="addicon" alt="add" />
+                    </Button>
                     <Foot/>
                 </div>
             </div>
