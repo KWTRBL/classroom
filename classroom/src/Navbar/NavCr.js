@@ -35,7 +35,7 @@ function Navbar() {
             <br></br>
             <Link class="link" to="/ClassroomData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลห้องเรียน</Link >
             <br></br>
-            <Link class="link" to="/DownloadData"><img src={datapic} className="iconlink" alt="Datapic"/> โหลดข้อมูลตารางสอน</Link >
+            <Link class="link" to="/DownloadData"><img src={datapic} className="iconlink" alt="Datapic"/> ข้อมูลตารางสอน</Link >
             <br></br>
             <Link class="link" to="/ManageGroup"><img src={grouppic} className="iconlink" alt="Grouppic"/> จัดจำนวนนักศึกษาแต่ละกลุ่ม</Link >
             <br></br>

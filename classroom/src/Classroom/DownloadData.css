@@ -1,17 +1,33 @@
 .updatetitle{
     color: #707070;
 }
-.getReg{
-    color:#393939;
-    border-color: #707070;
-}
 .getFile{
-    color:#393939;
-    border-color: #707070;
+    position: relative;
 }
 .typetitle{
     color: #707070;
 }
-.updata{
-    color: #393939;
+.uploadfile{
+    margin-bottom: 2%;
+}
+.selectdepartDl{
+    width: 40%;
+    margin-right: 8px;
+    margin-bottom: 2%;
+}
+.departDLfil2{
+    font-size: 1.5vw;
+    color: #707070;
+    margin-right: 0px;
+    width: 8.5%;
+}
+.dayfilDl{
+    font-size: 1.5vw;
+    width: 8.7%;
+    color: #707070;
+}
+.selectdayDl{
+    margin-right: 8px;
+    width: 14%;
+    margin-bottom: 2%;
 }
