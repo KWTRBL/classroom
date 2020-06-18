@@ -12,7 +12,6 @@ import ManageGroup from './Classroom/ManageGroup'
 import SpecialCr from './Classroom/SpecialCr'
 import ManageZone from './Classroom/ManageZone'
 import ManageCr from './Classroom/ManageCr'
-import DownloadFile from './Classroom/DownloadFile'
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter,Route} from 'react-router-dom';
 import './index.css';
@@ -28,7 +27,6 @@ const AppWithRouter = () => (
     <Route exact path="/SpecialCr" component={SpecialCr} />
     <Route exact path="/ManageZone" component={ManageZone} />
     <Route exact path="/ManageCr" component={ManageCr} />
-    <Route exact path="/DownloadFile" component={DownloadFile} />
   </BrowserRouter>
 )
 ReactDOM.render(

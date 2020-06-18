@@ -87,6 +87,7 @@ function ManageCr() {
                     </tr>
                 </tbody>
             </table>
+            <Button variant="light" className="downloadbtn">Download เอกสาร</Button>
             <Button variant="light" className="adddata">
                 <img src={addbt} className="addicon" alt="add" />
             </Button>

@@ -15,74 +15,24 @@ function ManageGroup() {
         <Nav/>
         <h1 class="state">จัดจำนวนนักศึกษาแต่ละกลุ่ม</h1>
         <div id="detail">
-            <h4 className="groupfil1">หลักสูตร</h4>
-            <div className="groupfildetail1">
-                <select>
-                    <option value="1">วิศวกรรมโทรคมนาคม</option>
-                    <option value="2">วิศวกรรมไฟฟ้า</option>
-                    <option value="3">วิศวกรรมอิเล็กทรอนิกส์</option>
-                    <option value="4">วิศวกรรมระบบควบคุม</option>
-                    <option value="5">วิศวกรรมคอมพิวเตอร์</option>
-                    <option value="6">วิศวกรรมเครื่องกล</option>
-                    <option value="7">วิศวกรรมการวัดคุม</option>
-                    <option value="8">วิศวกรรมโยธา</option>
-                    <option value="9">วิศวกรรมเกษตร</option>
-                    <option value="10">วิศวกรรมเคมี</option>
-                    <option value="11">วิศวกรรมอาหาร</option>
-                    <option value="12">วิศวกรรมอุตสาหการ</option>
-                    <option value="13">วิศวกรรมชีวการแพทย์</option>
-                    <option value="14">สำนักงานบริหารหลักสูตรวิศวกรรมสหวิทยาการนานาชาติ</option>
-                </select>
-            </div>
-            
             <table className="Crtable">
                 <thead>
                     <tr className="Managegrouptable">
-                        <th>รหัสวิชา</th>
-                        <th>ชื่อวิชา</th>
-                        <th>กลุ่ม</th>
-                        <th>เวลาเรียน</th>
-                        <th>จำนวนนศ.</th>
+                        <th>สาขา</th>
+                        <th>ชั้นปี</th>
+                        <th>กลุ่ม 1</th>
+                        <th>กลุ่ม 2</th>
+                        <th>กลุ่ม 3</th>
                         <th>แก้ไขข้อมูล</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td >xxxxx</td>
-                        <td >วิชา A</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>40</td>
-                        <td>
-                        <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" />
-                            </Button>
-                            <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" />
-                            </Button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td >xxxxx</td>
-                        <td >วิชา A</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>40</td>
-                        <td>
-                        <Button variant="light" className="editdata"> 
-                                <img src={editbt} className="editicon" alt="edit" />
-                            </Button>
-                            <Button variant="light" className="deletedata">
-                                <img src={deletebt} className="deleteicon" alt="delete" />
-                            </Button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td >xxxxx</td>
-                        <td >วิชา A</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>40</td>
+                        <td >วิศวกรรมคอมพิวเตอร์</td>
+                        <td >1</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>30</td>
                         <td>
                         <Button variant="light" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" />

@@ -38,3 +38,9 @@
     width: 11%;
     margin-bottom: 2%;
 }
+.downloadbtn{
+    color:#393939;
+    border-color: #707070;
+    border-width: thin;
+    margin-top: 3%;
+}
