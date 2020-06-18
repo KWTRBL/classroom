@@ -26,38 +26,9 @@ function ManageZone() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            <select className="ManageZoneDepartdetail">
-                                <option value="1">วิศวกรรมโทรคมนาคม</option>
-                                <option value="2">วิศวกรรมไฟฟ้า</option>
-                                <option value="3">วิศวกรรมอิเล็กทรอนิกส์</option>
-                                <option value="4">วิศวกรรมระบบควบคุม</option>
-                                <option value="5">วิศวกรรมคอมพิวเตอร์</option>
-                                <option value="6">วิศวกรรมเครื่องกล</option>
-                                <option value="7">วิศวกรรมการวัดคุม</option>
-                                <option value="8">วิศวกรรมโยธา</option>
-                                <option value="9">วิศวกรรมเกษตร</option>
-                                <option value="10">วิศวกรรมเคมี</option>
-                                <option value="11">วิศวกรรมอาหาร</option>
-                                <option value="12">วิศวกรรมอุตสาหการ</option>
-                                <option value="13">วิศวกรรมชีวการแพทย์</option>
-                                <option value="14">สำนักงานบริหารหลักสูตรวิศวกรรมสหวิทยาการนานาชาติ</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select className="ManageZoneBuilddetail">
-                                <option value="1">อาคาร 12 ชั้น</option>
-                                <option value="2">ตึกเครื่องกล</option>
-                                <option value="3">อาคารเฉลิมพระเกียรติ 7 ชั้น</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                        </td>
+                        <td>วิศวกรรมเครื่องกล</td>
+                        <td>ตึกเครื่องกล</td>
+                        <td>1</td>
                         <td>
                             <Button variant="light" className="editdata"> 
                                 <img src={editbt} className="editicon" alt="edit" />

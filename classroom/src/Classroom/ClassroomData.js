@@ -55,6 +55,7 @@ function ClassroomData() {
                                     type="switch"
                                     id="custom-switch"
                                     label=""
+                                    defaultChecked
                                 />
                             </Form>
                         </td>
@@ -78,6 +79,7 @@ function ClassroomData() {
                                     type="switch"
                                     id="custom-switch2"
                                     label=""
+                                    defaultChecked
                                 />
                             </Form>
                         </td>
@@ -101,6 +103,7 @@ function ClassroomData() {
                                     type="switch"
                                     id="custom-switch3"
                                     label=""
+                                    defaultChecked
                                 />
                             </Form>
                         </td>
