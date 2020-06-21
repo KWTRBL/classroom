@@ -80,7 +80,6 @@ export default class BuildingData extends Component {
   sumbitfile() {
     var formData = new FormData()
     formData.append('uploadfile', this.state.fileupload)
-
     axios.post('http://localhost:7777/uploadfile',
       formData
     ).then(res => {

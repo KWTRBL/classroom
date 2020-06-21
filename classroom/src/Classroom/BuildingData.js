@@ -7,8 +7,8 @@ import editbt from './icon/edit.png';
 import deletebt from './icon/trash.png';
 import addbt from './icon/plus.png';
 import './BuildingData.css';
-import axios from 'axios';
 import Foot from '../Navbar/FooterCr'
+import axios from 'axios';
 import { Component } from 'react';
 import { json } from 'body-parser';
 
@@ -24,7 +24,7 @@ export default class BuildingData extends Component {
 
   
   componentWillMount() {
-        axios.get('http://localhost:7777/users')
+        axios.get('http://localhost:7777/building')
         .then(res => {
           this.setState({
             name: res.data,
