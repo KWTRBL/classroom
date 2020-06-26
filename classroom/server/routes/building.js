@@ -3,7 +3,7 @@ const pool = require('./dbconfig')
 
 module.exports.read = function (callback){
 
-    let sql = 'SELECT * FROM t_building'  // คำสั่ง sql
+    let sql = 'SELECT * FROM t_building ORDER BY building_no'  // คำสั่ง sql
 
     pool.getConnection((err, connection) => {
         if(err) throw err;

@@ -6,7 +6,10 @@ const building = require('./routes/building')
 const classroom = require('./routes/classroom')
 const upload = require('./routes/upload')
 const zonedata = require('./routes/zonedata')
-
+const groupdata = require('./routes/groupdata')
+const teachdata = require('./routes/teachdata')
+const semesterdata = require('./routes/semesterdata')
+const yeardata = require('./routes/yeardata')
 
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
@@ -34,6 +37,34 @@ app.get('/classroom', (req, res) => {   // Router เวลาเรียกใ
 //CurriculumZone Data
 app.get('/zonedata', (req, res) => {   // Router เวลาเรียกใช้งาน
     zonedata.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//CurriculumGroup Data
+app.get('/groupdata', (req, res) => {   // Router เวลาเรียกใช้งาน
+    groupdata.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//Teach Data
+app.get('/teachdata', (req, res) => {   // Router เวลาเรียกใช้งาน
+    teachdata.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//Semester Data
+app.get('/semesterdata', (req, res) => {   // Router เวลาเรียกใช้งาน
+    semesterdata.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//Year Data
+app.get('/yeardata', (req, res) => {   // Router เวลาเรียกใช้งาน
+    yeardata.read(function (callback) {
         res.json(callback)
     })
 })

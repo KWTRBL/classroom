@@ -7,94 +7,311 @@ import Foot from '../Navbar/FooterCr'
 import editbt from './icon/edit.png';
 import deletebt from './icon/trash.png';
 import addbt from './icon/plus.png';
+import axios from 'axios';
+import { Component } from 'react';
+import { json } from 'body-parser';
+import Pagination from 'react-bootstrap/Pagination'
 import './ManageCr.css'
 
-function ManageCr() {
-  return (
-    <div >
-        <Nav/>
-        <h1 class="state">จัดห้องเรียน</h1>
-        <div id="detail">
-            <div className="filter">
-                <h5 className="departManfil2">สาขาวิชา</h5>
-                <select className="selectdepart">
-                        <option value="1">วิศวกรรมโทรคมนาคม</option>
-                        <option value="2">วิศวกรรมไฟฟ้า</option>
-                        <option value="3">วิศวกรรมอิเล็กทรอนิกส์</option>
-                        <option value="4">วิศวกรรมระบบควบคุม</option>
-                        <option value="5">วิศวกรรมคอมพิวเตอร์</option>
-                        <option value="6">วิศวกรรมเครื่องกล</option>
-                        <option value="7">วิศวกรรมการวัดคุม</option>
-                        <option value="8">วิศวกรรมโยธา</option>
-                        <option value="9">วิศวกรรมเกษตร</option>
-                        <option value="10">วิศวกรรมเคมี</option>
-                        <option value="11">วิศวกรรมอาหาร</option>
-                        <option value="12">วิศวกรรมอุตสาหการ</option>
-                        <option value="13">วิศวกรรมชีวการแพทย์</option>
-                        <option value="14">สำนักงานบริหารหลักสูตรวิศวกรรมสหวิทยาการนานาชาติ</option>
-                </select>
-                <h5 className="dayfil">วันที่เรียน</h5>
-                <select className="selectday">
-                        <option value="1">จันทร์</option>
-                        <option value="2">อังคาร</option>
-                        <option value="3">พุธ</option>
-                        <option value="4">พฤหัสบดี</option>
-                        <option value="5">ศุกร์</option>
-                </select>
-                <h5 className="periodTimefil">ช่วงเวลาที่เรียน</h5>
-                <select className="selectime">
-                        <option value="1">เช้า</option>
-                        <option value="2">บ่าย</option>
-                        <option value="3">ค่ำ</option>
-                </select>
-                <div id="buttonedit">
-                    <Button variant="light" className="managebtn">จัดห้อง</Button>
+export default class BuildingData extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: [],
+            year: [],
+            semester: [],
+            curr2: [],
+            stateyear: 0,
+            yearsearch: null,
+            semestersearch: null,
+            curr2search: null,
+            daysearch: null,
+            result: [1, 2, 3],
+            pageclick: 1,
+            itemperpage: 10,
+            firstitem: null,
+            lastitem: null,
+            starttime: '07:00',
+
+        }
+        this.test = this.test.bind(this);
+        this.componentWillMount = this.componentWillMount.bind(this);
+    }
+    componentWillMount() {
+        axios.get('http://localhost:7777/teachdata')
+            .then(res => {
+                this.setState({
+                    name: res.data,
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        axios.get('http://localhost:7777/yeardata')
+            .then(res => {
+                this.setState({
+                    year: res.data,
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        axios.get('http://localhost:7777/semesterdata')
+            .then(res => {
+                this.setState({
+                    semester: res.data,
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        axios.get('http://localhost:7777/zonedata')
+            .then(res => {
+                this.setState({
+                    curr2: res.data,
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        this.setState({
+            firstitem: 0,
+            lastitem: this.state.itemperpage
+        })
+    }
+    test(e) {
+        this.setState({
+            pageclick: parseInt(e.target.textContent),
+            firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * parseInt(e.target.textContent))
+        })
+    }
+    searchYear = (event) => {
+        let keyword = event.target.value;
+        this.setState({
+            yearsearch: keyword,
+            stateyear: 0
+        })
+        //alert(this.state.yearsearch)
+
+        //this.state.stateyear = 0 ;
+    }
+    searchSemester = (event) => {
+        let keyword = event.target.value;
+        this.setState({ semestersearch: keyword })
+    }
+    searchCurr2 = (event) => {
+        let keyword = event.target.value;
+        this.setState({ curr2search: keyword })
+    }
+    searchDay = (event) => {
+        let keyword = event.target.value;
+        this.setState({ daysearch: keyword })
+    }
+
+    searchTime = (event) => {
+        let keyword = event.target.value;
+        this.setState({ starttime: keyword })
+    }
+
+
+    render() {
+        const item = this.state.name.filter((member) => {
+            var teachtime = member.teach_time.split(/[- :]/);
+            var searchtime = this.state.starttime.split(/[- :]/);
+
+            if (this.state.yearsearch == null) {
+
+                this.setState({ curr2search: "00", yearsearch: 2555, semestersearch: 1, daysearch: 1 })
+                return member.curr2_id == "00" && member.year == 2555 && member.semester == 1 && member.teach_day == 1 && (parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 13)
+            }
+
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 13 && parseInt(teachtime[0]) >= 7))
+                return member
+
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )   )                     )
+                return member
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
+                return member
+            
+            
+
+
+        }).slice(this.state.firstitem, this.state.lastitem).map(data =>
+            <tr>
+                <td>{data.subject_id}</td>
+                <td>{data.subject_ename}</td>
+                <td>{data.section}</td>
+                <td>{data.teach_time.split(/[- :]/)[0]}:{data.teach_time.split(/[- :]/)[1]}-{data.teach_time2.split(/[- :]/)[0]}:{data.teach_time2.split(/[- :]/)[1]}</td>
+                <td>{data.building_no}</td>
+                <td>{data.room_no}</td>
+                <td>{data.room_no}</td>
+                <td>{data.limit}</td>
+                <td>
+                    <Button variant="light" className="editdata">
+                        <img src={editbt} className="editicon" alt="edit" />
+                    </Button>
+                    <Button variant="light" className="deletedata">
+                        <img src={deletebt} className="deleteicon" alt="delete" />
+                    </Button>
+                </td>
+            </tr>
+        )
+
+        let data_num = this.state.name.filter((member) => {
+            var teachtime = member.teach_time.split(/[- :]/);
+            var searchtime = this.state.starttime.split(/[- :]/);
+            //console.log(searchtime)
+            //console.log(parseInt(searchtime[0]))
+            if (this.state.yearsearch == null) {
+
+                this.setState({ curr2search: "00", yearsearch: 2555, semestersearch: 1, daysearch: 1 })
+                return member.curr2_id == "00" && member.year == 2555 && member.semester == 1 && member.teach_day == 1 && (parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 13)
+            }
+
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 13))
+                return member
+
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )   )                     )
+                return member
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
+                return member
+
+        }).length
+
+        let items = [];
+        for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
+            items.push(
+                <Pagination.Item key={number} active={number == this.state.pageclick} onClick={this.test}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+
+        const paginationBasic = (
+            <div>
+                <Pagination>{items}</Pagination>
+                <br />
+            </div>
+        );
+        const term_num = this.state.semester.map((member) => {
+            /*
+            if (member.year == this.state.yearsearch && this.state.stateyear == 0) {
+              
+              while (this.state.result.length) {
+                this.state.result.pop();
+              }
+              //this.state.result.push(member.semester)
+              this.setState({
+                stateyear: 1
+              })
+            }
+            else if (member.year == this.state.yearsearch && this.state.stateyear == 1 ) {
+                    this.state.result.push(member.semester)
+            }
+            */
+            if (member.year == this.state.yearsearch) {
+                while (this.state.result.length) {
+                    this.state.result.pop();
+                }
+                for (let number = 1; number <= member.semester; number++) {
+                    this.state.result.push(number)
+                }
+
+            }
+            return member
+        })
+        const semester = this.state.result.map((data, index) =>
+            <option value={data}>{data}</option>
+        )
+        return (
+            <div >
+                <Nav />
+                <h1 class="state">จัดห้องเรียน</h1>
+                <div id="detail">
+                    <div className="filter">
+                        <h5 className="yearDLfil">ปีการศึกษา</h5>
+                        <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
+                            {
+                                this.state.year.map((data, index) =>
+                                    <option value={data.year}>{data.year}</option>
+                                )
+                            }
+                        </select>
+                        <h5 className="termDLfil">ภาคเรียน</h5>
+                        <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
+                            {
+                                semester
+                            }
+                        </select>
+                    </div>
+                    <div className="filter">
+                        <h5 className="departManfil2">สาขาวิชา</h5>
+                        <select className="selectdepart" onChange={(e) => this.searchCurr2(e)}>
+                            {
+                                this.state.curr2.map((data, index) =>
+                                    <option value={data.curr2_id}>{data.curr2_tname}</option>
+                                )
+                            }
+                        </select>
+                        <h5 className="dayfil">วันที่เรียน</h5>
+                        <select className="selectday" onChange={(e) => this.searchDay(e)}>
+                            <option value="1">อาทิตย์</option>
+                            <option value="2">จันทร์</option>
+                            <option value="3">อังคาร</option>
+                            <option value="4">พุธ</option>
+                            <option value="5">พฤหัสบดี</option>
+                            <option value="6">ศุกร์</option>
+                            <option value="7">เสาร์</option>
+                        </select>
+                        <h5 className="periodTimefil">ช่วงเวลาที่เรียน</h5>
+                        <select className="selectime" onChange={(e) => this.searchTime(e)}>
+                            <option value="7:00">เช้า</option>
+                            <option value="13:00">บ่าย</option>
+                            <option value="16:30">ค่ำ</option>
+                        </select>
+                        <div id="buttonManage">
+                            <Button variant="light" className="managebtn">จัดห้อง</Button>
+                        </div>
+                    </div>
+
+                    <table className="Crtable">
+                        <thead>
+                            <tr className="ManageTable">
+                                <th>รหัสวิชา</th>
+                                <th>ชื่อวิชา</th>
+                                <th>กลุ่ม</th>
+                                <th>เวลาเรียน</th>
+                                <th>รหัสอาคาร</th>
+                                <th>ห้อง</th>
+                                <th>จำนวนที่นั่ง</th>
+                                <th>จำนวนนศ.</th>
+                                <th>แก้ไขข้อมูล</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {item}
+                        </tbody>
+                    </table>
+                    <Button variant="light" className="downloadbtn">Download เอกสาร</Button>
+                    <Button variant="light" className="adddata">
+                        <img src={addbt} className="addicon" alt="add" />
+                    </Button>
+                    {paginationBasic}
+                    <Foot />
                 </div>
             </div>
-            
-            <table className="Crtable">
-                <thead>
-                    <tr className="ManageTable">
-                        <th>รหัสวิชา</th>
-                        <th>ชื่อวิชา</th>
-                        <th>กลุ่ม</th>
-                        <th>เวลาเรียน</th>
-                        <th>รหัสอาคาร</th>
-                        <th>ห้อง</th>
-                        <th>จำนวนที่นั่ง</th>
-                        <th>จำนวนนศ.</th>
-                        <th>แก้ไขข้อมูล</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td >01006004</td>
-                        <td >INDUSTRIAL TRAINING</td>
-                        <td>1</td>
-                        <td>9.00-12.00</td>
-                        <td>HM</td>
-                        <td>401</td>
-                        <td>100</td>
-                        <td>40</td>
-                        <td>
-                            <Button variant="light" className="editdata"> 
-                                    <img src={editbt} className="editicon" alt="edit" />
-                                </Button>
-                            <Button variant="light" className="deletedata">
-                                    <img src={deletebt} className="deleteicon" alt="delete" />
-                            </Button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <Button variant="light" className="downloadbtn">Download เอกสาร</Button>
-            <Button variant="light" className="adddata">
-                <img src={addbt} className="addicon" alt="add" />
-            </Button>
-            <Foot/>
-        </div>
-    </div>
-  );
-}
+        )
 
-export default ManageCr;
+    }
+
+
+}
