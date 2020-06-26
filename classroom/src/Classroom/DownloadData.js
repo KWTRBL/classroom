@@ -216,8 +216,7 @@ export default class BuildingData extends Component {
                 <td>{data.subject_id}</td>
                 <td>{data.subject_ename}</td>
                 <td>{data.section}</td>
-                <td>{data.teach_day}</td>
-                <td>{data.teach_time}-{data.teach_time2}</td>
+                <td>{data.teach_time.split(/[- :]/)[0]}:{data.teach_time.split(/[- :]/)[1]}-{data.teach_time2.split(/[- :]/)[0]}:{data.teach_time2.split(/[- :]/)[1]}</td>
                 <td>
                   <Form>
                       <Form.Check 
@@ -347,7 +346,6 @@ export default class BuildingData extends Component {
                                 <th>รหัสวิชา</th>
                                 <th>ชื่อวิชา</th>
                                 <th>กลุ่ม</th>
-                                <th>วันที่เรียน</th>
                                 <th>เวลาที่เรียน</th>
                                 <th>สถานะ</th>
                                 <th>แก้ไขข้อมูล</th>

@@ -153,7 +153,7 @@ export default class BuildingData extends Component {
                 <td>{data.teach_time.split(/[- :]/)[0]}:{data.teach_time.split(/[- :]/)[1]}-{data.teach_time2.split(/[- :]/)[0]}:{data.teach_time2.split(/[- :]/)[1]}</td>
                 <td>{data.building_no}</td>
                 <td>{data.room_no}</td>
-                <td>{data.room_no}</td>
+                <td>{data.seat_num}</td>
                 <td>{data.limit}</td>
                 <td>
                     <Button variant="light" className="editdata">
