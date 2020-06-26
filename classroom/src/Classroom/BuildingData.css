@@ -103,7 +103,6 @@ option {
   height: auto;
 }
 .adddata{
-  margin-left: 5px;
   margin-top: 3%;
   color:#393939;
   border-color: #707070;
@@ -146,4 +145,7 @@ option {
 }
 .Buildtable th:nth-of-type(4){
   width: 13%;
+}
+.selectpage{
+  margin-top: 2%;
 }

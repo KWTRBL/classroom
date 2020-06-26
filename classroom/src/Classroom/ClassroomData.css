@@ -1,33 +1,31 @@
 .date{
     display: flex;
 }
+.filterCrData{
+    display: flex;
+    width: 110%;
+    height: 5%;
+}
 .buildfil1{
     font-size: 1.5vw;
-    position: absolute;
     color: #707070;
-}
-.buildfildetail1{
-    display: flex;
-    position: absolute;
-    left: 18%;
+    margin-right: 8px;
 }
 .buildfildetail1 select{
     width: 100%;
+    margin-right: 10px;
 }
 .buildfildetail2 select{
-    width: 10%;
+    width: 150%;
 }
 .buildfildetail2{
-    display: flex;
-    position: relative;
-    left: 56%;
     margin-bottom: 2%;
+    margin-left: 8px;
 }
 .buildfil2{
     font-size: 1.5vw;
-    position: absolute;
     color: #707070;
-    left: 50%;
+    margin-left: 8px;
 }
 .statusroom{
     margin-top: 15px;

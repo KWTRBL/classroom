@@ -27,7 +27,7 @@ export default class ClassroomData extends Component {
             firstitem:null,
             lastitem:null,
         }
-        this.test = this.test.bind(this);
+        this.test = this.pageselect.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
 
     }
@@ -68,7 +68,7 @@ export default class ClassroomData extends Component {
         this.setState({ floor_no: keyword ,pageclick:1})
     }
 
-    test(e) {
+    pageselect(e) {
         this.setState({ 
             pageclick: parseInt(e.target.textContent),
             firstitem: (this.state.itemperpage * parseInt(e.target.textContent) ) - this.state.itemperpage,
@@ -121,7 +121,7 @@ export default class ClassroomData extends Component {
         let items = [];
         for (let number = 1; number <= Math.ceil(data_num/this.state.itemperpage); number++) {
             items.push(
-                <Pagination.Item key={number} active={number == this.state.pageclick} onClick ={this.test}>
+                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick ={this.pageselect}>
                     {number}
                 </Pagination.Item>,
             );
@@ -158,26 +158,27 @@ export default class ClassroomData extends Component {
                 <Nav />
                 <h1 class="state">ข้อมูลห้องเรียน</h1>
                 <div id="detail">
-                    <h4 className="buildfil1">อาคารเรียน</h4>
-                    <h4 className="buildfil2">ชั้น</h4>
-                    <div className="buildfildetail1">
-                        <select id="building" onChange={(e) => this.searchSpace(e)} >
-                            {
-                                this.state.building.map((data, index) =>
-                                    <option value={data.building_no}>{data.building_name}</option>
-                                )
-                            }
-                        </select>
-
+                    <div className="filterCrData">
+                        <h4 className="buildfil1">อาคารเรียน</h4>
+                        <div className="buildfildetail1">
+                            <select id="building" onChange={(e) => this.searchSpace(e)} >
+                                {
+                                    this.state.building.map((data, index) =>
+                                        <option value={data.building_no}>{data.building_name}</option>
+                                    )
+                                }
+                            </select>
+                        </div>
+                        <h4 className="buildfil2">ชั้น</h4>
+                        <div className="buildfildetail2">
+                            <select id="floor_num" onChange={(e) => this.searchSpace1(e)}>
+                                {
+                                    test
+                                }
+                            </select>
+                        </div>
                     </div>
-                    <div className="buildfildetail2">
-                        <select id="floor_num" onChange={(e) => this.searchSpace1(e)}>
-                            {
-                                test
-                            }
-
-                        </select>
-                    </div>
+                    
                     <table className="Crtable">
                         <thead>
                             <tr className="Buildtable">
