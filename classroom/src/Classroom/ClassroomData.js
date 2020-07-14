@@ -12,6 +12,7 @@ import { Component } from 'react';
 import { json } from 'body-parser';
 import './ClassroomData.css';
 import Pagination from 'react-bootstrap/Pagination'
+import Modal from 'react-bootstrap/Modal'
 
 export default class ClassroomData extends Component {
     constructor(props) {
@@ -22,20 +23,61 @@ export default class ClassroomData extends Component {
             result: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             search: null,
             floor_no: null,
-            pageclick:1,
-            itemperpage:10,
-            firstitem:null,
-            lastitem:null,
+            pageclick: 1,
+            itemperpage: 10,
+            firstitem: null,
+            lastitem: null,
+            show: false,
+            showsubmit: false,
+            showfailed: false,
+            rows: null,
+            room_no_data: null,
+            building_no: null,
+            building_name: null,
+            room_no: null,
+            seat_num: null,
+            room_status: 1,
+            editlist: [],
+            olddata: []
         }
-        this.test = this.pageselect.bind(this);
+        this.pageselect = this.pageselect.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
+        //delete row
+        this.deletebt = this.deletebt.bind(this)
+        this.confirmdelete = this.confirmdelete.bind(this);
+
+        //modal
+        this.handleClose = this.handleClose.bind(this);
+        this.handleClosesubmit = this.handleClosesubmit.bind(this);
+        this.handleClosefailed = this.handleClosefailed.bind(this);
+
+        //add row
+        this.addrow = this.addrow.bind(this);
+        this.handleChange_room_no = this.handleChange_room_no.bind(this)
+        this.handleChange_seatnum = this.handleChange_seatnum.bind(this)
+        this.handleChange_room_status = this.handleChange_room_status.bind(this)
+
+        //edit data
+        this.enableedit = this.enableedit.bind(this)
+        this.canceledit = this.canceledit.bind(this)
+        this.confirmedit = this.confirmedit.bind(this)
+        this.handleChange_editroom_no = this.handleChange_editroom_no.bind(this)
+        this.handleChange_editseat_num = this.handleChange_editseat_num.bind(this)
+        this.handleChange_editroom_status = this.handleChange_editroom_status.bind(this)
 
     }
+
     componentWillMount() {
         axios.get('http://localhost:7777/classroom')
             .then(res => {
+                const newIds = this.state.editlist.slice()
+                for (var i = 0; i < res.data.length; i++) {
+                    newIds.push(0)
+                }
                 this.setState({
                     name: res.data,
+                    editlist: newIds,
+                    olddata: JSON.stringify(res.data)
                 })
             })
             .catch(function (error) {
@@ -47,68 +89,388 @@ export default class ClassroomData extends Component {
                 this.setState({
                     building: res.data,
                 })
+                res.data.map((data, index) => {
+                    if (data.building_no == "CCA") {
+                        this.setState({ building_name: data.building_name })
+                    }
+                })
 
             })
             .catch(function (error) {
                 console.log(error);
             })
 
-            this.setState({
-                firstitem: 0,
-                lastitem: this.state.itemperpage
-            })
+        this.setState({
+            firstitem: 0,
+            lastitem: this.state.itemperpage
+        })
 
     }
     searchSpace = (event) => {
         let keyword = event.target.value;
-        this.setState({ search: keyword })
+        let newId = this.state.editlist.slice()
+        for (var i = 0; i < newId.length; i++) {
+            if (newId[i] == 1) {
+                newId[i] = 0
+            }
+        }
+        this.setState({
+            search: keyword, building_no: keyword,
+            editlist: newId,
+            name: JSON.parse(this.state.olddata),
+        })
+        this.delrow()
+        this.state.building.map((data, index) => {
+            if (data.building_no == keyword) {
+                this.setState({ building_name: data.building_name })
+            }
+        }
+        )
     }
     searchSpace1 = (event) => {
         let keyword = event.target.value;
-        this.setState({ floor_no: keyword ,pageclick:1})
-    }
-
-    pageselect(e) {
-        this.setState({ 
-            pageclick: parseInt(e.target.textContent),
-            firstitem: (this.state.itemperpage * parseInt(e.target.textContent) ) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(e.target.textContent) )
+        let newId = this.state.editlist.slice()
+        for (var i = 0; i < newId.length; i++) {
+            if (newId[i] == 1) {
+                newId[i] = 0
+            }
+        }
+        this.setState({
+            floor_no: keyword, pageclick: 1,
+            editlist: newId,
+            name: JSON.parse(this.state.olddata),
         })
     }
 
-    render() {
-        const item = this.state.name.filter((member) => {
-            if (this.state.search == null){
-                this.setState({search:"CCA",floor_no:1})
-                return member.building_no == "CCA" && (member.room_floor == "1")
+    pageselect(e) {
+        let newId = this.state.editlist.slice()
+        for (var i = 0; i < newId.length; i++) {
+            if (newId[i] == 1) {
+                newId[i] = 0
             }
-            else if ((member.building_no == this.state.search) && (member.room_floor == this.state.floor_no))
-                return member
-        }).slice(this.state.firstitem,this.state.lastitem).map(data =>
-            <tr>
-                <td>{data.building_no}</td>
-                <td>{data.building_name}</td>
-                <td>{data.room_no}</td>
-                <td>{data.seat_num}</td>
+        }
+
+        this.setState({
+            pageclick: parseInt(e.target.textContent),
+            firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * parseInt(e.target.textContent)),
+            editlist: newId,
+            name: JSON.parse(this.state.olddata),
+
+        })
+    }
+
+    //handle modal
+    handleClose() {
+        this.setState({
+            show: false
+        })
+    }
+    handleClosesubmit() {
+
+        this.setState({
+            showsubmit: false
+        })
+        window.location.reload(false);
+    }
+
+    handleClosefailed() {
+        this.setState({
+            showfailed: false
+        })
+        window.location.reload(false);
+
+    }
+
+    //delete row button 
+    deletebt = (data) => {
+        this.setState({
+            show: true,
+            room_no: data
+        })
+    }
+
+    //confirm delete row in table function
+    confirmdelete() {
+        axios
+            .delete("http://localhost:7777/classroom/delete", { data: { room_no: this.state.room_no } })
+            .then(response => {
+                console.log("response: ", response)
+                if (response.data == "Success") {
+                    this.setState({
+                        showsubmit: !this.state.showsubmit
+                    })
+                }
+                else {
+                    this.setState({
+                        showfailed: !this.state.showfailed
+                    })
+                }
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        this.handleClose()
+    }
+
+    //handle addrow data 
+    handleChange_room_no(event) {
+        this.setState({ room_no_data: event.target.value })
+    }
+    handleChange_seatnum(event) {
+        this.setState({ seat_num: event.target.value })
+    }
+    async handleChange_room_status(event) {
+        await this.setState({ room_status: event.target.checked })
+        await this.addrow()
+    }
+
+    //show row input for insert
+    addrow = () => {
+        this.setState({
+            rows: <tr>
+                <td>{this.state.building_no}</td>
+                <td>
+                    {this.state.building_name}
+                </td>
+                <td>
+                    <input
+                        value={this.state.room_no_data}
+                        type="text"
+                        className="form-control"
+                        id="formGroupExampleInput"
+                        onChange={this.handleChange_room_no}
+                    />
+                </td>
+                <td>
+                    <input
+                        value={this.state.seat_num}
+                        type="number"
+                        className="form-control"
+                        id="formGroupExampleInput"
+                        onChange={this.handleChange_seatnum}
+                        min="0"
+                        pattern="0-9"
+                    />
+                </td>
                 <td>
                     <Form>
                         <Form.Check
                             type="switch"
-                            id="custom-switch2"
+                            id="custom-switch"
                             label=""
-                            defaultChecked
+                            checked={this.state.room_status}
+                            onClick={this.handleChange_room_status}
                         />
                     </Form>
                 </td>
                 <td>
-                    <Button variant="light" className="editdata">
-                        <img src={editbt} className="editicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deletedata">
-                        <img src={deletebt} className="deleteicon" alt="delete" />
-                    </Button>
+                    <Button variant="link" onClick={() => this.delrow()}>ยกเลิก</Button>
+                    <Button variant="primary" onClick={() => this.confirmdata()} >ยืนยัน</Button>
                 </td>
             </tr>
+        })
+    }
+
+    //delete row input
+    delrow = () => {
+        this.setState({
+            rows: null,
+            room_no_data: null,
+            seat_num: null,
+            room_status: null
+        })
+        this.state.building.map((data, index) => {
+            if (data.building_no == "CCA") {
+                this.setState({ building_name: data.building_name })
+            }
+        })
+    }
+    //insert row confirm
+    confirmdata = () => {
+        axios
+            .post("http://localhost:7777/classroom/insert", {
+                data: {
+                    building_no: this.state.building_no,
+                    room_no: this.state.room_no_data,
+                    room_name: this.state.room_no_data,
+                    seat_num: this.state.seat_num,
+                    room_status: this.state.room_status,
+                    room_floor: this.state.floor_no
+                }
+            })
+            .then(response => {
+                console.log("response: ", response)
+
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        window.location.reload(false);
+
+    }
+    //edit data handle
+    handleChange_editroom_no(index, event) {
+        const newIds = this.state.name //copy the array
+        newIds[index].room_no = event.target.value//execute the manipulations
+        this.setState({ name: newIds }) //set the new state
+    }
+    handleChange_editseat_num(index, event) {
+        const newIds = this.state.name //copy the array
+        newIds[index].seat_num = event.target.value //execute the manipulations
+        this.setState({ name: newIds }) //set the new state
+        //this.setState({ building_name: event.target.value })
+    }
+    async handleChange_editroom_status(index, event) {
+        const newIds = this.state.name //copy the array
+        newIds[index].room_status = event.target.checked//execute the manipulations
+        await this.setState({ name: newIds }) //set the new state
+        await this.enableedit(index)
+
+    }
+
+    //cancel edit row
+    canceledit = (index) => {
+        const newIds = this.state.editlist.slice() //copy the array
+        newIds[index] = 0//execute the manipulations
+        this.setState({
+            editlist: newIds,
+            name: JSON.parse(this.state.olddata),
+        }) //set the new state
+    }
+
+    //confirm edit data sent to database
+    confirmedit = (index) => {
+        let olddata = JSON.parse(this.state.olddata)
+        axios
+            .put("http://localhost:7777/classroom/update", {
+
+                room_no: this.state.name[index].room_no,
+                room_name: this.state.name[index].room_no,
+                seat_num: this.state.name[index].seat_num,
+                room_status: this.state.name[index].room_status,
+                room_no_select: olddata[index].room_no,
+            })
+            .then(response => {
+                console.log("response: ", response)
+
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        window.location.reload(false);
+
+    }
+
+    //enable edit row
+    enableedit = (index) => {
+        const result = this.state.editlist.find((data) => {
+            return data == 1
+        })
+        if (!result) {
+            const newIds = this.state.editlist.slice() //copy the array
+            newIds[index] = 1//execute the manipulations
+            this.setState({ editlist: newIds }) //set the new state
+        }
+    }
+
+    render() {
+        var editjson = []
+        const item = this.state.name.filter((member, index) => {
+            if (this.state.search == null) {
+
+                this.setState({ search: "CCA", floor_no: 1, building_no: "CCA" })
+                if (member.building_no == "CCA" && (member.room_floor == "1")) {
+                    editjson.push(index)
+                    console.log(editjson)
+                }
+
+                return member.building_no == "CCA" && (member.room_floor == "1")
+            }
+            else if ((member.building_no == this.state.search) && (member.room_floor == this.state.floor_no)) {
+                editjson.push(index)
+                console.log(editjson)
+                return member
+            }
+        }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
+            if (this.state.editlist[index] == 1) {
+                return (
+
+                    <tr>
+                        <td>{data.building_no}</td>
+                        <td>{data.building_name}</td>
+                        <td>
+                            <input
+                                value={data.room_no}
+                                type="text"
+                                className="form-control"
+                                id="formGroupExampleInput"
+                                onChange={(e) => this.handleChange_editroom_no(editjson[index], e)}
+                            />
+                        </td>
+                        <td>
+                            <input
+                                value={data.seat_num}
+                                type="number"
+                                className="form-control"
+                                id="formGroupExampleInput"
+                                min="0"
+                                onChange={(e) => this.handleChange_editseat_num(editjson[index], e)}
+                            /></td>
+                        <td>
+                            <Form>
+                                <Form.Check
+                                    type="switch"
+                                    id="custom-switch"
+                                    label=""
+                                    checked={data.room_status}
+                                    onClick={(e) => this.handleChange_editroom_status(editjson[index], e)}
+                                />
+                            </Form>
+                        </td>
+                        <td>
+                            <Button variant="link" onClick={() => this.canceledit(index)}>ยกเลิก</Button>
+
+                            <Button variant="primary" onClick={() => this.confirmedit(editjson[index])} >ยืนยัน</Button>
+                        </td>
+                    </tr>
+
+                )
+            } else {
+                return (
+                    <tr>
+                        <td>{data.building_no}</td>
+                        <td>{data.building_name}</td>
+                        <td>{data.room_no}</td>
+                        <td>{data.seat_num}</td>
+                        <td>
+                            <Form>
+                                <Form.Check
+                                    disabled
+                                    type="switch"
+                                    id="custom-switch2"
+                                    label=""
+                                    checked={data.room_status}
+                                />
+                            </Form>
+                        </td>
+                        <td>
+                            <Button variant="light" className="editdata" onClick={() => this.enableedit(index)}>
+                                <img src={editbt} className="editicon" alt="edit" />
+                            </Button>
+                            <Button variant="light" className="deletedata" onClick={() => this.deletebt(data.room_no)}>
+                                <img src={deletebt} className="deleteicon" alt="delete" />
+                            </Button>
+                        </td>
+                    </tr>
+
+                )
+            }
+
+        }
         )
 
         let data_num = this.state.name.filter((member) => {
@@ -117,11 +479,11 @@ export default class ClassroomData extends Component {
             else if ((member.building_no == this.state.search) && (member.room_floor == this.state.floor_no))
                 return member
         }).length
-       
+
         let items = [];
-        for (let number = 1; number <= Math.ceil(data_num/this.state.itemperpage); number++) {
+        for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
             items.push(
-                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick ={this.pageselect}>
+                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick={this.pageselect}>
                     {number}
                 </Pagination.Item>,
             );
@@ -178,10 +540,10 @@ export default class ClassroomData extends Component {
                             </select>
                         </div>
                     </div>
-                    
+
                     <table className="Crtable">
                         <thead>
-                            <tr className="Buildtable">
+                            <tr className="Classroomtable">
                                 <th>รหัสอาคาร</th>
                                 <th>อาคารเรียน</th>
                                 <th>รหัสห้อง</th>
@@ -194,14 +556,47 @@ export default class ClassroomData extends Component {
                             {
                                 item
                             }
+                            {this.state.rows}
                         </tbody>
                     </table>
-                    <Button variant="light" className="adddata">
+                    <Button variant="light" className="adddata" onClick={() => this.addrow()}>
                         <img src={addbt} className="addicon" alt="add" />
                     </Button>
                     {paginationBasic}
                     <Foot />
                 </div>
+                <Modal show={this.state.show} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Modal heading</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>สวัสดี</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={this.confirmdelete}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Success</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Failed</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }

@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+
 //Building Data
 app.get('/building', (req, res) => {   // Router เวลาเรียกใช้งาน
     building.read(function (callback) {
@@ -27,11 +28,63 @@ app.get('/building', (req, res) => {   // Router เวลาเรียกใ�
     })
 })
 
+app.delete('/building/delete', (req, res) => {   // Router เวลาเรียกใช้งาน
+    building.delete(req.body.building_no,function(callback){
+        console.log(callback)
+        if(callback){
+            res.send('Success')
+        }
+        else{
+            res.send('Error')
+        }
+    })
+})
+
+app.post('/building/insert', (req, res) => {   // Router เวลาเรียกใช้งาน
+    building.add(req,function(callback){
+        res.send(callback)
+    })
+    
+})
+
+app.put('/building/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    building.update(req,function(callback){
+        res.send(callback)
+    })
+    
+})
+
 //Classroom Data
 app.get('/classroom', (req, res) => {   // Router เวลาเรียกใช้งาน
     classroom.read(function (callback) {
         res.json(callback)
     })
+})
+
+app.delete('/classroom/delete', (req, res) => {   // Router เวลาเรียกใช้งาน
+    classroom.delete(req.body.room_no,function(callback){
+        console.log(callback)
+        if(callback){
+            res.send('Success')
+        }
+        else{
+            res.send('Error')
+        }
+    })
+})
+
+app.post('/classroom/insert', (req, res) => {   // Router เวลาเรียกใช้งาน
+    classroom.add(req,function(callback){
+        res.send(callback)
+    })
+    
+})
+
+app.put('/classroom/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    classroom.update(req,function(callback){
+        res.send(callback)
+    })
+    
 })
 
 //CurriculumZone Data
@@ -46,6 +99,13 @@ app.get('/groupdata', (req, res) => {   // Router เวลาเรียกใ
     groupdata.read(function (callback) {
         res.json(callback)
     })
+})
+
+app.put('/groupdata/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    groupdata.update(req,function(callback){
+        res.send(callback)
+    })
+    
 })
 
 //Teach Data
