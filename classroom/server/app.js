@@ -38,6 +38,7 @@ const semesterdata = require('./routes/semesterdata')
 const yeardata = require('./routes/yeardata')
 const availableroom = require('./routes/availableroom')
 const auth = require('./routes/auth')
+const manageroom = require('./routes/manageroom')
 
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
@@ -238,6 +239,13 @@ app.post('/uploadfile', upload.upload.single("uploadfile"), (req, res) => {
 //Availableroom Data
 app.get('/availableroom', (req, res) => {   // Router เวลาเรียกใช้งาน
     availableroom.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//Manage room
+app.get('/manageroom', (req, res) => {   // Router เวลาเรียกใช้งาน
+    manageroom.read(function (callback) {
         res.json(callback)
     })
 })
