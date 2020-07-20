@@ -24,7 +24,7 @@ export default class ClassroomData extends Component {
             search: null,
             floor_no: null,
             pageclick: 1,
-            itemperpage: 10,
+            itemperpage: 2,
             firstitem: null,
             lastitem: null,
             show: false,

@@ -1,6 +1,32 @@
 const express = require('express') // เรียกใช้ Express
 var cors = require('cors');
 var bodyParser = require('body-parser');
+
+const cookieParser = require('cookie-parser') // ใช้งาน cookie-parser module
+
+//new
+var session = require('express-session')
+const bcrypt = require('bcrypt')
+var MySQLStore = require('express-mysql-session')(session);
+
+var options = {
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'classroom_management',
+    clearExpired: true,
+    //expiration: 2000,
+    checkExpirationInterval: 2000,
+
+};
+
+var sessionStore = new MySQLStore(options);
+
+
+
+
+
 var port = process.env.PORT || 7777;
 const building = require('./routes/building')
 const classroom = require('./routes/classroom')
@@ -10,15 +36,88 @@ const groupdata = require('./routes/groupdata')
 const teachdata = require('./routes/teachdata')
 const semesterdata = require('./routes/semesterdata')
 const yeardata = require('./routes/yeardata')
+const availableroom = require('./routes/availableroom')
+const auth = require('./routes/auth')
 
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
-app.use(cors())
+app.use(cookieParser())
+/*
+const corsOptions = {
+    origin: /\.your.domain\.com$/,    // reqexp will match all prefixes
+    methods: "GET,HEAD,POST,PATCH,DELETE,OPTIONS",
+    credentials: true,                // required to pass
+    allowedHeaders: "Content-Type, Authorization, X-Requested-With",
+}
+*/
+
+app.use(session({
+    secret: 'session_cookie_secret',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+}));
+
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }))
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+
+
+
+
+
+//testlogin
+app.post('/login', (req, res) => {   // Router เวลาเรียกใช้งาน
+
+    auth.login(req, function (callback) {
+        if(callback.message == "login success"){
+            const timeout = 60 * 60 * 1000
+            req.session.cookie.maxAge = timeout
+            req.session.token = callback.token
+            res.cookie('token', callback.token, { maxAge: timeout,httpOnly: true })
+            res.cookie('session_id', req.sessionID, { maxAge: timeout,httpOnly: true })
+            req.session.save()   
+        }
+        res.send({
+            message:callback.message,
+            isLogin:callback.isLogin
+        })
+        
+    })
+})
+app.get('/auth', (req, res) => {
+    auth.auth(req, function (callback) {
+        res.status(200).send({
+            login: callback
+        })
+    })
+
+})
+
+app.get('/logout', (req, res) => {
+    res.cookie('token', '', {expires: new Date(1), path: '/' });
+    res.cookie('session_id', '', {expires: new Date(1), path: '/' });
+    res.cookie('connect.sid', '', {expires: new Date(1), path: '/' });
+    auth.logout(req, function (callback) {
+        res.status(200).send({
+            logout: callback
+        })
+    })
+
+
+})
+
+
+app.post('/register', (req, res) => {   // Router เวลาเรียกใช้งาน
+    auth.register(req, function (callback) {
+        res.send(callback)
+    })
+
+})
 
 
 //Building Data
@@ -29,29 +128,29 @@ app.get('/building', (req, res) => {   // Router เวลาเรียกใ�
 })
 
 app.delete('/building/delete', (req, res) => {   // Router เวลาเรียกใช้งาน
-    building.delete(req.body.building_no,function(callback){
+    building.delete(req.body.building_no, function (callback) {
         console.log(callback)
-        if(callback){
+        if (callback) {
             res.send('Success')
         }
-        else{
+        else {
             res.send('Error')
         }
     })
 })
 
 app.post('/building/insert', (req, res) => {   // Router เวลาเรียกใช้งาน
-    building.add(req,function(callback){
+    building.add(req, function (callback) {
         res.send(callback)
     })
-    
+
 })
 
 app.put('/building/update', (req, res) => {   // Router เวลาเรียกใช้งาน
-    building.update(req,function(callback){
+    building.update(req, function (callback) {
         res.send(callback)
     })
-    
+
 })
 
 //Classroom Data
@@ -62,29 +161,29 @@ app.get('/classroom', (req, res) => {   // Router เวลาเรียกใ
 })
 
 app.delete('/classroom/delete', (req, res) => {   // Router เวลาเรียกใช้งาน
-    classroom.delete(req.body.room_no,function(callback){
+    classroom.delete(req.body.room_no, function (callback) {
         console.log(callback)
-        if(callback){
+        if (callback) {
             res.send('Success')
         }
-        else{
+        else {
             res.send('Error')
         }
     })
 })
 
 app.post('/classroom/insert', (req, res) => {   // Router เวลาเรียกใช้งาน
-    classroom.add(req,function(callback){
+    classroom.add(req, function (callback) {
         res.send(callback)
     })
-    
+
 })
 
 app.put('/classroom/update', (req, res) => {   // Router เวลาเรียกใช้งาน
-    classroom.update(req,function(callback){
+    classroom.update(req, function (callback) {
         res.send(callback)
     })
-    
+
 })
 
 //CurriculumZone Data
@@ -102,10 +201,10 @@ app.get('/groupdata', (req, res) => {   // Router เวลาเรียกใ
 })
 
 app.put('/groupdata/update', (req, res) => {   // Router เวลาเรียกใช้งาน
-    groupdata.update(req,function(callback){
+    groupdata.update(req, function (callback) {
         res.send(callback)
     })
-    
+
 })
 
 //Teach Data
@@ -136,6 +235,12 @@ app.post('/uploadfile', upload.upload.single("uploadfile"), (req, res) => {
     });
 });
 
+//Availableroom Data
+app.get('/availableroom', (req, res) => {   // Router เวลาเรียกใช้งาน
+    availableroom.read(function (callback) {
+        res.json(callback)
+    })
+})
 
 app.listen(port, () => {     // 
     console.log('start port ' + port)
