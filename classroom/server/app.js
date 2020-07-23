@@ -244,8 +244,9 @@ app.get('/availableroom', (req, res) => {   // Router เวลาเรีย�
 })
 
 //Manage room
-app.get('/manageroom', (req, res) => {   // Router เวลาเรียกใช้งาน
-    manageroom.read(function (callback) {
+app.post('/manageroom', (req, res) => {   // Router เวลาเรียกใช้งาน
+    //console.log(req.body.data.year)
+    manageroom.read(req,function (callback) {
         res.json(callback)
     })
 })

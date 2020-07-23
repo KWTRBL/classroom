@@ -32,6 +32,7 @@ export default class BuildingData extends Component {
             firstitem: null,
             lastitem: null,
             starttime: '07:00',
+            timeperiod: 0, //ช่วงเวลา
 
         }
         this.pageselect = this.pageselect.bind(this);
@@ -122,6 +123,28 @@ export default class BuildingData extends Component {
         this.setState({ starttime: keyword })
     }
 
+    manageroom = () => {
+        axios
+        .post("http://localhost:7777/manageroom", {
+            data: {
+                year: this.state.yearsearch,
+                semester: this.state.semestersearch,
+                curr2_id: this.state.curr2search,
+                teach_day: this.state.daysearch,
+                timeperiod: this.state.starttime
+            }
+        })
+        .then(response => {
+            console.log("response: ", response)
+
+            // do something abosut response
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    window.location.reload(false);
+    }
+
 
     render() {
         const item = this.state.name.filter((member) => {
@@ -137,7 +160,7 @@ export default class BuildingData extends Component {
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 13 && parseInt(teachtime[0]) >= 7))
                 return member
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )   )                     )
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
                 return member
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
                 return member
@@ -154,7 +177,7 @@ export default class BuildingData extends Component {
                 <td>{data.building_no}</td>
                 <td>{data.room_no}</td>
                 <td>{data.seat_num}</td>
-                <td>{data.limit}</td>
+                <td>{data.studentnum}</td>
                 <td>
                     <Button variant="light" className="editdata">
                         <img src={editbt} className="editicon" alt="edit" />
@@ -169,8 +192,6 @@ export default class BuildingData extends Component {
         let data_num = this.state.name.filter((member) => {
             var teachtime = member.teach_time.split(/[- :]/);
             var searchtime = this.state.starttime.split(/[- :]/);
-            //console.log(searchtime)
-            //console.log(parseInt(searchtime[0]))
             if (this.state.yearsearch == null) {
 
                 this.setState({ curr2search: "00", yearsearch: 2555, semestersearch: 1, daysearch: 1 })
@@ -203,21 +224,6 @@ export default class BuildingData extends Component {
             </div>
         );
         const term_num = this.state.semester.map((member) => {
-            /*
-            if (member.year == this.state.yearsearch && this.state.stateyear == 0) {
-              
-              while (this.state.result.length) {
-                this.state.result.pop();
-              }
-              //this.state.result.push(member.semester)
-              this.setState({
-                stateyear: 1
-              })
-            }
-            else if (member.year == this.state.yearsearch && this.state.stateyear == 1 ) {
-                    this.state.result.push(member.semester)
-            }
-            */
             if (member.year == this.state.yearsearch) {
                 while (this.state.result.length) {
                     this.state.result.pop();
@@ -279,7 +285,7 @@ export default class BuildingData extends Component {
                             <option value="16:30">ค่ำ</option>
                         </select>
                         <div id="buttonManage">
-                            <Button variant="light" className="managebtn">จัดห้อง</Button>
+                            <Button variant="light" className="managebtn" onClick ={(e) => this.manageroom(e)}>จัดห้อง</Button>
                         </div>
                     </div>
 
