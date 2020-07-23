@@ -2,7 +2,7 @@ const pool = require('./dbconfig')
 
 module.exports.read = function (callback){
 
-    let sql = 'SELECT teach_table.* ,subject.subject_ename,t_room.seat_num FROM teach_table,subject,t_room WHERE teach_table.subject_id = subject.subject_id AND IF(teach_table.room_no !="",t_room.seat_num=(SELECT seat_num FROM t_room WHERE t_room.room_no=teach_table.room_no),t_room.seat_num=0) ORDER BY teach_table.subject_id AND teach_table.section ASC'  // คำสั่ง sql
+    let sql = 'SELECT DISTINCT teach_table.* ,subject.subject_ename,t_room.seat_num FROM teach_table,subject,t_room WHERE teach_table.subject_id = subject.subject_id AND if(teach_table.room_no!="" AND teach_table.room_no IN (SELECT room_no FROM t_room),t_room.room_no=teach_table.room_no,t_room.seat_num=0) ORDER BY teach_table.subject_id AND teach_table.section ASC'  // คำสั่ง sql
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
