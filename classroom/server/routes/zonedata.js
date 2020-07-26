@@ -10,7 +10,7 @@ module.exports.read = function (callback){
         pool.query(sql, (err, rows) => {
             
             if(err) throw err;
-            console.log('The data from users table are: \n', rows);
+            //console.log('The data from users table are: \n', rows);
             callback(rows)
             connection.release(); // return the connection to pool
         });

@@ -24,7 +24,7 @@ export default class ClassroomData extends Component {
             search: null,
             floor_no: null,
             pageclick: 1,
-            itemperpage: 2,
+            itemperpage: 10,
             firstitem: null,
             lastitem: null,
             show: false,
@@ -40,6 +40,7 @@ export default class ClassroomData extends Component {
             editlist: [],
             olddata: []
         }
+        this.pageselectvalue = this.pageselectvalue.bind(this)
         this.pageselect = this.pageselect.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
         //delete row
@@ -126,6 +127,7 @@ export default class ClassroomData extends Component {
             }
         }
         )
+        this.pageselectvalue(1)
     }
     searchSpace1 = (event) => {
         let keyword = event.target.value;
@@ -140,6 +142,8 @@ export default class ClassroomData extends Component {
             editlist: newId,
             name: JSON.parse(this.state.olddata),
         })
+        this.pageselectvalue(1)
+
     }
 
     pageselect(e) {
@@ -157,6 +161,14 @@ export default class ClassroomData extends Component {
             editlist: newId,
             name: JSON.parse(this.state.olddata),
 
+        })
+    }
+
+    pageselectvalue(value) {
+        this.setState({
+            pageclick: parseInt(value),
+            firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * parseInt(value))
         })
     }
 
@@ -424,7 +436,7 @@ export default class ClassroomData extends Component {
                             <Form>
                                 <Form.Check
                                     type="switch"
-                                    id="custom-switch"
+                                    id={data.building_name}                                    
                                     label=""
                                     checked={data.room_status}
                                     onClick={(e) => this.handleChange_editroom_status(editjson[index], e)}

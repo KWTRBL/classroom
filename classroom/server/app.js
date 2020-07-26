@@ -60,7 +60,8 @@ app.use(session({
 }));
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }))
-app.use(express.json())
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb',extended: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -215,6 +216,11 @@ app.get('/teachdata', (req, res) => {   // Router เวลาเรียกใ
     })
 })
 
+app.post('/teachdata/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    teachdata.update(req,function (callback) {
+        res.json(callback)
+    })
+})
 //Semester Data
 app.get('/semesterdata', (req, res) => {   // Router เวลาเรียกใช้งาน
     semesterdata.read(function (callback) {
@@ -235,6 +241,15 @@ app.post('/uploadfile', upload.upload.single("uploadfile"), (req, res) => {
         'msg': 'File uploaded/import successfully!', 'file': req.file
     });
 });
+
+app.post('/insert', (req, res) => {   // Router เวลาเรียกใช้งาน
+    upload.insert(req,function (callback) {
+        console.log(callback.status)
+        res.status(callback.status)
+        res.end()
+       // res.json(callback)
+    })
+})
 
 //Availableroom Data
 app.get('/availableroom', (req, res) => {   // Router เวลาเรียกใช้งาน

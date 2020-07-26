@@ -37,6 +37,9 @@ export default class BuildingData extends Component {
         }
         this.pageselect = this.pageselect.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
+
+        this.pageselectvalue = this.pageselectvalue.bind(this);
+
     }
     componentWillMount() {
         axios.get('http://localhost:7777/teachdata')
@@ -95,12 +98,21 @@ export default class BuildingData extends Component {
             lastitem: (this.state.itemperpage * parseInt(e.target.textContent))
         })
     }
+
+    pageselectvalue(value) {
+        this.setState({
+            pageclick: parseInt(value),
+            firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * parseInt(value))
+        })
+    }
     searchYear = (event) => {
         let keyword = event.target.value;
         this.setState({
             yearsearch: keyword,
             stateyear: 0
         })
+        this.pageselectvalue(1)
         //alert(this.state.yearsearch)
 
         //this.state.stateyear = 0 ;
@@ -112,15 +124,18 @@ export default class BuildingData extends Component {
     searchCurr2 = (event) => {
         let keyword = event.target.value;
         this.setState({ curr2search: keyword })
+        this.pageselectvalue(1)
     }
     searchDay = (event) => {
         let keyword = event.target.value;
         this.setState({ daysearch: keyword })
+        this.pageselectvalue(1)
     }
 
     searchTime = (event) => {
         let keyword = event.target.value;
         this.setState({ starttime: keyword })
+        this.pageselectvalue(1)
     }
 
     manageroom = () => {
@@ -159,7 +174,6 @@ export default class BuildingData extends Component {
 
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 13 && parseInt(teachtime[0]) >= 7))
                 return member
-
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
                 return member
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
