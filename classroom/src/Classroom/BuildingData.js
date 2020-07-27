@@ -437,15 +437,15 @@ export default class BuildingData extends Component {
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
+                        <Modal.Title>คำเตือน</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>สวัสดี</Modal.Body>
+                    <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
-                            Close
+                            ยกเลิก
                         </Button>
                         <Button variant="primary" onClick={this.confirmdelete}>
-                            Save Changes
+                            ยืนยัน
                         </Button>
                     </Modal.Footer>
                 </Modal>
