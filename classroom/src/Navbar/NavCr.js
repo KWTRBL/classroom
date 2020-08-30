@@ -9,18 +9,22 @@ import datapic from './docs.png'
 import grouppic from './book.png'
 import managepic from './content.png'
 import download from './download.png'
-import kmitl from './logokmitl.png'
+import kmitlEng from './logokmitl.png'
+import kmitlIcon from './headbg.jpg'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './NavBar.css';
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import NavDropdown from 'react-bootstrap/NavDropdown'
 import { Component } from 'react';
 import axios from 'axios';
 
 export default class ClassroomData extends Component {
   constructor(props) {
     super(props);
-    
+
   }
   logout = () => {
     axios.get('http://localhost:7777/logout', { withCredentials: true })
@@ -30,80 +34,51 @@ export default class ClassroomData extends Component {
 
 
   }
-  render(){
+
+
+
+  render() {
     return (
-    <div>
-      <div className="headerkmitl">
-          <img src={kmitl} className="Logokmitl" alt="kmitlpic"/>
-          <div className="linetop"></div>
-          <Button variant="light" className="logout" onClick={() => this.logout()}>Logout</Button>
-          <p className="username">พี่วรรณ</p>
-          <img src={imageCr} className="profilePic" alt="profilepic"/>
-          
+      <div>
+        <div className="dummy"></div>
+        <Navbar collapseOnSelect fixed="top" className="edNavbar" expand="lg" variant="light">
+          <Navbar.Brand><img src={kmitlEng} className="Logokmitl" alt="logokmitl" /></Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="อาคารและห้องเรียน" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/BuildingData">ข้อมูลอาคารเรียน</NavDropdown.Item>
+                <NavDropdown.Item href="/ClassroomData">ข้อมูลห้องเรียน</NavDropdown.Item>
+                <NavDropdown.Item href="/AvailableRoom">สถานะการใช้ห้องเรียน</NavDropdown.Item>
+                <NavDropdown.Item href="/ManageZone">แบ่งโซนห้องเรียน</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="ตารางสอน" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/DownloadData">ข้อมูลตารางสอน</NavDropdown.Item>
+                <NavDropdown.Item href="/ManageGroup">จัดจำนวนนักศึกษา</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="การจัดการห้องเรียน" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/SpecialCr">จัดห้องเรียนกรณีพิเศษ</NavDropdown.Item>
+                <NavDropdown.Item href="/ManageCr">จัดห้องเรียนปกติ</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <NavDropdown title="เจ้าหน้าที่ฝ่ายอาคารสถานที่" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item>
+                <NavDropdown.Item href="#" onClick={() => this.logout()}>ออกจากระบบ</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+
       </div>
-      <div id="mySidenav" class="sidenav">
-          <div class="navtitle">
-              <h2 class="navclass">Classroom</h2>
-              <h2 class="navmanage">Management</h2>
-          </div>
-          <div class="detailnav">
-            <Link class="link" to="/BuildingData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลอาคารเรียน</Link >
-            <br></br>
-            <Link class="link" to="/ClassroomData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลห้องเรียน</Link >
-            <br></br>
-            <Link class="link" to="/AvailableRoom"><img src={build} className="iconlink" alt="AvailableRoom"/> สถานะการใช้ห้องเรียน</Link >
-            <br></br>
-            <Link class="link" to="/DownloadData"><img src={datapic} className="iconlink" alt="Datapic"/> ข้อมูลตารางสอน</Link >
-            <br></br>
-            <Link class="link" to="/ManageGroup"><img src={grouppic} className="iconlink" alt="Grouppic"/> จัดจำนวนนักศึกษาแต่ละกลุ่ม</Link >
-            <br></br>
-            <Link class="link" to="/SpecialCr"><img src={managepic} className="iconlink" alt="SpecialCrpic"/> กำหนดห้องเรียนกรณีพิเศษ</Link >
-            <br></br>
-            <Link class="link" to="/ManageZone"><img src={managepic} className="iconlink" alt="ManageZonepic"/> แบ่งโซนห้องเรียนแต่ละภาควิชา</Link >
-            <br></br>
-            <Link class="link" to="/ManageCr"><img src={managepic} className="iconlink" alt="ManageCrpic"/> จัดห้องเรียน</Link >
-          </div>
-      </div>
-    </div>
-  )
+    )
   }
 }
-/*
-function Navbar() {
-  return (
-    <div>
-      <div className="headerkmitl">
-          <img src={kmitl} className="Logokmitl" alt="kmitlpic"/>
-          <div className="linetop"></div>
-          <Button variant="light" className="logout">Logout</Button>
-          <p className="username">พี่วรรณ</p>
-          <img src={imageCr} className="profilePic" alt="profilepic"/>
-          
-      </div>
-      <div id="mySidenav" class="sidenav">
-          <div class="navtitle">
-              <h2 class="navclass">Classroom</h2>
-              <h2 class="navmanage">Management</h2>
-          </div>
-          <div class="detailnav">
-            <Link class="link" to="/BuildingData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลอาคารเรียน</Link >
-            <br></br>
-            <Link class="link" to="/ClassroomData"><img src={build} className="iconlink" alt="Buildpic"/> ข้อมูลห้องเรียน</Link >
-            <br></br>
-            <Link class="link" to="/DownloadData"><img src={datapic} className="iconlink" alt="Datapic"/> ข้อมูลตารางสอน</Link >
-            <br></br>
-            <Link class="link" to="/ManageGroup"><img src={grouppic} className="iconlink" alt="Grouppic"/> จัดจำนวนนักศึกษาแต่ละกลุ่ม</Link >
-            <br></br>
-            <Link class="link" to="/SpecialCr"><img src={managepic} className="iconlink" alt="SpecialCrpic"/> กำหนดห้องเรียนกรณีพิเศษ</Link >
-            <br></br>
-            <Link class="link" to="/ManageZone"><img src={managepic} className="iconlink" alt="ManageZonepic"/> แบ่งโซนห้องเรียนแต่ละภาควิชา</Link >
-            <br></br>
-            <Link class="link" to="/ManageCr"><img src={managepic} className="iconlink" alt="ManageCrpic"/> จัดห้องเรียน</Link >
-          </div>
-      </div>
-    </div>
-  );
-}
-
-export default Navbar;
-*/

@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
@@ -11,8 +12,9 @@ import axios from 'axios';
 import { Component } from 'react';
 import { json } from 'body-parser';
 import './ClassroomData.css';
-import Pagination from 'react-bootstrap/Pagination'
 import Modal from 'react-bootstrap/Modal'
+
+import Pagination from "react-js-pagination";
 
 export default class ClassroomData extends Component {
     constructor(props) {
@@ -41,7 +43,6 @@ export default class ClassroomData extends Component {
             olddata: []
         }
         this.pageselectvalue = this.pageselectvalue.bind(this)
-        this.pageselect = this.pageselect.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
         //delete row
         this.deletebt = this.deletebt.bind(this)
@@ -146,29 +147,22 @@ export default class ClassroomData extends Component {
 
     }
 
-    pageselect(e) {
+
+
+    pageselectvalue(value) {
         let newId = this.state.editlist.slice()
         for (var i = 0; i < newId.length; i++) {
             if (newId[i] == 1) {
                 newId[i] = 0
             }
         }
-
-        this.setState({
-            pageclick: parseInt(e.target.textContent),
-            firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(e.target.textContent)),
-            editlist: newId,
-            name: JSON.parse(this.state.olddata),
-
-        })
-    }
-
-    pageselectvalue(value) {
         this.setState({
             pageclick: parseInt(value),
             firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(value))
+            lastitem: (this.state.itemperpage * parseInt(value)),
+            editlist: newId,
+            name: JSON.parse(this.state.olddata),
+
         })
     }
 
@@ -492,21 +486,7 @@ export default class ClassroomData extends Component {
                 return member
         }).length
 
-        let items = [];
-        for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
-            items.push(
-                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick={this.pageselect}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
 
-        const paginationBasic = (
-            <div>
-                <Pagination>{items}</Pagination>
-                <br />
-            </div>
-        );
 
         const floor_num = this.state.building.filter((member) => {
             if (member.building_no == this.state.search) {
@@ -533,7 +513,7 @@ export default class ClassroomData extends Component {
                 <h1 class="state">ข้อมูลห้องเรียน</h1>
                 <div id="detail">
                     <div className="filterCrData">
-                        <h4 className="buildfil1">อาคารเรียน</h4>
+                        <h5 className="buildfil1">อาคารเรียน</h5>
                         <div className="buildfildetail1">
                             <select id="building" onChange={(e) => this.searchSpace(e)} >
                                 {
@@ -543,7 +523,7 @@ export default class ClassroomData extends Component {
                                 }
                             </select>
                         </div>
-                        <h4 className="buildfil2">ชั้น</h4>
+                        <h5 className="buildfil2">ชั้น</h5>
                         <div className="buildfildetail2">
                             <select id="floor_num" onChange={(e) => this.searchSpace1(e)}>
                                 {
@@ -553,7 +533,7 @@ export default class ClassroomData extends Component {
                         </div>
                     </div>
 
-                    <table className="Crtable">
+                    <Table striped responsive className="Crtable">
                         <thead>
                             <tr className="Classroomtable">
                                 <th>รหัสอาคาร</th>
@@ -570,12 +550,20 @@ export default class ClassroomData extends Component {
                             }
                             {this.state.rows}
                         </tbody>
-                    </table>
+                    </Table>
                     <Button variant="light" className="adddata" onClick={() => this.addrow()}>
                         <img src={addbt} className="addicon" alt="add" />
                     </Button>
-                    {paginationBasic}
-                    <Foot />
+                    <Pagination
+                        activePage={this.state.pageclick}
+                        itemsCountPerPage={this.state.itemperpage}
+                        totalItemsCount={data_num}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        pageRangeDisplayed={5}
+                        onChange={this.pageselectvalue}
+
+                    />
                 </div>
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
@@ -609,6 +597,10 @@ export default class ClassroomData extends Component {
                     <Modal.Footer>
                     </Modal.Footer>
                 </Modal>
+
+                <div className="footer">
+                    <Foot />
+                </div>
             </div>
         );
     }

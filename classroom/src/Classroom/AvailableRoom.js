@@ -1,4 +1,6 @@
 import React from 'react';
+import Table from 'react-bootstrap/Table';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,8 +12,9 @@ import addbt from './icon/plus.png';
 import axios from 'axios';
 import { Component } from 'react';
 import { json } from 'body-parser';
-import Pagination from 'react-bootstrap/Pagination'
+//import Pagination from 'react-bootstrap/Pagination'
 import './AvailableRoom.css'
+import Pagination from "react-js-pagination";
 
 export default class AvailiableRoom extends Component {
     constructor(props) {
@@ -34,7 +37,6 @@ export default class AvailiableRoom extends Component {
             timezone: 1
 
         }
-        this.pageselect = this.pageselect.bind(this);
         this.pageselectvalue = this.pageselectvalue.bind(this);
 
         this.componentWillMount = this.componentWillMount.bind(this);
@@ -89,13 +91,7 @@ export default class AvailiableRoom extends Component {
             lastitem: this.state.itemperpage
         })
     }
-    pageselect(e) {
-        this.setState({
-            pageclick: parseInt(e.target.textContent),
-            firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(e.target.textContent))
-        })
-    }
+
 
     pageselectvalue(value) {
         this.setState({
@@ -181,22 +177,7 @@ export default class AvailiableRoom extends Component {
                 return member.building_no == this.state.buildingsearch && member.year == this.state.yearsearch && member.semester == this.state.semestersearch && member.teach_day == this.state.daysearch
             }
         }).length
-
-        let items = [];
-        for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
-            items.push(
-                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick={this.pageselect}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
-
-        const paginationBasic = (
-            <div>
-                <Pagination>{items}</Pagination>
-                <br />
-            </div>
-        );
+        
         const term_num = this.state.semester.map((member) => {
             /*
             if (member.year == this.state.yearsearch && this.state.stateyear == 0) {
@@ -275,7 +256,7 @@ export default class AvailiableRoom extends Component {
                         </select>
                     </div>
 
-                    <table className="Crtable">
+                    <Table striped responsive className="Crtable">
                         <thead>
                             <tr className="ManageTable">
                                 <th>ชั้น</th>
@@ -286,8 +267,23 @@ export default class AvailiableRoom extends Component {
                         <tbody>
                             {item}
                         </tbody>
-                    </table>
-                    {paginationBasic}
+                    </Table>
+   
+
+                    <Pagination
+                        activePage={this.state.pageclick}
+                        itemsCountPerPage={this.state.itemperpage}
+                        totalItemsCount={data_num}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        pageRangeDisplayed={5}
+                        onChange={this.pageselectvalue}
+
+                    />
+       
+                </div>
+
+                <div className="footer">
                     <Foot />
                 </div>
             </div>

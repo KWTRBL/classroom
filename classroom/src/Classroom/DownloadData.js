@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
@@ -10,7 +11,7 @@ import addbt from './icon/plus.png';
 import './DownloadData.css'
 import { Component } from 'react';
 import axios from 'axios';
-import Pagination from 'react-bootstrap/Pagination'
+import Pagination from "react-js-pagination";
 import Modal from 'react-bootstrap/Modal'
 import Papa from 'papaparse'
 export default class BuildingData extends Component {
@@ -52,7 +53,6 @@ export default class BuildingData extends Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClosesubmit = this.handleClosesubmit.bind(this);
     this.handleClosefailed = this.handleClosefailed.bind(this);
-    this.pageselect = this.pageselect.bind(this);
     this.componentWillMount = this.componentWillMount.bind(this);
     this.pageselectvalue = this.pageselectvalue.bind(this);
 
@@ -77,6 +77,7 @@ export default class BuildingData extends Component {
         for (var i = 0; i < res.data.length; i++) {
           newIds.push(0)
         }
+        console.log(res.data)
         this.setState({
           name: res.data,
           editlist: newIds,
@@ -126,30 +127,22 @@ export default class BuildingData extends Component {
       lastitem: this.state.itemperpage
     })
   }
-  pageselect(e) {
+
+
+  pageselectvalue(value) {
     let newId = this.state.editlist.slice()
     for (var i = 0; i < newId.length; i++) {
       if (newId[i] == 1) {
         newId[i] = 0
       }
     }
-
-    this.setState({
-      pageclick: parseInt(e.target.textContent),
-      firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
-      lastitem: (this.state.itemperpage * parseInt(e.target.textContent)),
-      editlist: newId,
-      name: JSON.parse(this.state.olddata),
-
-    })
-
-  }
-
-  pageselectvalue(value) {
     this.setState({
         pageclick: parseInt(value),
         firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
-        lastitem: (this.state.itemperpage * parseInt(value))
+        lastitem: (this.state.itemperpage * parseInt(value)),
+        editlist: newId,
+        name: JSON.parse(this.state.olddata),
+  
     })
 }
   handleOpen() {
@@ -395,12 +388,12 @@ export default class BuildingData extends Component {
     var editjson = []
     const item = this.state.name.filter((member, index) => {
       if (this.state.yearsearch == null) {
-        this.setState({ curr2search: "00", yearsearch: 2555, semestersearch: 1, daysearch: 1 })
-        if (member.curr2_id == "00" && member.year == 2555 && member.semester == 1 && member.teach_day == 1) {
+        this.setState({ curr2search: "00", yearsearch: 2563, semestersearch: 1, daysearch: 1 })
+        if (member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1) {
           editjson.push(index)
           //console.log(editjson)
         }
-        return member.curr2_id == "00" && member.year == 2555 && member.semester == 1 && member.teach_day == 1
+        return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1
       }
       else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch)) {
         editjson.push(index)
@@ -473,28 +466,14 @@ export default class BuildingData extends Component {
 
     let data_num = this.state.name.filter((member) => {
       if (this.state.yearsearch == null) {
-        this.setState({ curr2search: "00", yearsearch: 2555, semestersearch: 1, daysearch: 1 })
-        return member.curr2_id == "00" && member.year == 2555 && member.semester == 1 && member.teach_day == 1
+        this.setState({ curr2search: "00", yearsearch: 2563, semestersearch: 1, daysearch: 1 })
+        return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1
       }
       else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch))
         return member
     }).length
 
-    let items = [];
-    for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
-      items.push(
-        <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick={this.pageselect}>
-          {number}
-        </Pagination.Item>,
-      );
-    }
 
-    const paginationBasic = (
-      <div>
-        <Pagination>{items}</Pagination>
-        <br />
-      </div>
-    );
     const term_num = this.state.semester.map((member) => {
       /*
       if (member.year == this.state.yearsearch && this.state.stateyear == 0) {
@@ -531,7 +510,7 @@ export default class BuildingData extends Component {
         <Nav />
         <h1 class="state">ข้อมูลตารางสอน</h1>
         <div id="detail">
-          <h6 className="typetitle">รับข้อมูลตารางสอน</h6>
+          <h5 className="typetitle">รับข้อมูลตารางสอน</h5>
           <div className="uploadfile">
             <input type='file' name='fileInput' id="file" accept=".csv"className="updata" onChange={this.handleFileUpload} />
             <Button variant="primary" type="file" onClick={this.handleOpen} className="getFile" size="sm">Submit</Button>
@@ -573,7 +552,7 @@ export default class BuildingData extends Component {
               <option value="7">เสาร์</option>
             </select>
           </div>
-          <table className="Crtable">
+          <Table striped responsive className="Crtable">
             <thead>
               <tr className="Downloadtable">
                 <th>รหัสวิชา</th>
@@ -587,7 +566,7 @@ export default class BuildingData extends Component {
             <tbody>
               {item}
             </tbody>
-          </table>
+          </Table>
           <Button variant="light" className="adddata">
             <img src={addbt} className="addicon" alt="add" />
           </Button>
@@ -624,9 +603,21 @@ export default class BuildingData extends Component {
             <Modal.Footer>
             </Modal.Footer>
           </Modal>
-          {paginationBasic}
-          <Foot />
+          <Pagination
+                        activePage={this.state.pageclick}
+                        itemsCountPerPage={this.state.itemperpage}
+                        totalItemsCount={data_num}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        pageRangeDisplayed={5}
+                        onChange={this.pageselectvalue}
+
+                    />
         </div>
+
+        <div className="footer">
+                    <Foot />
+                </div>
       </div>
     )
 

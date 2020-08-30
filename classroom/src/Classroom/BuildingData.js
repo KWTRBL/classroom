@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
@@ -13,6 +14,8 @@ import { Component } from 'react';
 import { json } from 'body-parser';
 import Pagination from 'react-bootstrap/Pagination'
 import Modal from 'react-bootstrap/Modal'
+import Paginations from "react-js-pagination";
+
 
 export default class BuildingData extends Component {
     constructor(props) {
@@ -32,10 +35,13 @@ export default class BuildingData extends Component {
             building_name: null,
             floor_num: null,
             editlist: [],
-            olddata: []
+            olddata: [],
+            pagenumber: 0
         }
-        
+
         this.pageselect = this.pageselect.bind(this);
+
+
 
         //delete row
         this.deletebt = this.deletebt.bind(this)
@@ -62,7 +68,7 @@ export default class BuildingData extends Component {
 
         this.componentWillMount = this.componentWillMount.bind(this);
     }
-   
+
 
     //handle modal
     handleClose() {
@@ -169,7 +175,7 @@ export default class BuildingData extends Component {
                         className="form-control"
                         id="formGroupExampleInput"
                         onChange={this.handleChange_floornum}
-                        min = "0"
+                        min="0"
                     />
                 </td>
                 <td>
@@ -183,6 +189,7 @@ export default class BuildingData extends Component {
         })
     }
 
+
     //delete row input
     delrow = () => {
         this.setState({
@@ -192,7 +199,7 @@ export default class BuildingData extends Component {
             floor_num: null
         })
     }
-    
+
     //delete row button 
     deletebt = (data) => {
         this.setState({
@@ -200,7 +207,7 @@ export default class BuildingData extends Component {
             building_no: data
         })
     }
-    
+
     //confirm delete row in table function
     confirmdelete() {
         axios
@@ -240,11 +247,11 @@ export default class BuildingData extends Component {
         let olddata = JSON.parse(this.state.olddata)
         axios
             .put("http://localhost:7777/building/update", {
-                
-                    building_no: this.state.name[index].building_no,
-                    building_name: this.state.name[index].building_name,
-                    floor_num: this.state.name[index].floor_num,
-                    building_no_select: olddata[index].building_no
+
+                building_no: this.state.name[index].building_no,
+                building_name: this.state.name[index].building_name,
+                floor_num: this.state.name[index].floor_num,
+                building_no_select: olddata[index].building_no
             })
             .then(response => {
                 console.log("response: ", response)
@@ -254,7 +261,7 @@ export default class BuildingData extends Component {
             .catch(err => {
                 console.error(err)
             })
-            window.location.reload(false);
+        window.location.reload(false);
 
     }
 
@@ -296,18 +303,18 @@ export default class BuildingData extends Component {
 
 
     }
-    pageselect(e) {
+
+    pageselect(pageNumber) {
         let newId = this.state.editlist.slice()
-        for(var i = 0 ;i< newId.length;i++){
-            if(newId[i] == 1){
+        for (var i = 0; i < newId.length; i++) {
+            if (newId[i] == 1) {
                 newId[i] = 0
             }
         }
-
         this.setState({
-            pageclick: parseInt(e.target.textContent),
-            firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(e.target.textContent)),
+            pageclick: pageNumber,
+            firstitem: (this.state.itemperpage * pageNumber) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * pageNumber),
             editlist: newId,
             name: JSON.parse(this.state.olddata),
 
@@ -332,7 +339,7 @@ export default class BuildingData extends Component {
                                 type="text"
                                 className="form-control"
                                 id="formGroupExampleInput"
-                                onChange={(e) => this.handleChange_editbuilding_no(((this.state.pageclick-1)*this.state.itemperpage) +index, e)}
+                                onChange={(e) => this.handleChange_editbuilding_no(((this.state.pageclick - 1) * this.state.itemperpage) + index, e)}
                             />
                         </td>
                         <td>
@@ -341,7 +348,7 @@ export default class BuildingData extends Component {
                                 type="text"
                                 className="form-control"
                                 id="formGroupExampleInput"
-                                onChange={(e) => this.handleChange_editbuilding_name(((this.state.pageclick-1)*this.state.itemperpage) +index, e)}
+                                onChange={(e) => this.handleChange_editbuilding_name(((this.state.pageclick - 1) * this.state.itemperpage) + index, e)}
                             /></td>
                         <td>
                             <input
@@ -349,14 +356,14 @@ export default class BuildingData extends Component {
                                 type="number"
                                 className="form-control"
                                 id="formGroupExampleInput"
-                                min = "1"
-                                onChange={(e) => this.handleChange_editfloor_num(((this.state.pageclick-1)*this.state.itemperpage) +index, e)}
+                                min="1"
+                                onChange={(e) => this.handleChange_editfloor_num(((this.state.pageclick - 1) * this.state.itemperpage) + index, e)}
                             />
                         </td>
                         <td>
                             <Button variant="link" onClick={() => this.canceledit(index)}>ยกเลิก</Button>
 
-                            <Button variant="primary" onClick={() => this.confirmedit(((this.state.pageclick-1)*this.state.itemperpage) +index)} >ยืนยัน</Button>
+                            <Button variant="primary" onClick={() => this.confirmedit(((this.state.pageclick - 1) * this.state.itemperpage) + index)} >ยืนยัน</Button>
                         </td>
                     </tr>
 
@@ -392,27 +399,12 @@ export default class BuildingData extends Component {
             return member
         }).length
 
-        let items = [];
-        for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
-            items.push(
-                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick={this.pageselect}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
-
-        const paginationBasic = (
-            <div>
-                <Pagination>{items}</Pagination>
-                <br />
-            </div>
-        );
         return (
             <div >
                 <Nav />
                 <h1 class="state">ข้อมูลอาคารเรียน</h1>
                 <div id="detail">
-                    <table className="Crtable">
+                    <Table striped responsive className="Crtable">
                         <thead>
                             <tr className="Buildtable">
                                 <th>รหัสอาคาร</th>
@@ -427,14 +419,26 @@ export default class BuildingData extends Component {
                             }
                             {this.state.rows}
                         </tbody>
-                    </table>
+                    </Table>
                     <Button variant="light" className="adddata" onClick={() => this.addrow()}>
                         <img src={addbt} className="addicon" alt="add" />
                     </Button>
-                    {paginationBasic}
-                    <Foot />
-                </div>
 
+                    <Paginations
+                        activePage={this.state.pageclick}
+                        itemsCountPerPage={this.state.itemperpage}
+                        totalItemsCount={data_num}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        pageRangeDisplayed={5}
+                        onChange={this.pageselect}
+
+                    />
+
+
+
+
+                </div>
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>คำเตือน</Modal.Title>
@@ -467,6 +471,10 @@ export default class BuildingData extends Component {
                     <Modal.Footer>
                     </Modal.Footer>
                 </Modal>
+
+                <div className="footer">
+                    <Foot />
+                </div>
             </div>
         );
     }

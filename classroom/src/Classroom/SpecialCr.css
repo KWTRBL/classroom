@@ -1,11 +1,9 @@
 .departfil2{
-    font-size: 1.5vw;
     color: #707070;
     margin-right: 4px;
-    width: 14%;
 }
 .departfil2detail{
-    width: 60%;
+    width: 40%;
     margin-bottom: 2%;
 }
 .ManageTable th:nth-of-type(1){

@@ -23,7 +23,7 @@ import './index.css';
 
 
 const AppWithRouter = () => (
-  <BrowserRouter>
+  <BrowserRouter basename="/cims">
     <Route exact path="/" component={Login} />
     <Route exact path="/BuildingData" component={RequireAuth(BuildingData)} />
     <Route exact path="/ClassroomData" component={RequireAuth(ClassroomData)} />

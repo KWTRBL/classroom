@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavCr'
@@ -10,7 +11,7 @@ import addbt from './icon/plus.png';
 import axios from 'axios';
 import { Component } from 'react';
 import { json } from 'body-parser';
-import Pagination from 'react-bootstrap/Pagination'
+import Pagination from "react-js-pagination";
 import './ManageZone.css'
 
 export default class ManageZone extends Component {
@@ -71,18 +72,17 @@ export default class ManageZone extends Component {
             lastitem: this.state.itemperpage
         })
     }
-    pageselect(e) {
+    pageselect(pageNumber) {
         let newId = this.state.editlist.slice()
         for (var i = 0; i < newId.length; i++) {
             if (newId[i] == 1) {
                 newId[i] = 0
             }
         }
-
         this.setState({
-            pageclick: parseInt(e.target.textContent),
-            firstitem: (this.state.itemperpage * parseInt(e.target.textContent)) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(e.target.textContent)),
+            pageclick: pageNumber,
+            firstitem: (this.state.itemperpage * pageNumber) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * pageNumber),
             editlist: newId,
             name: JSON.parse(this.state.olddata),
 
@@ -242,27 +242,13 @@ export default class ManageZone extends Component {
             return member
         }).length
 
-        let items = [];
-        for (let number = 1; number <= Math.ceil(data_num / this.state.itemperpage); number++) {
-            items.push(
-                <Pagination.Item className="selectpage" key={number} active={number == this.state.pageclick} onClick={this.pageselect}>
-                    {number}
-                </Pagination.Item>,
-            );
-        }
 
-        const paginationBasic = (
-            <div>
-                <Pagination>{items}</Pagination>
-                <br />
-            </div>
-        );
         return (
             <div >
                 <Nav />
                 <h1 class="state">แบ่งโซนห้องเรียนแต่ละภาควิชา</h1>
                 <div id="detail">
-                    <table className="Crtable">
+                    <Table striped responsive className="Crtable">
                         <thead>
                             <tr className="ManZoneTable">
                                 <th>สาขาวิชา</th>
@@ -276,11 +262,24 @@ export default class ManageZone extends Component {
                                 item
                             }
                         </tbody>
-                    </table>
+                    </Table>
                     <Button variant="light" className="adddata">
                         <img src={addbt} className="addicon" alt="add" />
                     </Button>
-                    {paginationBasic}
+                    
+<Pagination
+                        activePage={this.state.pageclick}
+                        itemsCountPerPage={this.state.itemperpage}
+                        totalItemsCount={data_num}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                        pageRangeDisplayed={5}
+                        onChange={this.pageselect}
+
+                    />
+                </div>
+
+                <div className="footer">
                     <Foot />
                 </div>
             </div>

@@ -2,6 +2,7 @@
   "name": "classroom",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/cims",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -26,8 +27,10 @@
     "react-bootstrap": "^1.0.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-js-pagination": "^3.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "redis": "^3.0.2",
     "sql-importer": "^1.0.3"
   },
   "scripts": {

@@ -1,6 +1,5 @@
 .filter{
     display: flex;
-    width: 170%;
     height: 5%;
 }
 .option{
@@ -12,30 +11,22 @@
     margin-bottom: 2%;
 }
 .buildingfil2{
-    font-size: 1.5vw;
     color: #707070;
     margin-right: 0px;
-    width: 10%;
 }
 .dayfil{
-    font-size: 1.5vw;
-    width: 8.7%;
     color: #707070;
 }
 .selectday{
     margin-right: 8px;
-    width: 10%;
     margin-bottom: 2%;
 }
 .periodTimefil{
-    font-size: 1.5vw;
-    width: 13.5%;
     color: #707070;
     margin-right: 2px;
 }
 .selectime{
     margin-right: 8px;
-    width: 9%;
     margin-bottom: 2%;
 }
 .downloadbtn{
@@ -45,12 +36,3 @@
     margin-top: 3%;
     margin-right: 1%;
 }
-#buttonManage{
-    position: relative;
-    margin-left: 10px;
-    left: 4%;
-    display: flex;
-    width: 10%;
-    height: 2%;
-    margin-top: -0.5%;
-  }

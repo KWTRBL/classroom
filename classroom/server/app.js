@@ -4,6 +4,9 @@ var bodyParser = require('body-parser');
 
 const cookieParser = require('cookie-parser') // ใช้งาน cookie-parser module
 
+const redis = require('redis')
+const client = redis.createClient()
+
 //new
 var session = require('express-session')
 const bcrypt = require('bcrypt')
@@ -209,11 +212,32 @@ app.put('/groupdata/update', (req, res) => {   // Router เวลาเรี�
 
 })
 
+
+  
+
+
+
 //Teach Data
 app.get('/teachdata', (req, res) => {   // Router เวลาเรียกใช้งาน
-    teachdata.read(function (callback) {
-        res.json(callback)
+    
+    client.get('teachtable', async (error, data) => {
+        /*
+        if (error) {
+          return res.json({
+            message: 'Something went wrong!',
+            error
+          })
+        }*/
+        if (data) {
+          return res.json(JSON.parse(data))
+        }else{
+            teachdata.read(function (callback) {
+                client.setex('teachtable', 60, JSON.stringify(callback))
+                res.json(callback)
+            })
+        }
     })
+    
 })
 
 app.post('/teachdata/update', (req, res) => {   // Router เวลาเรียกใช้งาน
@@ -269,6 +293,3 @@ app.post('/manageroom', (req, res) => {   // Router เวลาเรียก�
 app.listen(port, () => {     // 
     console.log('start port ' + port)
 })
-
-
-
