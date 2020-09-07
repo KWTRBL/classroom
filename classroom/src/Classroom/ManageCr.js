@@ -161,12 +161,12 @@ export default class BuildingData extends Component {
             if (this.state.yearsearch == null) {
 
                 this.setState({ curr2search: "00", yearsearch: 2563, semestersearch: 1, daysearch: 1 })
-                return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && (parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 13)
+                return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 13 && parseInt(teachtime[0]) >= 7))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ( (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7 ) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45  ) ))
                 return member
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45)||((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
                 return member
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
                 return member
@@ -201,13 +201,13 @@ export default class BuildingData extends Component {
             if (this.state.yearsearch == null) {
 
                 this.setState({ curr2search: "00", yearsearch: 2563, semestersearch: 1, daysearch: 1 })
-                return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && (parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 13)
+                return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 13))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ( (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7 ) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45  ) ))
                 return member
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )   )                     )
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45)||((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
                 return member
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
                 return member
