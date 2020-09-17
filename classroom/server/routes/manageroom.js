@@ -79,15 +79,17 @@ module.exports.read = async function (req,callback) {
         var rownum =  await row(numrow_evening,year,semester,curr2_id,teach_day)  
     }
 
-    console.log(rownum[0].row)
+    console.log("row = "+rownum[0].row)
     pool.getConnection(async (err, connection) => {
         if (err) throw err;
         var test
-        console.log('connected as id ' + connection.threadId);
+        //console.log('connected as id ' + connection.threadId);
 
         do{
         if(timeperiod=="07:00"){
-            connection.query(stunumsql_morning,[year,semester,curr2_id,teach_day],  async (err, rows) => {
+            connection.query(stunumsql_morning,[year,semester,curr2_id,teach_day],  (err, rows) => {
+                //console.log(rows)
+
             });
             
             connection.query(manageroomsql_morning,[curr2_id,curr2_id,year,teach_day,semester,year,semester,curr2_id,teach_day,curr2_id,curr2_id,year,teach_day,semester,year,semester,curr2_id,teach_day,curr2_id,year,teach_day,semester,year,semester,curr2_id,teach_day,curr2_id,year,teach_day,semester,year,semester,curr2_id,teach_day,year,teach_day,semester,year,semester,curr2_id,teach_day,year,semester,curr2_id,teach_day],  (err, rows) => {
@@ -136,11 +138,13 @@ module.exports.read = async function (req,callback) {
                 if(err) throw err;
             });
             connection.query(setroomsql_evening,[year,semester,curr2_id,teach_day],  (err, rows) => {
+                console.log(rows)
                 if(err) throw err;
             });
             */
         }
         loopnum++;
+        console.log(loopnum)
         }while(loopnum!=rownum[0].row+1)
         connection.release();
         callback(rownum[0].row)

@@ -74,7 +74,7 @@ export default class BuildingData extends Component {
                 console.log(error);
             })
 
-        axios.get('http://localhost:7777/zonedata')
+        axios.get('http://localhost:7777/curriculum')
             .then(res => {
                 this.setState({
                     curr2: res.data,

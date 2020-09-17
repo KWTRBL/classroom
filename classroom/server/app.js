@@ -42,6 +42,7 @@ const yeardata = require('./routes/yeardata')
 const availableroom = require('./routes/availableroom')
 const auth = require('./routes/auth')
 const manageroom = require('./routes/manageroom')
+const curriculum = require('./routes/curriculum')
 
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
@@ -197,6 +198,14 @@ app.get('/zonedata', (req, res) => {   // Router เวลาเรียกใ�
         res.json(callback)
     })
 })
+
+//Curriculum Data From teachtable
+app.get('/curriculum', (req, res) => {   // Router เวลาเรียกใช้งาน
+    curriculum.read(function (callback) {
+        res.json(callback)
+    })
+})
+
 
 //CurriculumGroup Data
 app.get('/groupdata', (req, res) => {   // Router เวลาเรียกใช้งาน
