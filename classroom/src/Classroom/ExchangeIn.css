@@ -1,0 +1,9 @@
+.textbox{
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
+.btnIn{
+    justify-content: flex-end;
+}
