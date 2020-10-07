@@ -244,41 +244,43 @@ export default class ManageZone extends Component {
 
 
         return (
-            <div >
-                <Nav />
-                <h1 class="state">แบ่งโซนห้องเรียนแต่ละภาควิชา</h1>
-                <div id="detail">
-                    <Table striped responsive className="Crtable">
-                        <thead>
-                            <tr className="ManZoneTable">
-                                <th>สาขาวิชา</th>
-                                <th>อาคารเรียน</th>
-                                <th>ชั้น</th>
-                                <th>แก้ไขข้อมูล</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                item
-                            }
-                        </tbody>
-                    </Table>
-                    <Button variant="light" className="adddata">
-                        <img src={addbt} className="addicon" alt="add" />
-                    </Button>
-                    
-<Pagination
-                        activePage={this.state.pageclick}
-                        itemsCountPerPage={this.state.itemperpage}
-                        totalItemsCount={data_num}
-                        itemClass="page-item"
-                        linkClass="page-link"
-                        pageRangeDisplayed={5}
-                        onChange={this.pageselect}
+            <div className="page-container" >
+                <div className="content-wrap">
 
-                    />
+                    <Nav />
+                    <h1 class="state">แบ่งโซนห้องเรียนแต่ละภาควิชา</h1>
+                    <div id="detail">
+                        <Table striped responsive className="Crtable">
+                            <thead>
+                                <tr className="ManZoneTable">
+                                    <th>สาขาวิชา</th>
+                                    <th>อาคารเรียน</th>
+                                    <th>ชั้น</th>
+                                    <th>แก้ไขข้อมูล</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    item
+                                }
+                            </tbody>
+                        </Table>
+                        <Button variant="light" className="adddata">
+                            <img src={addbt} className="addicon" alt="add" />
+                        </Button>
+
+                        <Pagination
+                            activePage={this.state.pageclick}
+                            itemsCountPerPage={this.state.itemperpage}
+                            totalItemsCount={data_num}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            pageRangeDisplayed={5}
+                            onChange={this.pageselect}
+
+                        />
+                    </div>
                 </div>
-
                 <div className="footer">
                     <Foot />
                 </div>

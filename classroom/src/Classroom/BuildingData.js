@@ -400,78 +400,79 @@ export default class BuildingData extends Component {
         }).length
 
         return (
-            <div >
-                <Nav />
-                <h1 class="state">ข้อมูลอาคารเรียน</h1>
-                <div id="detail">
-                    <Table striped responsive className="Crtable">
-                        <thead>
-                            <tr className="Buildtable">
-                                <th>รหัสอาคาร</th>
-                                <th>อาคารเรียน</th>
-                                <th>จำนวนชั้นทั้งหมด</th>
-                                <th>แก้ไขข้อมูล</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                item
-                            }
-                            {this.state.rows}
-                        </tbody>
-                    </Table>
-                    <Button variant="light" className="adddata" onClick={() => this.addrow()}>
-                        <img src={addbt} className="addicon" alt="add" />
-                    </Button>
+            <div className="page-container">
+                <div className="content-wrap">
+                    <Nav />
+                    <h1 class="state">ข้อมูลอาคารเรียน</h1>
+                    <div id="detail">
+                        <Table striped responsive className="Crtable">
+                            <thead>
+                                <tr className="Buildtable">
+                                    <th>รหัสอาคาร</th>
+                                    <th>อาคารเรียน</th>
+                                    <th>จำนวนชั้นทั้งหมด</th>
+                                    <th>แก้ไขข้อมูล</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    item
+                                }
+                                {this.state.rows}
+                            </tbody>
+                        </Table>
+                        <Button variant="light" className="adddata" onClick={() => this.addrow()}>
+                            <img src={addbt} className="addicon" alt="add" />
+                        </Button>
 
-                    <Paginations
-                        activePage={this.state.pageclick}
-                        itemsCountPerPage={this.state.itemperpage}
-                        totalItemsCount={data_num}
-                        itemClass="page-item"
-                        linkClass="page-link"
-                        pageRangeDisplayed={5}
-                        onChange={this.pageselect}
+                        <Paginations
+                            activePage={this.state.pageclick}
+                            itemsCountPerPage={this.state.itemperpage}
+                            totalItemsCount={data_num}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            pageRangeDisplayed={5}
+                            onChange={this.pageselect}
 
-                    />
-
-
+                        />
 
 
+
+
+                    </div>
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>คำเตือน</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.handleClose}>
+                                ยกเลิก
+                        </Button>
+                            <Button variant="primary" onClick={this.confirmdelete}>
+                                ยืนยัน
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Success</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Failed</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
-                <Modal show={this.state.show} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>คำเตือน</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
-                            ยกเลิก
-                        </Button>
-                        <Button variant="primary" onClick={this.confirmdelete}>
-                            ยืนยัน
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-
-                <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Success</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
-                    <Modal.Footer>
-                    </Modal.Footer>
-                </Modal>
-
-                <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Failed</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
-                    <Modal.Footer>
-                    </Modal.Footer>
-                </Modal>
-
                 <div className="footer">
                     <Foot />
                 </div>

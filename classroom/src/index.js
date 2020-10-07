@@ -17,6 +17,12 @@ import ManageGroup from './Classroom/ManageGroup'
 import SpecialCr from './Classroom/SpecialCr'
 import ManageZone from './Classroom/ManageZone'
 import ManageCr from './Classroom/ManageCr'
+import FacultyData from './Classroom/FacultyData'
+import ConditionIn from "./Classroom/ConditionIn"
+import ManageIn from "./Classroom/ManageIn"
+import ReportIn from "./Classroom/ReportIn"
+import ExchangeIn from "./Classroom/ExchangeIn"
+import InvigilatorData from "./Classroom/InvigilatorData"
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './index.css';
@@ -33,6 +39,15 @@ const AppWithRouter = () => (
     <Route exact path="/SpecialCr" component={RequireAuth(SpecialCr)} />
     <Route exact path="/ManageZone" component={RequireAuth(ManageZone)} />
     <Route exact path="/ManageCr" component={RequireAuth(ManageCr)} />
+    <Route exact path="/FacultyData" component={RequireAuth(FacultyData)} />
+
+    <Route exact path="/ConditionIn" component={RequireAuth(ConditionIn)} />
+    <Route exact path="/ManageIn" component={RequireAuth(ManageIn)} />
+    <Route exact path="/ReportIn" component={RequireAuth(ReportIn)} />
+
+    <Route exact path="/ExchangeIn" component={RequireAuth(ExchangeIn)} />
+    <Route exact path="/InvigilatorData" component={RequireAuth(InvigilatorData)} />
+
   </BrowserRouter>
 )
 

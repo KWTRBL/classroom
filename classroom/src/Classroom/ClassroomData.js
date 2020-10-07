@@ -430,7 +430,7 @@ export default class ClassroomData extends Component {
                             <Form>
                                 <Form.Check
                                     type="switch"
-                                    id={data.building_name}                                    
+                                    id={data.building_name}
                                     label=""
                                     checked={data.room_status}
                                     onClick={(e) => this.handleChange_editroom_status(editjson[index], e)}
@@ -508,96 +508,98 @@ export default class ClassroomData extends Component {
 
 
         return (
-            <div >
-                <Nav />
-                <h1 class="state">ข้อมูลห้องเรียน</h1>
-                <div id="detail">
-                    <div className="filterCrData">
-                        <h5 className="buildfil1">อาคารเรียน</h5>
-                        <div className="buildfildetail1">
-                            <select id="building" onChange={(e) => this.searchSpace(e)} >
-                                {
-                                    this.state.building.map((data, index) =>
-                                        <option value={data.building_no}>{data.building_name}</option>
-                                    )
-                                }
-                            </select>
+            <div className="page-container">
+                <div className="content-wrap">
+
+                    <Nav />
+                    <h1 class="state">ข้อมูลห้องเรียน</h1>
+                    <div id="detail">
+                        <div className="filterCrData">
+                            <h5 className="buildfil1">อาคารเรียน</h5>
+                            <div className="buildfildetail1">
+                                <select id="building" onChange={(e) => this.searchSpace(e)} >
+                                    {
+                                        this.state.building.map((data, index) =>
+                                            <option value={data.building_no}>{data.building_name}</option>
+                                        )
+                                    }
+                                </select>
+                            </div>
+                            <h5 className="buildfil2">ชั้น</h5>
+                            <div className="buildfildetail2">
+                                <select id="floor_num" onChange={(e) => this.searchSpace1(e)}>
+                                    {
+                                        test
+                                    }
+                                </select>
+                            </div>
                         </div>
-                        <h5 className="buildfil2">ชั้น</h5>
-                        <div className="buildfildetail2">
-                            <select id="floor_num" onChange={(e) => this.searchSpace1(e)}>
+
+                        <Table striped responsive className="Crtable">
+                            <thead>
+                                <tr className="Classroomtable">
+                                    <th>รหัสอาคาร</th>
+                                    <th>อาคารเรียน</th>
+                                    <th>รหัสห้อง</th>
+                                    <th>จำนวนที่นั่ง</th>
+                                    <th>สถานะ</th>
+                                    <th>แก้ไขข้อมูล</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {
-                                    test
+                                    item
                                 }
-                            </select>
-                        </div>
+                                {this.state.rows}
+                            </tbody>
+                        </Table>
+                        <Button variant="light" className="adddata" onClick={() => this.addrow()}>
+                            <img src={addbt} className="addicon" alt="add" />
+                        </Button>
+                        <Pagination
+                            activePage={this.state.pageclick}
+                            itemsCountPerPage={this.state.itemperpage}
+                            totalItemsCount={data_num}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            pageRangeDisplayed={5}
+                            onChange={this.pageselectvalue}
+
+                        />
                     </div>
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>คำเตือน</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.handleClose}>
+                                ยกเลิก
+                        </Button>
+                            <Button variant="primary" onClick={this.confirmdelete}>
+                                ยืนยัน
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
 
-                    <Table striped responsive className="Crtable">
-                        <thead>
-                            <tr className="Classroomtable">
-                                <th>รหัสอาคาร</th>
-                                <th>อาคารเรียน</th>
-                                <th>รหัสห้อง</th>
-                                <th>จำนวนที่นั่ง</th>
-                                <th>สถานะ</th>
-                                <th>แก้ไขข้อมูล</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                item
-                            }
-                            {this.state.rows}
-                        </tbody>
-                    </Table>
-                    <Button variant="light" className="adddata" onClick={() => this.addrow()}>
-                        <img src={addbt} className="addicon" alt="add" />
-                    </Button>
-                    <Pagination
-                        activePage={this.state.pageclick}
-                        itemsCountPerPage={this.state.itemperpage}
-                        totalItemsCount={data_num}
-                        itemClass="page-item"
-                        linkClass="page-link"
-                        pageRangeDisplayed={5}
-                        onChange={this.pageselectvalue}
+                    <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Success</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
 
-                    />
+                    <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Failed</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
-                <Modal show={this.state.show} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>คำเตือน</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
-                            ยกเลิก
-                        </Button>
-                        <Button variant="primary" onClick={this.confirmdelete}>
-                            ยืนยัน
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-
-                <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Success</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
-                    <Modal.Footer>
-                    </Modal.Footer>
-                </Modal>
-
-                <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Failed</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
-                    <Modal.Footer>
-                    </Modal.Footer>
-                </Modal>
-
                 <div className="footer">
                     <Foot />
                 </div>

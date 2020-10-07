@@ -42,69 +42,71 @@ export default class ReportIn extends Component {
     }
     render() {
         return (
-            <div >
-                <Nav />
-                <h1 class="state">รายงานผลการจัดผู้คุมสอบ</h1>
+            <div className="page-container" >
+                <div className="content-wrap">
 
-                <ul class="list-group">
-                    <li className="year">
-                        <h5 className="yearDLfil">ปีการศึกษา</h5>
-                        <select className="selector" onChange={(e) => this.searchYear(e)}>
-                            <option value="13:00">2563</option>
+                    <Nav />
+                    <h1 class="state">รายงานผลการจัดผู้คุมสอบ</h1>
 
-                        </select>
+                    <ul class="list-group">
+                        <li className="year">
+                            <h5 className="yearDLfil">ปีการศึกษา</h5>
+                            <select className="selector" onChange={(e) => this.searchYear(e)}>
+                                <option value="13:00">2563</option>
 
-                    </li>
-                    <li className="semester">
-                        <h5 className="yearDLfil">ภาคการศึกษา</h5>
-                        <select className="selector" onChange={(e) => this.searchYear(e)}>
-                            <option value="13:00">1</option>
+                            </select>
 
-                        </select>
-                    </li>
-                    <li className="mid-final">
-                        <h5 className="yearDLfil">การสอบ</h5>
-                        <select className="selector" onChange={(e) => this.searchYear(e)}>
-                            <option value="13:00">กลางภาค</option>
-                            <option value="13:00">ปลายภาค</option>
-                        </select>
+                        </li>
+                        <li className="semester">
+                            <h5 className="yearDLfil">ภาคการศึกษา</h5>
+                            <select className="selector" onChange={(e) => this.searchYear(e)}>
+                                <option value="13:00">1</option>
 
-                    </li>
-                    <li className="reporttype">
-                        <h5 className="yearDLfil">ประเภทรายงาน</h5>
-                        <select className="selector" onChange={(e) => this.report(e)}>
-                            <option value="0">รายงานผลการจัดผู้คุมสอบ</option>
-                            <option value="1">รายงานการจัดผู้คุมสอบแยกตามภาควิชา</option>
-                            <option value="2">รายงานเวียนแฟ้ม</option>
+                            </select>
+                        </li>
+                        <li className="mid-final">
+                            <h5 className="yearDLfil">การสอบ</h5>
+                            <select className="selector" onChange={(e) => this.searchYear(e)}>
+                                <option value="13:00">กลางภาค</option>
+                                <option value="13:00">ปลายภาค</option>
+                            </select>
 
-                        </select>
-                    </li>
-                    <li className="depart" hidden={this.state.box[0]}>
-                        <h5 className="yearDLfil">ภาควิชา</h5>
-                        <select className="selector">
-                            <option value="0">วิศวกรรมคอมพิวเตอร์</option>
-                        </select>
-                    </li>
-                    <li className="daytext" hidden={this.state.box[1]}>
-                        <h5 className="yearDLfil">วันสอบ</h5>
-                        <select className="selector" >
-                            <option value="0">15   มีนาคม  2563 </option>
-                            <option value="1">16   มีนาคม  2563 </option>
-                        </select>
-                    </li>
-                    <li className="timetext" hidden={this.state.box[1]}>
-                        <h5 className="yearDLfil">ช่วงเวลาสอบ</h5>
-                        <select className="selector" >
-                            <option value="0">13.30 น. - 16.30 น.</option>
-                        </select>
-                    </li>
-                    <li>
-                        <Button variant="primary" className="">แสดงข้อมูล
+                        </li>
+                        <li className="reporttype">
+                            <h5 className="yearDLfil">ประเภทรายงาน</h5>
+                            <select className="selector" onChange={(e) => this.report(e)}>
+                                <option value="0">รายงานผลการจัดผู้คุมสอบ</option>
+                                <option value="1">รายงานการจัดผู้คุมสอบแยกตามภาควิชา</option>
+                                <option value="2">รายงานเวียนแฟ้ม</option>
+
+                            </select>
+                        </li>
+                        <li className="depart" hidden={this.state.box[0]}>
+                            <h5 className="yearDLfil">ภาควิชา</h5>
+                            <select className="selector">
+                                <option value="0">วิศวกรรมคอมพิวเตอร์</option>
+                            </select>
+                        </li>
+                        <li className="daytext" hidden={this.state.box[1]}>
+                            <h5 className="yearDLfil">วันสอบ</h5>
+                            <select className="selector" >
+                                <option value="0">15   มีนาคม  2563 </option>
+                                <option value="1">16   มีนาคม  2563 </option>
+                            </select>
+                        </li>
+                        <li className="timetext" hidden={this.state.box[1]}>
+                            <h5 className="yearDLfil">ช่วงเวลาสอบ</h5>
+                            <select className="selector" >
+                                <option value="0">13.30 น. - 16.30 น.</option>
+                            </select>
+                        </li>
+                        <li>
+                            <Button variant="primary" className="">แสดงข้อมูล
                         </Button>
 
-                    </li>
-                </ul>
-
+                        </li>
+                    </ul>
+                </div>
                 <div className="footer">
                     <Foot />
                 </div>

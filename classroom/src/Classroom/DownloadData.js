@@ -44,7 +44,7 @@ export default class BuildingData extends Component {
       show: false,
       showsubmit: false,
       showfailed: false,
-      data:null
+      data: null
 
     }
     this.handleClose = this.handleClose.bind(this);
@@ -56,7 +56,7 @@ export default class BuildingData extends Component {
     this.componentWillMount = this.componentWillMount.bind(this);
     this.pageselectvalue = this.pageselectvalue.bind(this);
 
-    
+
 
     //modal
     this.handleClose = this.handleClose.bind(this);
@@ -137,14 +137,14 @@ export default class BuildingData extends Component {
       }
     }
     this.setState({
-        pageclick: parseInt(value),
-        firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
-        lastitem: (this.state.itemperpage * parseInt(value)),
-        editlist: newId,
-        name: JSON.parse(this.state.olddata),
-  
+      pageclick: parseInt(value),
+      firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
+      lastitem: (this.state.itemperpage * parseInt(value)),
+      editlist: newId,
+      name: JSON.parse(this.state.olddata),
+
     })
-}
+  }
   handleOpen() {
     this.setState({
       show: true
@@ -177,7 +177,7 @@ export default class BuildingData extends Component {
 
     if (!allowedExtensions.exec(filePath)) {
       this.setState({
-        data:null
+        data: null
       })
       //alert('Invalid file type');
       fileInput.value = '';
@@ -190,29 +190,29 @@ export default class BuildingData extends Component {
 
     //this.fileValidation()
 
-    if(this.fileValidation()){
+    if (this.fileValidation()) {
       const file = e.target.files[0]
 
-    
-    Papa.parse(file, {
-      encoding: "UTF-8",
-      complete: (result) => {
-        this.setState({
-          data:result.data
-        })
-      }
-    });
-    
-    
-    this.setState({
-      fileupload: file,
-    })
-  }
+
+      Papa.parse(file, {
+        encoding: "UTF-8",
+        complete: (result) => {
+          this.setState({
+            data: result.data
+          })
+        }
+      });
+
+
+      this.setState({
+        fileupload: file,
+      })
+    }
   }
 
   sumbitfile() {
     console.log(this.state.data)
-    if(this.state.data == null){
+    if (this.state.data == null) {
       this.setState({
         showfailed: !this.state.showfailed
       })
@@ -220,7 +220,7 @@ export default class BuildingData extends Component {
     }
     axios.post('http://localhost:7777/insert',
       {
-        data:this.state.data
+        data: this.state.data
       }
     ).then(res => {
       this.setState({
@@ -233,7 +233,7 @@ export default class BuildingData extends Component {
           this.setState({
             showfailed: !this.state.showfailed
           })
-          
+
         }
       );
 
@@ -322,14 +322,14 @@ export default class BuildingData extends Component {
 
 
   //edit data handle
- async handleChange_editroom_status(index, event) {
+  async handleChange_editroom_status(index, event) {
 
     const newIds = this.state.name //copy the array
     newIds[index].teach_status = !newIds[index].teach_status//execute the manipulations
-    console.log('status:', newIds[index].teach_status,index)
+    console.log('status:', newIds[index].teach_status, index)
     console.log(newIds)
     await this.setState({ name: newIds }) //set the new state
-   // await this.enableedit(index)
+    // await this.enableedit(index)
 
   }
 
@@ -378,7 +378,7 @@ export default class BuildingData extends Component {
     if (!result) {
       const newIds = this.state.editlist.slice() //copy the array
       newIds[index] = 1//execute the manipulations
-      console.log('new editlist',newIds)
+      console.log('new editlist', newIds)
       this.setState({ editlist: newIds }) //set the new state
     }
   }
@@ -402,7 +402,7 @@ export default class BuildingData extends Component {
       }
     }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
       if (this.state.editlist[index] == 1) {
-        console.log(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index],editjson,index)
+        console.log(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index], editjson, index)
         return (
           <tr>
             <td>{data.subject_id}</td>
@@ -416,8 +416,8 @@ export default class BuildingData extends Component {
                   id={data.subject_id}
                   label=""
                   checked={data.teach_status}
-                  onClick = {(e) => this.handleChange_editroom_status(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index], e)}
-                  />
+                  onClick={(e) => this.handleChange_editroom_status(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index], e)}
+                />
               </Form>
             </td>
             <td>
@@ -506,118 +506,120 @@ export default class BuildingData extends Component {
       <option value={data}>{data}</option>
     )
     return (
-      <div >
-        <Nav />
-        <h1 class="state">ข้อมูลตารางสอน</h1>
-        <div id="detail">
-          <h5 className="typetitle">รับข้อมูลตารางสอน</h5>
-          <div className="uploadfile">
-            <input type='file' name='fileInput' id="file" accept=".csv"className="updata" onChange={this.handleFileUpload} />
-            <Button variant="primary" type="file" onClick={this.handleOpen} className="getFile" size="sm">Submit</Button>
-            <br />
-          </div>
-          <div className="filter">
-            <h5 className="yearDLfil">ปีการศึกษา</h5>
-            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
-              {
-                this.state.year.map((data, index) =>
-                  <option value={data.year}>{data.year}</option>
-                )
-              }
-            </select>
-            <h5 className="termDLfil">ภาคเรียน</h5>
-            <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
-              {
-                semester
-              }
-            </select>
-          </div>
-          <div className="filter">
-            <h5 className="departDLfil2">สาขาวิชา</h5>
-            <select className="selectdepartDl" onChange={(e) => this.searchCurr2(e)}>
-              {
-                this.state.curr2.map((data, index) =>
-                  <option value={data.curr2_id}>{data.curr2_tname}</option>
-                )
-              }
-            </select>
-            <h5 className="dayfilDl">วันที่เรียน</h5>
-            <select className="selectdayDl" onChange={(e) => this.searchDay(e)}>
-              <option value="1">อาทิตย์</option>
-              <option value="2">จันทร์</option>
-              <option value="3">อังคาร</option>
-              <option value="4">พุธ</option>
-              <option value="5">พฤหัสบดี</option>
-              <option value="6">ศุกร์</option>
-              <option value="7">เสาร์</option>
-            </select>
-          </div>
-          <Table striped responsive className="Crtable">
-            <thead>
-              <tr className="Downloadtable">
-                <th>รหัสวิชา</th>
-                <th>ชื่อวิชา</th>
-                <th>กลุ่ม</th>
-                <th>เวลาที่เรียน</th>
-                <th>สถานะ</th>
-                <th>แก้ไขข้อมูล</th>
-              </tr>
-            </thead>
-            <tbody>
-              {item}
-            </tbody>
-          </Table>
-          <Button variant="light" className="adddata">
-            <img src={addbt} className="addicon" alt="add" />
+      <div className="page-container">
+        <div className="content-wrap">
+
+          <Nav />
+          <h1 class="state">ข้อมูลตารางสอน</h1>
+          <div id="detail">
+            <h5 className="typetitle">รับข้อมูลตารางสอน</h5>
+            <div className="uploadfile">
+              <input type='file' name='fileInput' id="file" accept=".csv" className="updata" onChange={this.handleFileUpload} />
+              <Button variant="primary" type="file" onClick={this.handleOpen} className="getFile" size="sm">Submit</Button>
+              <br />
+            </div>
+            <div className="filter">
+              <h5 className="yearDLfil">ปีการศึกษา</h5>
+              <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
+                {
+                  this.state.year.map((data, index) =>
+                    <option value={data.year}>{data.year}</option>
+                  )
+                }
+              </select>
+              <h5 className="termDLfil">ภาคเรียน</h5>
+              <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
+                {
+                  semester
+                }
+              </select>
+            </div>
+            <div className="filter">
+              <h5 className="departDLfil2">สาขาวิชา</h5>
+              <select className="selectdepartDl" onChange={(e) => this.searchCurr2(e)}>
+                {
+                  this.state.curr2.map((data, index) =>
+                    <option value={data.curr2_id}>{data.curr2_tname}</option>
+                  )
+                }
+              </select>
+              <h5 className="dayfilDl">วันที่เรียน</h5>
+              <select className="selectdayDl" onChange={(e) => this.searchDay(e)}>
+                <option value="1">อาทิตย์</option>
+                <option value="2">จันทร์</option>
+                <option value="3">อังคาร</option>
+                <option value="4">พุธ</option>
+                <option value="5">พฤหัสบดี</option>
+                <option value="6">ศุกร์</option>
+                <option value="7">เสาร์</option>
+              </select>
+            </div>
+            <Table striped responsive className="Crtable">
+              <thead>
+                <tr className="Downloadtable">
+                  <th>รหัสวิชา</th>
+                  <th>ชื่อวิชา</th>
+                  <th>กลุ่ม</th>
+                  <th>เวลาที่เรียน</th>
+                  <th>สถานะ</th>
+                  <th>แก้ไขข้อมูล</th>
+                </tr>
+              </thead>
+              <tbody>
+                {item}
+              </tbody>
+            </Table>
+            <Button variant="light" className="adddata">
+              <img src={addbt} className="addicon" alt="add" />
+            </Button>
+
+            <Modal show={this.state.show} onHide={this.handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>คำเตือน</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการเพิ่มข้อมูลนี้</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={this.handleClose}>
+                  ยกเลิก
           </Button>
-
-          <Modal show={this.state.show} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>คำเตือน</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการเพิ่มข้อมูลนี้</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={this.handleClose}>
-                ยกเลิก
+                <Button variant="primary" onClick={this.sumbitfile}>
+                  ยืนยัน
           </Button>
-              <Button variant="primary" onClick={this.sumbitfile}>
-                ยืนยัน
-          </Button>
-            </Modal.Footer>
-          </Modal>
+              </Modal.Footer>
+            </Modal>
 
-          <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>Success</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
-            <Modal.Footer>
-            </Modal.Footer>
-          </Modal>
+            <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+              <Modal.Header closeButton>
+                <Modal.Title>Success</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+              <Modal.Footer>
+              </Modal.Footer>
+            </Modal>
 
-          <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
-            <Modal.Header closeButton>
-              <Modal.Title>Failed</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
-            <Modal.Footer>
-            </Modal.Footer>
-          </Modal>
-          <Pagination
-                        activePage={this.state.pageclick}
-                        itemsCountPerPage={this.state.itemperpage}
-                        totalItemsCount={data_num}
-                        itemClass="page-item"
-                        linkClass="page-link"
-                        pageRangeDisplayed={5}
-                        onChange={this.pageselectvalue}
+            <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+              <Modal.Header closeButton>
+                <Modal.Title>Failed</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+              <Modal.Footer>
+              </Modal.Footer>
+            </Modal>
+            <Pagination
+              activePage={this.state.pageclick}
+              itemsCountPerPage={this.state.itemperpage}
+              totalItemsCount={data_num}
+              itemClass="page-item"
+              linkClass="page-link"
+              pageRangeDisplayed={5}
+              onChange={this.pageselectvalue}
 
-                    />
+            />
+          </div>
         </div>
-
         <div className="footer">
-                    <Foot />
-                </div>
+          <Foot />
+        </div>
       </div>
     )
 

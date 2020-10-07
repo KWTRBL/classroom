@@ -132,24 +132,24 @@ export default class BuildingData extends Component {
 
     manageroom = () => {
         axios
-        .post("http://localhost:7777/manageroom", {
-            data: {
-                year: this.state.yearsearch,
-                semester: this.state.semestersearch,
-                curr2_id: this.state.curr2search,
-                teach_day: this.state.daysearch,
-                timeperiod: this.state.starttime
-            }
-        })
-        .then(response => {
-            console.log("response: ", response)
+            .post("http://localhost:7777/manageroom", {
+                data: {
+                    year: this.state.yearsearch,
+                    semester: this.state.semestersearch,
+                    curr2_id: this.state.curr2search,
+                    teach_day: this.state.daysearch,
+                    timeperiod: this.state.starttime
+                }
+            })
+            .then(response => {
+                console.log("response: ", response)
 
-            // do something abosut response
-        })
-        .catch(err => {
-            console.error(err)
-        })
-    window.location.reload(false);
+                // do something abosut response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        window.location.reload(false);
     }
 
 
@@ -164,14 +164,14 @@ export default class BuildingData extends Component {
                 return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ( (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7 ) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45  ) ))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)))
                 return member
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45)||((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45) || ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13)) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30)))
                 return member
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30)))
                 return member
-            
-            
+
+
 
 
         }).slice(this.state.firstitem, this.state.lastitem).map(data =>
@@ -204,12 +204,12 @@ export default class BuildingData extends Component {
                 return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ( (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7 ) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45  ) ))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)))
                 return member
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45)||((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13) ) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30  )))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45) || ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13)) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30)))
                 return member
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) &&( (parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16 ) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30  )   )  ) 
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30)))
                 return member
 
         }).length
@@ -231,91 +231,93 @@ export default class BuildingData extends Component {
             <option value={data}>{data}</option>
         )
         return (
-            <div >
-                <Nav />
-                <h1 class="state">จัดห้องเรียน</h1>
-                <div id="detail">
-                    <div className="filter">
-                        <h5 className="yearDLfil">ปีการศึกษา</h5>
-                        <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
-                            {
-                                this.state.year.map((data, index) =>
-                                    <option value={data.year}>{data.year}</option>
-                                )
-                            }
-                        </select>
-                        <h5 className="termDLfil">ภาคเรียน</h5>
-                        <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
-                            {
-                                semester
-                            }
-                        </select>
-                    </div>
-                    <div className="filter">
-                        <h5 className="departManfil2">สาขาวิชา</h5>
-                        <select className="selectdepart" onChange={(e) => this.searchCurr2(e)}>
-                            {
-                                this.state.curr2.map((data, index) =>
-                                    <option value={data.curr2_id}>{data.curr2_tname}</option>
-                                )
-                            }
-                        </select>
-                        <h5 className="dayfil">วันที่เรียน</h5>
-                        <select className="selectday" onChange={(e) => this.searchDay(e)}>
-                            <option value="1">อาทิตย์</option>
-                            <option value="2">จันทร์</option>
-                            <option value="3">อังคาร</option>
-                            <option value="4">พุธ</option>
-                            <option value="5">พฤหัสบดี</option>
-                            <option value="6">ศุกร์</option>
-                            <option value="7">เสาร์</option>
-                        </select>
-                        <h5 className="periodTimefil">ช่วงเวลาที่เรียน</h5>
-                        <select className="selectime" onChange={(e) => this.searchTime(e)}>
-                            <option value="7:00">เช้า</option>
-                            <option value="13:00">บ่าย</option>
-                            <option value="16:30">ค่ำ</option>
-                        </select>
-                        <div id="buttonManage">
-                            <Button variant="light" className="managebtn" onClick ={(e) => this.manageroom(e)}>จัดห้อง</Button>
+            <div className="page-container" >
+                <div className="content-wrap">
+
+                    <Nav />
+                    <h1 class="state">จัดห้องเรียน</h1>
+                    <div id="detail">
+                        <div className="filter">
+                            <h5 className="yearDLfil">ปีการศึกษา</h5>
+                            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
+                                {
+                                    this.state.year.map((data, index) =>
+                                        <option value={data.year}>{data.year}</option>
+                                    )
+                                }
+                            </select>
+                            <h5 className="termDLfil">ภาคเรียน</h5>
+                            <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
+                                {
+                                    semester
+                                }
+                            </select>
                         </div>
+                        <div className="filter">
+                            <h5 className="departManfil2">สาขาวิชา</h5>
+                            <select className="selectdepart" onChange={(e) => this.searchCurr2(e)}>
+                                {
+                                    this.state.curr2.map((data, index) =>
+                                        <option value={data.curr2_id}>{data.curr2_tname}</option>
+                                    )
+                                }
+                            </select>
+                            <h5 className="dayfil">วันที่เรียน</h5>
+                            <select className="selectday" onChange={(e) => this.searchDay(e)}>
+                                <option value="1">อาทิตย์</option>
+                                <option value="2">จันทร์</option>
+                                <option value="3">อังคาร</option>
+                                <option value="4">พุธ</option>
+                                <option value="5">พฤหัสบดี</option>
+                                <option value="6">ศุกร์</option>
+                                <option value="7">เสาร์</option>
+                            </select>
+                            <h5 className="periodTimefil">ช่วงเวลาที่เรียน</h5>
+                            <select className="selectime" onChange={(e) => this.searchTime(e)}>
+                                <option value="7:00">เช้า</option>
+                                <option value="13:00">บ่าย</option>
+                                <option value="16:30">ค่ำ</option>
+                            </select>
+                            <div id="buttonManage">
+                                <Button variant="light" className="managebtn" onClick={(e) => this.manageroom(e)}>จัดห้อง</Button>
+                            </div>
+                        </div>
+
+                        <Table striped responsive className="Crtable">
+                            <thead>
+                                <tr className="ManageTable">
+                                    <th>รหัสวิชา</th>
+                                    <th>ชื่อวิชา</th>
+                                    <th>กลุ่ม</th>
+                                    <th>เวลาเรียน</th>
+                                    <th>รหัสอาคาร</th>
+                                    <th>ห้อง</th>
+                                    <th>จำนวนที่นั่ง</th>
+                                    <th>จำนวนนศ.</th>
+                                    <th>แก้ไขข้อมูล</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {item}
+                            </tbody>
+                        </Table>
+
+                        <Button variant="light" className="downloadbtn">Download เอกสาร</Button>
+                        <Button variant="light" className="adddata">
+                            <img src={addbt} className="addicon" alt="add" />
+                        </Button>
+                        <Pagination
+                            activePage={this.state.pageclick}
+                            itemsCountPerPage={this.state.itemperpage}
+                            totalItemsCount={data_num}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            pageRangeDisplayed={5}
+                            onChange={this.pageselectvalue}
+
+                        />
                     </div>
-
-                    <Table striped responsive className="Crtable">
-                        <thead>
-                            <tr className="ManageTable">
-                                <th>รหัสวิชา</th>
-                                <th>ชื่อวิชา</th>
-                                <th>กลุ่ม</th>
-                                <th>เวลาเรียน</th>
-                                <th>รหัสอาคาร</th>
-                                <th>ห้อง</th>
-                                <th>จำนวนที่นั่ง</th>
-                                <th>จำนวนนศ.</th>
-                                <th>แก้ไขข้อมูล</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {item}
-                        </tbody>
-                    </Table>
-                    
-                    <Button variant="light" className="downloadbtn">Download เอกสาร</Button>
-                    <Button variant="light" className="adddata">
-                        <img src={addbt} className="addicon" alt="add" />
-                    </Button>
-                    <Pagination
-                        activePage={this.state.pageclick}
-                        itemsCountPerPage={this.state.itemperpage}
-                        totalItemsCount={data_num}
-                        itemClass="page-item"
-                        linkClass="page-link"
-                        pageRangeDisplayed={5}
-                        onChange={this.pageselectvalue}
-
-                    />
                 </div>
-
                 <div className="footer">
                     <Foot />
                 </div>

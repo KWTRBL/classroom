@@ -222,7 +222,8 @@ export default class ManageGroup extends Component {
         }).length
        
         return (
-            <div >
+            <div className="page-container" >
+                <div className="content-wrap">
                 <Nav/>
                 <h1 class="state">จัดจำนวนนักศึกษาแต่ละกลุ่ม</h1>
                 <div id="detail">
@@ -256,6 +257,7 @@ export default class ManageGroup extends Component {
                         onChange={this.pageselect}
 
                     />
+                </div>
                 </div>
                 <div className="footer">
                     <Foot />

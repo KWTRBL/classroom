@@ -19,52 +19,54 @@ export default class ReportIn extends Component {
     }
     render() {
         return (
-            <div >
-                <Nav />
-                <h1 class="state">แลกวันคุมสอบ และคุมสอบแทน</h1>
-                <div id="detail">
-                    <div className="filter content-center">
+            <div className="page-container">
+                <div className="content-wrap">
+                    <Nav />
+                    <h1 class="state">แลกวันคุมสอบ และคุมสอบแทน</h1>
+                    <div id="detail">
+                        <div className="filter content-center">
 
 
-                        <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ขอแลก)</h5>
-                        <input className="textbox"></input>
+                            <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ขอแลก)</h5>
+                            <input className="textbox"></input>
                             วัน - เวลาที่คุมสอบ
                     </div>
-                    <br />
-                    <div className="filter content-center">
+                        <br />
+                        <div className="filter content-center">
 
 
-                        <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ให้แลก) </h5>
-                        <input className="textbox"></input>
+                            <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ให้แลก) </h5>
+                            <input className="textbox"></input>
                         วัน - เวลาที่คุมสอบ
                     </div>
-                    <div className="filter btnIn">
-                        <Button variant="primary" className="" onClick={(e) => this.manageroom(e)}>แสดงข้อมูล</Button>
-                    </div>
+                        <div className="filter btnIn">
+                            <Button variant="primary" className="" onClick={(e) => this.manageroom(e)}>แสดงข้อมูล</Button>
+                        </div>
 
 
-                    <br />
-                    <div className="filter content-center">
+                        <br />
+                        <div className="filter content-center">
 
 
-                        <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ขอให้คุมสอบแทน) </h5>
-                        <input className="textbox"></input>
+                            <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ขอให้คุมสอบแทน) </h5>
+                            <input className="textbox"></input>
                         วัน - เวลาที่คุมสอบ
                     </div>
-                    <br />
-                    <div className="filter content-center">
+                        <br />
+                        <div className="filter content-center">
 
 
-                        <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ยินยอมคุมสอบแทน) </h5>
-                        <input className="textbox"></input>
+                            <h5 className="yearDLfil">ชื่อ-นามสกุล (ผู้ยินยอมคุมสอบแทน) </h5>
+                            <input className="textbox"></input>
                     วัน - เวลาที่คุมสอบ
                     </div>
-                    <div className="filter btnIn">
-                        <Button variant="primary" className="" onClick={(e) => this.manageroom(e)}>แสดงข้อมูล</Button>
+                        <div className="filter btnIn">
+                            <Button variant="primary" className="" onClick={(e) => this.manageroom(e)}>แสดงข้อมูล</Button>
+                        </div>
+
+                        <br />
+
                     </div>
-
-                    <br />
-
                 </div>
                 <div className="footer">
                     <Foot />
