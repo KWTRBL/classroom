@@ -262,7 +262,10 @@ export default class BuildingData extends Component {
                                     )
                                 }
                             </select>
-                            <h5 className="dayfil">วันที่เรียน</h5>
+
+                        </div>
+                        <div className="filter">
+                        <h5 className="dayfil">วันที่เรียน</h5>
                             <select className="selectday" onChange={(e) => this.searchDay(e)}>
                                 <option value="1">อาทิตย์</option>
                                 <option value="2">จันทร์</option>

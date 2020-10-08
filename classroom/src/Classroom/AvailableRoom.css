@@ -6,7 +6,7 @@
     font-size: 0.25vw;
 }
 .selectbuilding{
-    width: 20%;
+    width: fit-content;
     margin-right: 8px;
     margin-bottom: 2%;
 }

@@ -12,7 +12,7 @@
     margin-right: 5px;
 }
 .selectdepartDl{
-    width: 20%;
+    width: fit-content;
     margin-right: 8px;
     margin-bottom: 2%;
 }
@@ -28,7 +28,7 @@
     margin-right: 5px;
 }
 .selectyearDL{
-    width: 6%;
+    width: 8%;
     margin-right: 8px;
     margin-bottom: 2%;
 }
@@ -37,7 +37,7 @@
 }
 .selecttermDL{
     margin-right: 8px;
-    width: 5%;
+    width:8%;
     margin-bottom: 2%;
     position: relative;
 }
