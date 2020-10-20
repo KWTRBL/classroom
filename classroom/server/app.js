@@ -43,6 +43,8 @@ const availableroom = require('./routes/availableroom')
 const auth = require('./routes/auth')
 const manageroom = require('./routes/manageroom')
 const curriculum = require('./routes/curriculum')
+const department = require('./routes/department')
+const teacher = require('./routes/teacher')
 
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
@@ -206,6 +208,19 @@ app.get('/curriculum', (req, res) => {   // Router เวลาเรียก�
     })
 })
 
+//Department data
+app.get('/department', (req, res) => {   // Router เวลาเรียกใช้งาน
+    department.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//teacher data
+app.get('/teacher', (req, res) => {   // Router เวลาเรียกใช้งาน
+    teacher.read(function (callback) {
+        res.json(callback)
+    })
+})
 
 //CurriculumGroup Data
 app.get('/groupdata', (req, res) => {   // Router เวลาเรียกใช้งาน
