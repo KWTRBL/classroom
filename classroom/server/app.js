@@ -45,7 +45,8 @@ const manageroom = require('./routes/manageroom')
 const curriculum = require('./routes/curriculum')
 const department = require('./routes/department')
 const teacher = require('./routes/teacher')
-
+const officer = require('./routes/officer')
+const teacherteach = require('./routes/teacherteach')
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
 app.use(cookieParser())
@@ -208,6 +209,13 @@ app.get('/curriculum', (req, res) => {   // Router เวลาเรียก�
     })
 })
 
+//Curriculum teacherteach Data From teachtable
+app.get('/teacherteachcurriculum', (req, res) => {   // Router เวลาเรียกใช้งาน
+    curriculum.readforteacherteach(function (callback) {
+        res.json(callback)
+    })
+})
+
 //Department data
 app.get('/department', (req, res) => {   // Router เวลาเรียกใช้งาน
     department.read(function (callback) {
@@ -218,6 +226,13 @@ app.get('/department', (req, res) => {   // Router เวลาเรียก�
 //teacher data
 app.get('/teacher', (req, res) => {   // Router เวลาเรียกใช้งาน
     teacher.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//officer data
+app.get('/officer', (req, res) => {   // Router เวลาเรียกใช้งาน
+    officer.read(function (callback) {
         res.json(callback)
     })
 })
@@ -313,6 +328,36 @@ app.post('/manageroom', (req, res) => {   // Router เวลาเรียก�
         res.json(callback)
     })
 })
+
+
+//teacherteach data
+app.get('/teacherteach', (req, res) => {   // Router เวลาเรียกใช้งาน
+    /*
+    teacherteach.read(function (callback) {
+        res.json(callback)
+    })
+    */
+
+    client.get('teacherteach', async (error, data) => {
+        /*
+        if (error) {
+          return res.json({
+            message: 'Something went wrong!',
+            error
+          })
+        }*/
+        if (data) {
+            console.log('have data')
+          return res.json(JSON.parse(data))
+        }else{
+            teacherteach.read(function (callback) {
+                client.setex('teacherteach', 60, JSON.stringify(callback))
+                res.json(callback)
+            })
+        }
+    })
+})
+
 
 app.listen(port, () => {     // 
     console.log('start port ' + port)

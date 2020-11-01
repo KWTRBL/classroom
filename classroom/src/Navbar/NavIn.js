@@ -47,16 +47,17 @@ export default class ClassroomData extends Component {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
               <NavDropdown title="ข้อมูลในคณะ" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/BuildingData">ข้อมูลหน่วยงานในคณะ</NavDropdown.Item>
-                <NavDropdown.Item href="/ClassroomData">ข้อมูลบุคลากรในคณะ</NavDropdown.Item>
+                <NavDropdown.Item href="/FacultyData">ข้อมูลหน่วยงานในคณะ</NavDropdown.Item>
+                <NavDropdown.Item href="/InvigilatorData">ข้อมูลบุคลากรในคณะ</NavDropdown.Item>
+                <NavDropdown.Item href="/TeacherteachData">ข้อมูลตารางสอน</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="การจัดการคุมสอบ" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/DownloadData">กำหนดข้อมูลต่าง ๆ</NavDropdown.Item>
-                <NavDropdown.Item href="/ManageGroup">จัดกรรมการคุมสอบ</NavDropdown.Item>
-                <NavDropdown.Item href="/ManageGroup">แลกวันสอบและคุมสอบแทน</NavDropdown.Item>
+                <NavDropdown.Item href="/ConditionIn">กำหนดข้อมูลต่าง ๆ</NavDropdown.Item>
+                <NavDropdown.Item href="/ManageIn">จัดกรรมการคุมสอบ</NavDropdown.Item>
+                <NavDropdown.Item href="/ExchangeIn">แลกวันสอบและคุมสอบแทน</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="รายงานการคุมสอบ" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/SpecialCr">รายงานผลการจัดผู้คุมสอบ</NavDropdown.Item>
+                <NavDropdown.Item href="/ReportIn">รายงานผลการจัดผู้คุมสอบ</NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>

@@ -23,6 +23,7 @@ import ManageIn from "./Classroom/ManageIn"
 import ReportIn from "./Classroom/ReportIn"
 import ExchangeIn from "./Classroom/ExchangeIn"
 import InvigilatorData from "./Classroom/InvigilatorData"
+import TeacherteachData from "./Classroom/TeacherteachData"
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './index.css';
@@ -47,6 +48,8 @@ const AppWithRouter = () => (
 
     <Route exact path="/ExchangeIn" component={RequireAuth(ExchangeIn)} />
     <Route exact path="/InvigilatorData" component={RequireAuth(InvigilatorData)} />
+    <Route exact path="/TeacherteachData" component={RequireAuth(TeacherteachData)} />
+
 
   </BrowserRouter>
 )

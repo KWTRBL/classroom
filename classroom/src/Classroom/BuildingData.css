@@ -103,7 +103,6 @@ option {
   border-width: thin;
   width: 40px;
   height: auto;
-  box-shadow:0.5px 0.5px 1px #707070;
 }
 .managebtn{
   margin-left: 5px;
