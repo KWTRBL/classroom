@@ -24,6 +24,17 @@ var options = {
 
 };
 
+
+var cron = require('node-cron');
+
+
+//insert examweekdata every semester
+cron.schedule('0 0 1 1,6,8 *', () => {
+    console.log('detect new semester')
+    examweek.update()
+});
+
+
 var sessionStore = new MySQLStore(options);
 
 
@@ -47,6 +58,8 @@ const department = require('./routes/department')
 const teacher = require('./routes/teacher')
 const officer = require('./routes/officer')
 const teacherteach = require('./routes/teacherteach')
+const facultycondition = require('./routes/faculty_condition')
+const examweek = require('./routes/examweek')
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
 app.use(cookieParser())
@@ -67,8 +80,8 @@ app.use(session({
 }));
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }))
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb',extended: true}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -83,19 +96,19 @@ app.use(bodyParser.urlencoded({
 app.post('/login', (req, res) => {   // Router เวลาเรียกใช้งาน
 
     auth.login(req, function (callback) {
-        if(callback.message == "login success"){
+        if (callback.message == "login success") {
             const timeout = 60 * 60 * 1000
             req.session.cookie.maxAge = timeout
             req.session.token = callback.token
-            res.cookie('token', callback.token, { maxAge: timeout,httpOnly: true })
-            res.cookie('session_id', req.sessionID, { maxAge: timeout,httpOnly: true })
-            req.session.save()   
+            res.cookie('token', callback.token, { maxAge: timeout, httpOnly: true })
+            res.cookie('session_id', req.sessionID, { maxAge: timeout, httpOnly: true })
+            req.session.save()
         }
         res.send({
-            message:callback.message,
-            isLogin:callback.isLogin
+            message: callback.message,
+            isLogin: callback.isLogin
         })
-        
+
     })
 })
 app.get('/auth', (req, res) => {
@@ -108,9 +121,9 @@ app.get('/auth', (req, res) => {
 })
 
 app.get('/logout', (req, res) => {
-    res.cookie('token', '', {expires: new Date(1), path: '/' });
-    res.cookie('session_id', '', {expires: new Date(1), path: '/' });
-    res.cookie('connect.sid', '', {expires: new Date(1), path: '/' });
+    res.cookie('token', '', { expires: new Date(1), path: '/' });
+    res.cookie('session_id', '', { expires: new Date(1), path: '/' });
+    res.cookie('connect.sid', '', { expires: new Date(1), path: '/' });
     auth.logout(req, function (callback) {
         res.status(200).send({
             logout: callback
@@ -252,13 +265,13 @@ app.put('/groupdata/update', (req, res) => {   // Router เวลาเรี�
 })
 
 
-  
+
 
 
 
 //Teach Data
 app.get('/teachdata', (req, res) => {   // Router เวลาเรียกใช้งาน
-    
+
     client.get('teachtable', async (error, data) => {
         /*
         if (error) {
@@ -268,19 +281,19 @@ app.get('/teachdata', (req, res) => {   // Router เวลาเรียกใ
           })
         }*/
         if (data) {
-          return res.json(JSON.parse(data))
-        }else{
+            return res.json(JSON.parse(data))
+        } else {
             teachdata.read(function (callback) {
                 client.setex('teachtable', 60, JSON.stringify(callback))
                 res.json(callback)
             })
         }
     })
-    
+
 })
 
 app.post('/teachdata/update', (req, res) => {   // Router เวลาเรียกใช้งาน
-    teachdata.update(req,function (callback) {
+    teachdata.update(req, function (callback) {
         res.json(callback)
     })
 })
@@ -306,11 +319,11 @@ app.post('/uploadfile', upload.upload.single("uploadfile"), (req, res) => {
 });
 
 app.post('/insert', (req, res) => {   // Router เวลาเรียกใช้งาน
-    upload.insert(req,function (callback) {
+    upload.insert(req, function (callback) {
         console.log(callback.status)
         res.status(callback.status)
         res.end()
-       // res.json(callback)
+        // res.json(callback)
     })
 })
 
@@ -324,7 +337,7 @@ app.get('/availableroom', (req, res) => {   // Router เวลาเรีย�
 //Manage room
 app.post('/manageroom', (req, res) => {   // Router เวลาเรียกใช้งาน
     //console.log(req.body.data.year)
-    manageroom.read(req,function (callback) {
+    manageroom.read(req, function (callback) {
         res.json(callback)
     })
 })
@@ -348,8 +361,8 @@ app.get('/teacherteach', (req, res) => {   // Router เวลาเรียก
         }*/
         if (data) {
             console.log('have data')
-          return res.json(JSON.parse(data))
-        }else{
+            return res.json(JSON.parse(data))
+        } else {
             teacherteach.read(function (callback) {
                 client.setex('teacherteach', 60, JSON.stringify(callback))
                 res.json(callback)
@@ -358,6 +371,28 @@ app.get('/teacherteach', (req, res) => {   // Router เวลาเรียก
     })
 })
 
+
+//facultycondition Data
+app.get('/facultycondition', (req, res) => {   // Router เวลาเรียกใช้งาน
+    facultycondition.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//update facultycondition
+app.post('/facultycondition/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    //console.log(req.body.data.year)
+    facultycondition.update(req, function (callback) {
+        res.json(callback)
+    })
+})
+
+//examweek Data
+app.get('/examweek', (req, res) => {   // Router เวลาเรียกใช้งาน
+    examweek.read(function (callback) {
+        res.json(callback)
+    })
+})
 
 app.listen(port, () => {     // 
     console.log('start port ' + port)

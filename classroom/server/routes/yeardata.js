@@ -1,8 +1,9 @@
 const pool = require('./dbconfig')
 
 module.exports.read = function (callback){
+    console.log('yeardata')
 
-    let sql = 'SELECT DISTINCT year FROM teach_table ORDER BY year'  // คำสั่ง sql
+    let sql = 'SELECT DISTINCT year FROM t_exam_week ORDER BY year'  // คำสั่ง sql
 
     pool.getConnection((err, connection) => {
         if(err) throw err;

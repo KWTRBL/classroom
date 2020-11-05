@@ -1,3 +1,27 @@
+.yearConfil{
+    margin-right: 5px;
+}
+.selectyearCon{
+    width: 8%;
+    margin-right: 8px;
+    margin-bottom: 2%;
+}
+.termConfil{
+    margin-right: 5px;
+}
+.selecttermCon{
+    margin-right: 8px;
+    width:8%;
+    margin-bottom: 2%;
+}
+.partConfil{
+    margin-right: 5px;
+}
+.selectpartCon{
+    margin-right: 8px;
+    width:8%;
+    margin-bottom: 2%;
+}
 .top{
     text-align: center;
     display: block;
@@ -6,7 +30,7 @@
     width: 750px;
   
 }
-.stdcount{
+#stdcount{
     display: flex;
     width: 150px;
     float: right;

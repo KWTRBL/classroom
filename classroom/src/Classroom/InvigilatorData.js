@@ -14,6 +14,7 @@ import axios from 'axios';
 import Pagination from "react-js-pagination";
 
 import './InvigilatorData.css'
+import { parse } from 'papaparse';
 export default class FacultyData extends Component {
     constructor(props) {
         super(props);
@@ -21,7 +22,9 @@ export default class FacultyData extends Component {
             show: false,
             dept: [],
             teacher: [],
+            officer: [],
             deptid: null,
+            Typesearch: 1,
             editlist: [],
             olddata: [],
             pageclick: 1,
@@ -34,6 +37,7 @@ export default class FacultyData extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.searchDept = this.searchDept.bind(this)
+        this.searchType = this.searchType.bind(this)
         this.pageselectvalue = this.pageselectvalue.bind(this);
 
 
@@ -74,6 +78,28 @@ export default class FacultyData extends Component {
                 firstitem: 0,
                 lastitem: this.state.itemperpage
               })
+
+        axios.get('http://localhost:7777/officer')
+        .then(res => {
+            const newIds = this.state.editlist.slice()
+            for (var i = 0; i < res.data.length; i++) {
+                newIds.push(0)
+            }
+
+            this.setState({
+                officer: res.data,
+                editlist: newIds,
+                olddata: JSON.stringify(res.data)
+            })
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        this.setState({
+            firstitem: 0,
+            lastitem: this.state.itemperpage
+        })
     }
 
     pageselectvalue(value) {
@@ -107,6 +133,22 @@ export default class FacultyData extends Component {
             teacher: JSON.parse(this.state.olddata)
         })
         this.pageselectvalue(1)
+    }
+
+    searchType = (event) => {
+        let newId = this.state.editlist.slice()
+        for (var i = 0; i < newId.length; i++) {
+            if (newId[i] == 1) {
+                newId[i] = 0
+            }
+        }
+        let keyword = event.target.value;
+        this.setState({
+            Typesearch: parseInt(keyword),
+            editlist: newId,
+            teacher: JSON.parse(this.state.olddata)
+        })
+        this.pageselectvalue(1)
 
     }
 
@@ -125,62 +167,134 @@ export default class FacultyData extends Component {
 
     render() {
         var editjson = []
-        const tabledata = this.state.teacher.filter((data, index) => {
+        var tabledata = []
+        var datalength = 0
+        var typestring = ['สำนักงาน','ตำแหน่ง']
+        
+        if(this.state.Typesearch == 1){
+            tabledata = this.state.officer.filter((data, index) => {
 
-            if (data.dept_id == this.state.deptid) {
+                
                 editjson.push(index)
                 return data
-            }
-        }).slice(this.state.firstitem, this.state.lastitem).map((tabledata, index) => {
-            if (this.state.editlist[index] == 1) { }
-            else {
-                return (
-                    <tr>
-                        <td>{tabledata.teacher_id}</td>
-                        <td>{tabledata.t_prename}</td>
-                        <td>{tabledata.teacher_tname}</td>
-                        <td>อาจารย์</td>
-                        <td>
-                            <Form>
-                                {['radio'].map((type) => (
-                                    <div key={`inline-${type}`}  >
-                                        <Form.Group className="radiotable">
-                                            <Form.Check inline label="ไม่คุม" name="line" type={type} id={`inline-${type}-1`} />
+                
+            }).slice(this.state.firstitem, this.state.lastitem).map((tabledata, index) => {
+                if (this.state.editlist[index] == 1) { }
+                else {
+                    return (
+                        <tr>
+                            <td>{tabledata.officer_id}</td>
+                            <td>{tabledata.officer_prename}</td>
+                            <td>{tabledata.officer_firstname}</td>
+                            <td>{tabledata.officer_lastname}</td>
+                            <td>เจ้าหน้าที</td>
+                            <td>
+                                <Form>
+                                    {['radio'].map((type) => (
+                                        <div key={`inline-${type}`}  >
+                                            <Form.Group className="radiotable">
+                                                <Form.Check inline label="ไม่คุม" name="line" type={type} id={`inline-${type}-1`} />
+    
+                                                <Form.Check inline label="คุม" name="line" type={type} id={`inline-${type}-1`} />
+                                                <Form.Check inline label="คุม 1 ครั้ง" name="line" type={type} id={`inline-${type}-2`} />
+                                            </Form.Group>
+    
+                                        </div>
+                                    ))}
+                                </Form>
+    
+                            </td>
+                            <td>
+                                <Button type="primary" onClick={() => this.handleOpen()}>กำหนดเงื่อนไข</Button>
+                            </td>
+                            <td>
+                                <Button variant="light" className="editdata" >
+                                    <img src={editbt} className="editicon" alt="edit" />
+                                </Button>
+                            </td>
+                            <td>
+                                <Button variant="light" className="deletedata" >
+                                    <img src={deletebt} className="deleteicon" alt="delete" />
+                                </Button>
+    
+                            </td>
+    
+                        </tr>
+                    )
+                }
+            })   
+            datalength = this.state.officer.map((data) => {
+                    return data
+                
+            }).length     
+        }
+        if(this.state.Typesearch == 2){
+            tabledata = this.state.teacher.filter((data, index) => {
 
-                                            <Form.Check inline label="คุม" name="line" type={type} id={`inline-${type}-1`} />
-                                            <Form.Check inline label="คุม 1 ครั้ง" name="line" type={type} id={`inline-${type}-2`} />
-                                        </Form.Group>
+                if (data.dept_id == this.state.deptid) {
+                    editjson.push(index)
+                    return data
+                }
+            }).slice(this.state.firstitem, this.state.lastitem).map((tabledata, index) => {
+                if (this.state.editlist[index] == 1) { }
+                else {
+                    return (
+                        <tr>
+                            <td>{tabledata.teacher_id}</td>
+                            <td>{tabledata.t_prename}</td>
+                            <td>{tabledata.FIRSTNAME_TH}</td>
+                            <td>{tabledata.LASTNAME_TH}</td>
+                            <td>อาจารย์</td>
+                            <td>
+                                <Form>
+                                    {['radio'].map((type) => (
+                                        <div key={`inline-${type}`}  >
+                                            <Form.Group className="radiotable">
+                                                <Form.Check inline label="ไม่คุม" name="line" type={type} id={`inline-${type}-1`} />
+    
+                                                <Form.Check inline label="คุม" name="line" type={type} id={`inline-${type}-1`} />
+                                                <Form.Check inline label="คุม 1 ครั้ง" name="line" type={type} id={`inline-${type}-2`} />
+                                            </Form.Group>
+    
+                                        </div>
+                                    ))}
+                                </Form>
+    
+                            </td>
+                            <td>
+                                <Button type="primary" onClick={() => this.handleOpen()}>กำหนดเงื่อนไข</Button>
+                            </td>
+                            <td>
+                                <Button variant="light" className="editdata" >
+                                    <img src={editbt} className="editicon" alt="edit" />
+                                </Button>
+                            </td>
+                            <td>
+                                <Button variant="light" className="deletedata" >
+                                    <img src={deletebt} className="deleteicon" alt="delete" />
+                                </Button>
+    
+                            </td>
+    
+                        </tr>
+                    )
+                }
+            })
+            var teacherlist =[]
+            this.state.teacher.map((data) => {
+                if (data.dept_id == this.state.deptid) {
+                    teacherlist.push(data)
 
-                                    </div>
-                                ))}
-                            </Form>
+                    return data
+                }
+            })
+            
+            datalength = teacherlist.length
 
-                        </td>
-                        <td>
-                            <Button type="primary" onClick={() => this.handleOpen()}>กำหนดเงื่อนไข</Button>
-                        </td>
-                        <td>
-                            <Button variant="light" className="editdata" >
-                                <img src={editbt} className="editicon" alt="edit" />
-                            </Button>
-                        </td>
-                        <td>
-                            <Button variant="light" className="deletedata" >
-                                <img src={deletebt} className="deleteicon" alt="delete" />
-                            </Button>
+        }
+        
 
-                        </td>
-
-                    </tr>
-                )
-            }
-        })
-
-        let datalength = this.state.teacher.map((data) => {
-            if (data.dept_id == this.state.deptid) {
-                return data
-            }
-        }).length
+         
         return (
             <div className="page-container" >
                 <div className="content-wrap">
@@ -191,11 +305,13 @@ export default class FacultyData extends Component {
                     <div id="detail">
                         <div className="filter">
                             <h5 className="yearDLfil">บุคลากร</h5>
-                            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
-                                <option value='10'>อาจารย์</option>
+                            <select className="selectyearDL" onChange={(e) => this.searchType(e)}>
+                                <option value='1'>เจ้าหน้าที</option>
+                                <option value='2'>อาจารย์</option>
+
                             </select>
-                            <h5 className="yearDLfil">ภาควิชา</h5>
-                            <select className="selectyearDL" onChange={(e) => this.searchDept(e)}>
+                            <h5 className="yearDLfil" hidden ={this.state.Typesearch%2} >ภาควิชา</h5>
+                            <select className="selectDept" hidden ={this.state.Typesearch%2} onChange={(e) => this.searchDept(e)}>
                                 {
                                     this.state.dept.map(data =>
                                         <option value={data.dept_id}>{data.dept_name}</option>
@@ -209,8 +325,9 @@ export default class FacultyData extends Component {
                                 <tr className="">
                                     <th>รหัสบุคลากร</th>
                                     <th>คำนำหน้า</th>
-                                    <th>ชื่อ - นามสกุล</th>
-                                    <th>ตำแหน่ง</th>
+                                    <th>ชื่อ</th>
+                                    <th>นามสกุล</th>
+                            <th>{typestring[this.state.Typesearch - 1]}</th>
                                     <th>คุมสอบ</th>
                                     <th>เงื่อนไข</th>
                                     <th>แก้ไขข้อมูล</th>
