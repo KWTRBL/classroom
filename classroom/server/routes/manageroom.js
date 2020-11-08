@@ -103,7 +103,7 @@ function getRow(query,year,semester,curr2_id,teach_day) {
   }
 
 //test
-
+/*
 module.exports.read = async function (callback) {
     for(i=0;i<=23;i++){
     for(j=0;j<=6;j++){
@@ -121,8 +121,15 @@ module.exports.read = async function (callback) {
     let timeperiod = timeperiod_array[k]; //1=07:00 2=13:00 3=16:30
     let loopnum = 0
 
+module.exports.read = async function (callback) {
+    let year = 2563
+    let semester = 1
+    let curr2_id = 04;
+    let teach_day = 5;
+    let timeperiod = "16:30"; //1=07:00 2=13:00 3=16:30
+    let loopnum = 0
+*/
 
-/*
 module.exports.read = async function (req,callback) {
     console.log(req.body.data)
     let year = req.body.data.year
@@ -132,14 +139,7 @@ module.exports.read = async function (req,callback) {
     let timeperiod = req.body.data.timeperiod //1=morning 2=noon 3=evening
     let loopnum = 0
 
-module.exports.read = async function (callback) {
-    let year = 2563
-    let semester = 1
-    let curr2_id = 04;
-    let teach_day = 5;
-    let timeperiod = "16:30"; //1=07:00 2=13:00 3=16:30
-    let loopnum = 0
-*/
+
 //ใส่ห้องของปีก่อนหน้า
     let subjectoldroom ='SELECT room_no FROM `teach_table`WHERE subject_id=? AND year=?-1 AND semester=? and curr2_id=? ORDER BY section ASC LIMIT 1'
     //เช้า
@@ -276,5 +276,5 @@ module.exports.read = async function (callback) {
         
         
     });
-    }}}
+    //}}}
 }
