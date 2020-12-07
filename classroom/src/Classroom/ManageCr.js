@@ -13,6 +13,7 @@ import axios from 'axios';
 import { Component } from 'react';
 import { json } from 'body-parser';
 import Pagination from "react-js-pagination";
+import Modal from 'react-bootstrap/Modal'
 import './ManageCr.css'
 export default class BuildingData extends Component {
     constructor(props) {
@@ -34,17 +35,69 @@ export default class BuildingData extends Component {
             lastitem: null,
             starttime: '07:00',
             timeperiod: 0, //ช่วงเวลา
-
+            editlist: [],
+            olddata: null,
+            available_room: [],
+            room_no: null,
+            building_no: null,
+            showsubmit: false,
+            showfailed: false,
+            indextodel:null
         }
+        //modal
+        this.handleClose = this.handleClose.bind(this);
+        this.handleClosesubmit = this.handleClosesubmit.bind(this);
+        this.handleClosefailed = this.handleClosefailed.bind(this);
+
+
+        //delete row
+        this.deletebt = this.deletebt.bind(this)
+        this.confirmdelete = this.confirmdelete.bind(this);
+
+        //edit data
+        this.enableedit = this.enableedit.bind(this)
+        this.canceledit = this.canceledit.bind(this)
+        this.confirmedit = this.confirmedit.bind(this)
+        this.handleChange_building_no = this.handleChange_building_no.bind(this)
+        this.handleChange_room_no = this.handleChange_room_no.bind(this)
+        //    this.handleChange_editfloor_numhandleChange_room_no = this.handleChange_editfloor_num.bind(this)
+
         this.componentWillMount = this.componentWillMount.bind(this);
         this.pageselectvalue = this.pageselectvalue.bind(this);
 
     }
+    //delete row button 
+    deletebt = (buildng_no, room_no,index) => {
+        this.setState({
+            show: true,
+            building_no: buildng_no,
+            room_no: room_no,
+            indextodel:index
+        })
+    }
+
     componentWillMount() {
         axios.get('http://localhost:7777/teachdata')
             .then(res => {
+                const newIds = this.state.editlist.slice()
+                for (var i = 0; i < res.data.length; i++) {
+                    newIds.push(0)
+                }
                 this.setState({
                     name: res.data,
+                    editlist: newIds,
+                    olddata: JSON.stringify(res.data)
+
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        axios.get('http://localhost:7777/availableroom')
+            .then(res => {
+                this.setState({
+                    available_room: res.data,
                 })
 
             })
@@ -90,12 +143,65 @@ export default class BuildingData extends Component {
             lastitem: this.state.itemperpage
         })
     }
-
-    pageselectvalue(value) {
+    //cancel edit row
+    canceledit = (index) => {
+        const newIds = this.state.editlist.slice() //copy the array
+        newIds[index] = 0//execute the manipulations
         this.setState({
-            pageclick: parseInt(value),
-            firstitem: (this.state.itemperpage * parseInt(value)) - this.state.itemperpage,
-            lastitem: (this.state.itemperpage * parseInt(value))
+            editlist: newIds,
+            name: JSON.parse(this.state.olddata),
+        }) //set the new state
+    }
+
+    enableedit = (index) => {
+
+        const result = this.state.editlist.find((data) => {
+            return data == 1
+        })
+        if (!result) {
+            const newIds = this.state.editlist.slice() //copy the array
+            newIds[index] = 1//execute the manipulations
+            this.setState({ editlist: newIds }) //set the new state
+        }
+    }
+
+    handleChange_building_no(index, event) {
+        const newIds = this.state.name //copy the array
+        newIds[index].building_no = event.target.value //execute the manipulations
+
+        //await this.setState({ name: newIds }) //set the new state
+
+        this.setState({
+            name: newIds,
+            building_no: event.target.value
+        })
+    }
+
+    handleChange_room_no(index, event) {
+        const newIds = this.state.name //copy the array
+        newIds[index].room_no = event.target.value //execute the manipulations
+
+        //await this.setState({ name: newIds }) //set the new state
+
+        this.setState({
+            name: newIds,
+            room_no: event.target.value
+        })
+    }
+    pageselectvalue(value) {
+        let newId = this.state.editlist.slice()
+        for (var i = 0; i < newId.length; i++) {
+            if (newId[i] == 1) {
+                newId[i] = 0
+            }
+        }
+        this.setState({
+            pageclick: value,
+            firstitem: (this.state.itemperpage * value) - this.state.itemperpage,
+            lastitem: (this.state.itemperpage * value),
+            editlist: newId,
+            name: JSON.parse(this.state.olddata),
+
         })
     }
     searchYear = (event) => {
@@ -152,47 +258,313 @@ export default class BuildingData extends Component {
         window.location.reload(false);
     }
 
+    //enable edit row
+    enableedit = (index, building_no, room_no) => {
+
+        const result = this.state.editlist.find((data) => {
+            this.setState({
+                building_no: building_no,
+                room_no: room_no
+            })
+            return data == 1
+        })
+        if (!result) {
+            const newIds = this.state.editlist.slice() //copy the array
+            newIds[index] = 1//execute the manipulations
+            this.setState({ editlist: newIds }) //set the new state
+        }
+    }
+
+    //confirm edit data sent to database
+    confirmedit = (index) => {
+        let olddata = JSON.parse(this.state.olddata)
+
+        console.log(index)
+        console.log(this.state.name[index])
+        console.log(olddata[index])
+        let time = null
+        if (this.state.starttime == "07:00")
+            time = 1
+        if (this.state.starttime == "13:00")
+            time = 2
+        if (this.state.starttime == "16:30")
+            time = 3
+        console.log(time)
+
+        axios
+            .post("http://localhost:7777/availableroom/update", {
+                room_no: this.state.name[index].room_no,
+                building_no: this.state.name[index].building_no,
+                year: this.state.name[index].year,
+                semester: this.state.name[index].semester,
+                curr: this.state.name[index].curr2_id,
+                dept: this.state.name[index].dept_id,
+                teachday: this.state.name[index].teach_day,
+                subject_id: this.state.name[index].subject_id,
+                teach_time: this.state.name[index].teach_time,
+                teach_time2: this.state.name[index].teach_time2,
+                time: time,
+                oldroom: olddata[index].room_no,
+                section: this.state.name[index].section
+            })
+            .then(response => {
+                console.log("response: ", response)
+
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+
+        window.location.reload(false);
+
+    }
+
+
+
+    //confirm edit data sent to database
+    confirmdelete = () => {
+        let index = this.state.indextodel
+        let olddata = JSON.parse(this.state.olddata)
+
+        console.log(index)
+        console.log(this.state.name[index])
+        console.log(olddata[index])
+        let time = null
+        if (this.state.starttime == "07:00")
+            time = 1
+        if (this.state.starttime == "13:00")
+            time = 2
+        if (this.state.starttime == "16:30")
+            time = 3
+        console.log(time)
+
+        axios
+            .post("http://localhost:7777/availableroom/delete", {
+                room_no: this.state.name[index].room_no,
+                building_no: this.state.name[index].building_no,
+                year: this.state.name[index].year,
+                semester: this.state.name[index].semester,
+                curr: this.state.name[index].curr2_id,
+                dept: this.state.name[index].dept_id,
+                teachday: this.state.name[index].teach_day,
+                subject_id: this.state.name[index].subject_id,
+                teach_time: this.state.name[index].teach_time,
+                teach_time2: this.state.name[index].teach_time2,
+                time: time,
+                section: this.state.name[index].section
+            })
+            .then(response => {
+                console.log("response: ", response)
+                if (response.data == "Success") {
+                    this.setState({
+                        showsubmit: !this.state.showsubmit
+                    })
+                }
+                else {
+                    this.setState({
+                        showfailed: !this.state.showfailed
+                    })
+                }
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+
+        this.handleClose()
+
+    }
+
+    //handle modal
+    handleClose() {
+        this.setState({
+            show: false
+        })
+    }
+
+    handleClosesubmit() {
+
+        this.setState({
+            showsubmit: false
+        })
+        window.location.reload(false);
+    }
+
+    handleClosefailed() {
+        this.setState({
+            showfailed: false
+        })
+        window.location.reload(false);
+
+    }
+
+
 
     render() {
-        const item = this.state.name.filter((member) => {
+        var editjson = []
+        const buildingcheck = []
+        const buildinglist = this.state.available_room.map((data, index) => {
+            //return this.selectbuildroomcondition(buildingcheck,data.building_no,this.state.building_no,data.teach_day,data.morning,data.noon,data.evening)
+            if (!buildingcheck.includes(data.building_no)) {
+                if (this.state.yearsearch == data.year && this.state.semestersearch == data.semester && this.state.daysearch == data.teach_day) {
+
+                    if (data.morning == 0 && this.state.starttime == "07:00") {
+                        buildingcheck.push(data.building_no)
+                        if (data.building_no == this.state.building_no) {
+                            return <option value={data.building_no} selected>{data.building_no}</option>
+
+                        }
+                        return <option value={data.building_no}>{data.building_no}</option>
+                    }
+                    if (data.noon == 0 && this.state.starttime == "13:00") {
+                        buildingcheck.push(data.building_no)
+                        if (data.building_no == this.state.building_no) {
+                            return <option value={data.building_no} selected>{data.building_no}</option>
+
+                        }
+                        return <option value={data.building_no}>{data.building_no}</option>
+                    }
+                    if (data.evening == 0 && this.state.starttime == "16:30") {
+                        buildingcheck.push(data.building_no)
+                        if (data.building_no == this.state.building_no) {
+                            return <option value={data.building_no} selected>{data.building_no}</option>
+
+                        }
+                        return <option value={data.building_no}>{data.building_no}</option>
+                    }
+
+                }
+
+            }
+        })
+        //console.log(buildinglist)
+        const roomcheck = []
+
+        const roomlist = this.state.available_room.map((data, index) => {
+
+            if (this.state.building_no == data.building_no && this.state.yearsearch == data.year && this.state.semestersearch == data.semester && this.state.daysearch == data.teach_day) {
+
+                if (!roomcheck.includes(data.room_no)) {
+
+                    if (data.morning == 0 && this.state.starttime == "07:00") {
+                        roomcheck.push(data.room_no)
+                        if (data.room_no == this.state.room_no) {
+                            return <option value={data.room_no} selected>{data.room_no}</option>
+                        }
+                        return <option value={data.room_no}>{data.room_no}</option>
+                    }
+                    if (data.noon == 0 && this.state.starttime == "13:00") {
+                        roomcheck.push(data.room_no)
+                        if (data.room_no == this.state.room_no) {
+                            return <option value={data.room_no} selected>{data.room_no}</option>
+                        }
+                        return <option value={data.room_no}>{data.room_no}</option>
+                    }
+                    if (data.evening == 0 && this.state.starttime == "16:30") {
+                        roomcheck.push(data.room_no)
+                        if (data.room_no == this.state.room_no) {
+                            return <option value={data.room_no} selected>{data.room_no}</option>
+                        }
+                        return <option value={data.room_no}>{data.room_no}</option>
+                    }
+
+
+                }
+
+            }
+        })
+        //console.log(roomcheck)
+        const item = this.state.name.filter((member, index) => {
             var teachtime = member.teach_time.split(/[- :]/);
             var searchtime = this.state.starttime.split(/[- :]/);
 
             if (this.state.yearsearch == null) {
-
-                this.setState({ curr2search: "00", yearsearch: 2563, semestersearch: 1, daysearch: 1 })
-                return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
+                editjson.push(index)
+                this.setState({ searchTime:"07:00",curr2search: "01", yearsearch: 2562, semestersearch: 1, daysearch: 1 })
+                return member.curr2_id == "01" && member.year == 2562 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)))
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45))) {
+                editjson.push(index)
+
                 return member
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45) || ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13)) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30)))
+            }
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) >= 45) || ((parseInt(teachtime[0]) >= 13 && parseInt(teachtime[0]) < 16 && parseInt(searchtime[0]) == 13)) || (parseInt(searchtime[0]) == 13 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) < 30))) {
+                editjson.push(index)
+
                 return member
-            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30)))
+            }
+            else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30))) {
+                editjson.push(index)
+
                 return member
+            }
 
 
 
 
-        }).slice(this.state.firstitem, this.state.lastitem).map(data =>
-            <tr>
-                <td>{data.subject_id}</td>
-                <td>{data.subject_ename}</td>
-                <td>{data.section}</td>
-                <td>{data.teach_time.split(/[- :]/)[0]}:{data.teach_time.split(/[- :]/)[1]}-{data.teach_time2.split(/[- :]/)[0]}:{data.teach_time2.split(/[- :]/)[1]}</td>
-                <td>{data.building_no}</td>
-                <td>{data.room_no}</td>
-                <td>{data.seat_num}</td>
-                <td>{data.studentnum}</td>
-                <td>
-                    <Button variant="light" className="editdata">
-                        <img src={editbt} className="editicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deletedata">
-                        <img src={deletebt} className="deleteicon" alt="delete" />
-                    </Button>
-                </td>
-            </tr>
+        }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
+            if (this.state.editlist[index] == 1) {
+                return (
+                    <tr>
+                        <td>{data.subject_id}</td>
+                        <td>{data.subject_ename}</td>
+                        <td>{data.section}</td>
+                        <td>{data.teach_time.split(/[- :]/)[0]}:{data.teach_time.split(/[- :]/)[1]}-{data.teach_time2.split(/[- :]/)[0]}:{data.teach_time2.split(/[- :]/)[1]}</td>
+                        <td>
+                            <select onChange={(e) => this.handleChange_building_no(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index], e)}>
+                                {
+                                    buildinglist
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select onClick={(e) => this.handleChange_room_no(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index], e)}>
+                                {
+                                    roomlist
+                                }
+                            </select>
+
+                        </td>
+                        <td>{data.seat_num}</td>
+                        <td>{data.studentnum}</td>
+                        <td>
+                            <Button variant="link" onClick={() => this.canceledit(index)}>ยกเลิก</Button>
+
+                            <Button variant="primary" onClick={() => this.confirmedit(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index])} >ยืนยัน</Button>
+
+                        </td>
+                    </tr>
+
+                )
+            }
+            else {
+                return (
+                    <tr>
+                        <td>{data.subject_id}</td>
+                        <td>{data.subject_ename}</td>
+                        <td>{data.section}</td>
+                        <td>{data.teach_time.split(/[- :]/)[0]}:{data.teach_time.split(/[- :]/)[1]}-{data.teach_time2.split(/[- :]/)[0]}:{data.teach_time2.split(/[- :]/)[1]}</td>
+                        <td>{data.building_no}</td>
+                        <td>{data.room_no}</td>
+                        <td>{data.seat_num}</td>
+                        <td>{data.studentnum}</td>
+                        <td>
+                            <Button variant="light" className="editdata" onClick={() => this.enableedit(index, data.building_no, data.room_no)}>
+                                <img src={editbt} className="editicon" alt="edit" />
+                            </Button>
+                            <Button variant="light" className="deletedata" onClick={() => this.deletebt(data.building_no, data.room_no,editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index])}>
+                                <img src={deletebt} className="deleteicon" alt="delete" />
+                            </Button>
+                        </td>
+                    </tr>
+
+                )
+            }
+
+        }
+
         )
 
         let data_num = this.state.name.filter((member) => {
@@ -200,8 +572,8 @@ export default class BuildingData extends Component {
             var searchtime = this.state.starttime.split(/[- :]/);
             if (this.state.yearsearch == null) {
 
-                this.setState({ curr2search: "00", yearsearch: 2563, semestersearch: 1, daysearch: 1 })
-                return member.curr2_id == "00" && member.year == 2563 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
+                this.setState({ starttime:"07:00",curr2search: "01", yearsearch: 2562, semestersearch: 1, daysearch: 1 })
+                return member.curr2_id == "01" && member.year == 2562 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) < 12 && parseInt(teachtime[0]) >= 7) || (parseInt(searchtime[0]) == 7 && parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)))
@@ -265,7 +637,7 @@ export default class BuildingData extends Component {
 
                         </div>
                         <div className="filter">
-                        <h5 className="dayfil">วันที่เรียน</h5>
+                            <h5 className="dayfil">วันที่เรียน</h5>
                             <select className="selectday" onChange={(e) => this.searchDay(e)}>
                                 <option value="1">อาทิตย์</option>
                                 <option value="2">จันทร์</option>
@@ -282,7 +654,7 @@ export default class BuildingData extends Component {
                                 <option value="16:30">ค่ำ</option>
                             </select>
                             <div id="buttonManage">
-                                <Button variant="light" className="managebtn" onClick={(e) => this.manageroom(e)}>จัดห้อง</Button>
+                                <Button variant="primary" className="ManageInbtn" onClick={(e) => this.manageroom(e)}>จัดห้อง</Button>
                             </div>
                         </div>
 
@@ -321,6 +693,41 @@ export default class BuildingData extends Component {
                         />
                     </div>
                 </div>
+
+                <Modal show={this.state.show} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>คำเตือน</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleClose}>
+                            ยกเลิก
+                        </Button>
+                        <Button variant="primary" onClick={this.confirmdelete}>
+                            ยืนยัน
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
+                <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Success</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Failed</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>W
+
                 <div className="footer">
                     <Foot />
                 </div>

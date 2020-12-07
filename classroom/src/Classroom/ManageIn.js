@@ -25,43 +25,47 @@ export default class ManageIn extends Component {
                     <div id="detail">
                         <div className="filter">
                             <h5 className="yearDLfil">ปีการศึกษา</h5>
-                            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
+                            <select className="selectyearDL" >
                                 <option value="13:00">2563</option>
 
                             </select>
                             <h5 className="termDLfil">ภาคการศึกษา</h5>
-                            <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
-                                <option value="13:00">บ่าย</option>
+                            <select className="selecttermDL" >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+
+
 
                             </select>
                             <h5 className="termDLfil">การสอบ</h5>
-                            <select className="selectime" onChange={(e) => this.searchTime(e)}>
+                            <select className="selectime" >
                                 <option value="7:00">กลางภาค</option>
                                 <option value="13:00">ปลายภาค</option>
                             </select>
                         </div>
                         <div className="filter">
                             <h5 className="departManfil2">ภาควิชา</h5>
-                            <select className="selectdepart" onChange={(e) => this.searchCurr2(e)}>
+                            <select className="selectdepart">
                                 <option value="13:00">วิศวกรรมคอมพิวเตอร์</option>
 
                             </select>
 
                             <h5 className="termDLfil">กรรมการ</h5>
-                            <select className="selecttermDL" onChange={(e) => this.searchSemester(e)}>
+                            <select className="selecttermDL" >
                                 <option value="13:00">อาจารย์</option>
 
                             </select>
                             <div id="ManageInbtn">
-                                <Button variant="primary" className="ManageInbtn" onClick={(e) => this.manageroom(e)}>จัดคุมวิชาที่สอน</Button>
+                                <Button variant="primary" className="ManageInbtn" >จัดคุมวิชาที่สอน</Button>
                             </div>
                             <div id="">
-                                <Button variant="primary" className="ManageInbtn" onClick={(e) => this.manageroom(e)}>จัดคุมสอบปกติ</Button>
+                                <Button variant="primary" className="ManageInbtn" >จัดคุมสอบปกติ</Button>
                             </div>
 
 
                         </div>
-                        <Table striped responsive className="Crtable">
+                        <Table striped responsive className="ManageInTb">
                             <thead>
                                 <tr className="ManageIntable">
                                     <th>ชื่ออาจารย์ - เจ้าหน้าที่</th>
@@ -75,25 +79,152 @@ export default class ManageIn extends Component {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td> รศ.ดร. สวัสดี บุญมา</td>
-                                    <td>27 ก.ค. 63  09.30-12.30
-                                    อาคาร 12 ชั้น ห้อง E12-401
-</td>
-                                    <td>27 ก.ค. 63 09.30-12.30 อาคาร 12 ชั้น ห้อง E12-401	</td>
-                                    <td>27 ก.ค. 63 09.30-12.30 อาคาร 12 ชั้น ห้อง E12-401	</td>
-                                    <td>27 ก.ค. 63 09.30-12.30 อาคาร 12 ชั้น ห้อง E12-401	</td>
-                                    <td>27 ก.ค. 63 09.30-12.30 อาคาร 12 ชั้น ห้อง E12-401	</td>
+                                    <td> ผศ.ดร. ปกรณ์ วัฒนจตุรพร</td>
+                                    <td>
+                                        ส 7 มีค.63 	 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-410
+                                        <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td> ผศ.ดร.	ชมพูนุท	จินจาคาม</td>
+                                    <td>จ 2 มีค.63	 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-409
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+
+                                    </td>
+                                    <td>พฤ 5 มีค.63	 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-410
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+
+                                    </td>
+                                    <td>ศ 6 มีค.63	 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-302
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
 
                                 </tr>
                                 <tr>
-                                    <td>รศ.ดร. สวัสดี บุญมา </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td> ผศ. ธนา	หงษ์สุวรรณ</td>
+                                    <td>อ 3 มีค.63	 13:30-16:30 อาคาร HM ห้อง HM-405
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td>พฤ 5 มีค.63	 13:30-16:30 อาคาร 12 ชั้น ห้อง E12-503
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td>ศ 6 มีค.63	 09:30-12:30 อาคาร HM ห้อง HM-501
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
                                     <td></td>
                                     <td></td>
 
                                 </tr>
+                                <tr>
+                                    <td> รศ.ดร. เกียรติกูล	เจียรนัยธนะกิจ</td>
+                                    <td>อ 3 มีค.63	 13:30-16:30 อาคารเครื่องกล ห้อง ME-408
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td>พ 4 มีค.63	 09:30-12:30 อาคาร HM ห้อง HM-301
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td>พ 4 มีค.63	 13:30-16:30 อาคาร 12 ชั้น ห้อง E12-502
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                                <tr>
+                                    <td>อ. เกียรติณรงค์	ทองประเสริฐ</td>
+                                    <td>อ 3 มีค.63	 13:30-16:30 อาคารเครื่องกล ห้อง ME-402
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td>พฤ 5 มีค.63	 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-405
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td>พฤ 5 มีค.63	 13:30-16:30 อาคาร 12 ชั้น ห้อง E12-501
+                                    <Button variant="light" className="editIndata" >
+                                            <img src={editbt} className="editInicon" alt="edit" />
+                                        </Button>
+                                        <Button variant="light" className="deleteIndata" >
+                                            <img src={deletebt} className="deleteInicon" alt="delete" />
+                                        </Button>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>รศ.ดร.อรฉัตร จิตต์โสภักตร์</td>
+                                    <td><p><br></br><br></br></p></td>
+                                    <td><p><br></br><br></br></p></td>
+                                    <td><p><br></br><br></br></p></td>
+                                    <td><p><br></br><br></br></p></td>
+                                    <td><p><br></br><br></br></p></td>
+                                </tr>
+
+
 
                             </tbody>
                         </Table>

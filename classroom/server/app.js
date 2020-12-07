@@ -4,8 +4,8 @@ var bodyParser = require('body-parser');
 
 const cookieParser = require('cookie-parser') // ใช้งาน cookie-parser module
 
-const redis = require('redis')
-const client = redis.createClient()
+// const redis = require('redis')
+// const client = redis.createClient()
 
 //new
 var session = require('express-session')
@@ -272,23 +272,22 @@ app.put('/groupdata/update', (req, res) => {   // Router เวลาเรี�
 //Teach Data
 app.get('/teachdata', (req, res) => {   // Router เวลาเรียกใช้งาน
 
-    client.get('teachtable', async (error, data) => {
-        /*
-        if (error) {
-          return res.json({
-            message: 'Something went wrong!',
-            error
-          })
-        }*/
-        if (data) {
-            return res.json(JSON.parse(data))
-        } else {
-            teachdata.read(function (callback) {
-                client.setex('teachtable', 60, JSON.stringify(callback))
-                res.json(callback)
-            })
-        }
+    // client.get('teachtable', async (error, data) => {
+
+    //     if (data) {
+    //         return res.json(JSON.parse(data))
+    //     } else {
+    //         teachdata.read(function (callback) {
+    //             client.setex('teachtable', 60, JSON.stringify(callback))
+    //             res.json(callback)
+    //         })
+    //     }
+    // })
+
+    teachdata.read(function (callback) {
+        res.json(callback)
     })
+
 
 })
 
@@ -334,6 +333,28 @@ app.get('/availableroom', (req, res) => {   // Router เวลาเรีย�
     })
 })
 
+//update available room
+app.post('/availableroom/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    //console.log(req.body.data.year)
+    availableroom.update(req, function (callback) {
+        res.json(callback)
+    })
+})
+
+//delete available room
+app.post('/availableroom/delete', (req, res) => {   // Router เวลาเรียกใช้งาน
+    //console.log(req.body.data.year)
+    availableroom.delete(req, function (callback) {
+        if (callback) {
+            res.send('Success')
+        }
+        else {
+            res.send('Error')
+        }
+    })
+})
+
+
 //Manage room
 app.post('/manageroom', (req, res) => {   // Router เวลาเรียกใช้งาน
     //console.log(req.body.data.year)
@@ -345,30 +366,24 @@ app.post('/manageroom', (req, res) => {   // Router เวลาเรียก�
 
 //teacherteach data
 app.get('/teacherteach', (req, res) => {   // Router เวลาเรียกใช้งาน
-    /*
+    
     teacherteach.read(function (callback) {
         res.json(callback)
     })
-    */
+    
 
-    client.get('teacherteach', async (error, data) => {
-        /*
-        if (error) {
-          return res.json({
-            message: 'Something went wrong!',
-            error
-          })
-        }*/
-        if (data) {
-            console.log('have data')
-            return res.json(JSON.parse(data))
-        } else {
-            teacherteach.read(function (callback) {
-                client.setex('teacherteach', 60, JSON.stringify(callback))
-                res.json(callback)
-            })
-        }
-    })
+    // client.get('teacherteach', async (error, data) => {
+    //     if (data) {
+    //         console.log('have data')
+    //         return res.json(JSON.parse(data))
+    //     } else {
+    //         teacherteach.read(function (callback) {
+    //             client.setex('teacherteach', 60, JSON.stringify(callback))
+    //             res.json(callback)
+    //         })
+    //     }
+    // })
+
 })
 
 

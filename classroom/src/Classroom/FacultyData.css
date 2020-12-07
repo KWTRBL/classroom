@@ -24,3 +24,13 @@
 .Downloadtable th:nth-of-type(6){
     width: 6%;
 }
+.editFDdata{
+    margin-left: 5px;
+    color:#393939;
+    padding: 5px;
+    width: 30px;
+    height: 30px;}
+
+.deleteFDdata{
+
+}

@@ -64,8 +64,6 @@ export default class ClassroomData extends Component {
               <NavDropdown title="เจ้าหน้าที่วิชาการ" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item>
                 <NavDropdown.Item href="#" onClick={() => this.logout()}>ออกจากระบบ</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

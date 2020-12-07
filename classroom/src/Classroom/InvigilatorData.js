@@ -74,28 +74,28 @@ export default class FacultyData extends Component {
             .catch(function (error) {
                 console.log(error);
             })
-            this.setState({
-                firstitem: 0,
-                lastitem: this.state.itemperpage
-              })
+        this.setState({
+            firstitem: 0,
+            lastitem: this.state.itemperpage
+        })
 
         axios.get('http://localhost:7777/officer')
-        .then(res => {
-            const newIds = this.state.editlist.slice()
-            for (var i = 0; i < res.data.length; i++) {
-                newIds.push(0)
-            }
+            .then(res => {
+                const newIds = this.state.editlist.slice()
+                for (var i = 0; i < res.data.length; i++) {
+                    newIds.push(0)
+                }
 
-            this.setState({
-                officer: res.data,
-                editlist: newIds,
-                olddata: JSON.stringify(res.data)
+                this.setState({
+                    officer: res.data,
+                    editlist: newIds,
+                    olddata: JSON.stringify(res.data)
+                })
+
             })
-
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
+            .catch(function (error) {
+                console.log(error);
+            })
         this.setState({
             firstitem: 0,
             lastitem: this.state.itemperpage
@@ -169,15 +169,15 @@ export default class FacultyData extends Component {
         var editjson = []
         var tabledata = []
         var datalength = 0
-        var typestring = ['สำนักงาน','ตำแหน่ง']
-        
-        if(this.state.Typesearch == 1){
+        var typestring = ['สำนักงาน', 'ตำแหน่ง']
+
+        if (this.state.Typesearch == 1) {
             tabledata = this.state.officer.filter((data, index) => {
 
-                
+
                 editjson.push(index)
                 return data
-                
+
             }).slice(this.state.firstitem, this.state.lastitem).map((tabledata, index) => {
                 if (this.state.editlist[index] == 1) { }
                 else {
@@ -194,15 +194,15 @@ export default class FacultyData extends Component {
                                         <div key={`inline-${type}`}  >
                                             <Form.Group className="radiotable">
                                                 <Form.Check inline label="ไม่คุม" name="line" type={type} id={`inline-${type}-1`} />
-    
+
                                                 <Form.Check inline label="คุม" name="line" type={type} id={`inline-${type}-1`} />
                                                 <Form.Check inline label="คุม 1 ครั้ง" name="line" type={type} id={`inline-${type}-2`} />
                                             </Form.Group>
-    
+
                                         </div>
                                     ))}
                                 </Form>
-    
+
                             </td>
                             <td>
                                 <Button type="primary" onClick={() => this.handleOpen()}>กำหนดเงื่อนไข</Button>
@@ -216,19 +216,19 @@ export default class FacultyData extends Component {
                                 <Button variant="light" className="deletedata" >
                                     <img src={deletebt} className="deleteicon" alt="delete" />
                                 </Button>
-    
+
                             </td>
-    
+
                         </tr>
                     )
                 }
-            })   
+            })
             datalength = this.state.officer.map((data) => {
-                    return data
-                
-            }).length     
+                return data
+
+            }).length
         }
-        if(this.state.Typesearch == 2){
+        if (this.state.Typesearch == 2) {
             tabledata = this.state.teacher.filter((data, index) => {
 
                 if (data.dept_id == this.state.deptid) {
@@ -251,15 +251,15 @@ export default class FacultyData extends Component {
                                         <div key={`inline-${type}`}  >
                                             <Form.Group className="radiotable">
                                                 <Form.Check inline label="ไม่คุม" name="line" type={type} id={`inline-${type}-1`} />
-    
+
                                                 <Form.Check inline label="คุม" name="line" type={type} id={`inline-${type}-1`} />
                                                 <Form.Check inline label="คุม 1 ครั้ง" name="line" type={type} id={`inline-${type}-2`} />
                                             </Form.Group>
-    
+
                                         </div>
                                     ))}
                                 </Form>
-    
+
                             </td>
                             <td>
                                 <Button type="primary" onClick={() => this.handleOpen()}>กำหนดเงื่อนไข</Button>
@@ -273,14 +273,14 @@ export default class FacultyData extends Component {
                                 <Button variant="light" className="deletedata" >
                                     <img src={deletebt} className="deleteicon" alt="delete" />
                                 </Button>
-    
+
                             </td>
-    
+
                         </tr>
                     )
                 }
             })
-            var teacherlist =[]
+            var teacherlist = []
             this.state.teacher.map((data) => {
                 if (data.dept_id == this.state.deptid) {
                     teacherlist.push(data)
@@ -288,19 +288,19 @@ export default class FacultyData extends Component {
                     return data
                 }
             })
-            
+
             datalength = teacherlist.length
 
         }
-        
 
-         
+
+
         return (
             <div className="page-container" >
                 <div className="content-wrap">
 
                     <Nav />
-                    <h1 class="state">ข้อมูลหน่วยงานในคณะ</h1>
+                    <h1 class="state">ข้อมูลบุคลากรในคณะ</h1>
 
                     <div id="detail">
                         <div className="filter">
@@ -310,8 +310,8 @@ export default class FacultyData extends Component {
                                 <option value='2'>อาจารย์</option>
 
                             </select>
-                            <h5 className="yearDLfil" hidden ={this.state.Typesearch%2} >ภาควิชา</h5>
-                            <select className="selectDept" hidden ={this.state.Typesearch%2} onChange={(e) => this.searchDept(e)}>
+                            <h5 className="yearDLfil" hidden={this.state.Typesearch % 2} >ภาควิชา</h5>
+                            <select className="selectDept" hidden={this.state.Typesearch % 2} onChange={(e) => this.searchDept(e)}>
                                 {
                                     this.state.dept.map(data =>
                                         <option value={data.dept_id}>{data.dept_name}</option>
@@ -327,7 +327,7 @@ export default class FacultyData extends Component {
                                     <th>คำนำหน้า</th>
                                     <th>ชื่อ</th>
                                     <th>นามสกุล</th>
-                            <th>{typestring[this.state.Typesearch - 1]}</th>
+                                    <th>{typestring[this.state.Typesearch - 1]}</th>
                                     <th>คุมสอบ</th>
                                     <th>เงื่อนไข</th>
                                     <th>แก้ไขข้อมูล</th>
@@ -340,6 +340,9 @@ export default class FacultyData extends Component {
 
                             </tbody>
                         </Table>
+                        <Button variant="light" className="adddata">
+                            <img src={addbt} className="addicon" alt="add" />
+                        </Button>
                         <Pagination
                             activePage={this.state.pageclick}
                             itemsCountPerPage={this.state.itemperpage}
@@ -350,9 +353,7 @@ export default class FacultyData extends Component {
                             onChange={this.pageselectvalue}
 
                         />
-                        <Button variant="light" className="adddata">
-                            <img src={addbt} className="addicon" alt="add" />
-                        </Button>
+
                     </div>
                 </div>
 
@@ -369,11 +370,14 @@ export default class FacultyData extends Component {
                 >
                     <Modal.Body >
                         <button type="button" onClick={this.handleClose} class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                        <div className="filter">
+                            <h5 className="yearDLfil">ผศ.ดร. ชมพูนุท	จินจาคาม	</h5>
+                        </div>
 
                         <div className="filter">
                             <h5 className="yearDLfil">เงื่อนไขอาคาร</h5>
-                            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
-                                <option value='10'>อาจารย์</option>
+                            <select className="selectbuilding" onChange={(e) => this.searchYear(e)}>
+                                <option value='10'>อาคาร 12 ชั้น</option>
                             </select>
                         </div>
                         <div className="filter">
@@ -394,8 +398,10 @@ export default class FacultyData extends Component {
 
                         <div className="filter">
                             <h5 className="yearDLfil">เงื่อนไขสัปดาห์</h5>
-                            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
+                            <select className="selectweek" onChange={(e) => this.searchYear(e)}>
                                 <option value='10'>สัปดาห์ที่ 1</option>
+
+
                             </select>
                         </div>
 
@@ -428,14 +434,415 @@ export default class FacultyData extends Component {
 
                                     </div>
                                 ))}
-                            </Form>                            </div>
+                            </Form>
+                            <br></br>
 
-                        <div className="filter">
-                            <h5 className="yearDLfil">เงื่อนไขวัน</h5>
-                            <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
-                                <option value='10'>สัปดาห์ที่ 1</option>
-                            </select>
                         </div>
+                        <div className="filter">
+                            <h5 className="yearDLfil">ตารางเวลา</h5>
+
+                        </div>
+                        <Table striped responsive className="conditionTB">
+                            <thead>
+                                <tr className="">
+                                    <th colspan="2">จันทร์</th>
+                                    <th colspan="2">อังคาร</th>
+                                    <th colspan="2">พุธ</th>
+                                    <th colspan="2">พฤหัสบดี</th>
+                                    <th colspan="2">ศุกร์</th>
+                                    <th colspan="2">เสาร์</th>
+                                    <th colspan="2">อาทิตย์</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        02/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        03/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        04/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        05/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        06/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        07/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        08/03/63
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        09/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        10/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        11/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        12/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        13/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        14/03/63
+                                    </td>
+                                    <td colspan="2">
+                                        15/03/63
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        เช้า
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={1}
+                                            />
+                                        </Form>
+                                    </td>
+                                    <td>
+                                        บ่าย
+                                        <br></br>
+                                        <Form>
+                                            <Form.Check
+                                                type="switch"
+                                                id={1}
+                                                label=""
+                                                checked={0}
+                                            />
+                                        </Form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
 
                     </Modal.Body>
                 </Modal>

@@ -1,8 +1,77 @@
 #ManageInbtn{
-    margin-right: 10px;
+    margin-right: 14px;
     margin-left:auto; 
 }
 
 .ManageInbtn{
     font-size: 16px;
 }
+.ManageInTb{
+    text-align: center;
+
+}
+.ManageInTb th:nth-of-type(1){
+    width: 15%;
+  }
+  .ManageInTb th:nth-of-type(2){
+    width: 10%;
+  }
+  .ManageInTb th:nth-of-type(3){
+    width: 10%;
+  }
+  .ManageInTb th:nth-of-type(4){
+    width: 10%;
+  }
+  .ManageInTb th:nth-of-type(5){
+    width: 10%;
+  }
+  .ManageInTb th:nth-of-type(6){
+    width: 10%;
+  }
+
+  .ManageInTb td:nth-of-type(2){
+    font-size: 12px;
+  }
+  .ManageInTb td:nth-of-type(3){
+    font-size: 12px;
+  }
+  .ManageInTb td:nth-of-type(4){
+    font-size: 12px;
+  }
+  .ManageInTb td:nth-of-type(5){
+    font-size: 12px;
+
+  }
+  .ManageInTb td:nth-of-type(6){
+    font-size: 12px;
+  }
+
+  .editIndata{
+    margin-left: 5px;
+    color:#393939;
+    padding: 5px;
+    width: 24px;
+    height: 24px;
+
+  
+  }
+  .deleteIndata{
+    margin-left: 5px;
+    color:#393939;
+    padding: 5px;
+    width: 24px;
+    height: 24px;
+  
+  }
+
+  .editInicon{
+    width: 12px;
+    height: 12px;
+    float: left;
+  }
+  .deleteInicon{
+    width: 12px;
+    height: 12px;
+    float: left;
+
+  }

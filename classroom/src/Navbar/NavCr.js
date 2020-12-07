@@ -51,28 +51,20 @@ export default class ClassroomData extends Component {
                 <NavDropdown.Item href="/ClassroomData">ข้อมูลห้องเรียน</NavDropdown.Item>
                 <NavDropdown.Item href="/AvailableRoom">สถานะการใช้ห้องเรียน</NavDropdown.Item>
                 <NavDropdown.Item href="/ManageZone">แบ่งโซนห้องเรียน</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="ตารางสอน" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/DownloadData">ข้อมูลตารางสอน</NavDropdown.Item>
                 <NavDropdown.Item href="/ManageGroup">จัดจำนวนนักศึกษา</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="การจัดการห้องเรียน" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/SpecialCr">จัดห้องเรียนกรณีพิเศษ</NavDropdown.Item>
                 <NavDropdown.Item href="/ManageCr">จัดห้องเรียนปกติ</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>
               <NavDropdown title="เจ้าหน้าที่ฝ่ายอาคารสถานที่" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item>
                 <NavDropdown.Item href="#" onClick={() => this.logout()}>ออกจากระบบ</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

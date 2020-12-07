@@ -296,7 +296,7 @@ export default class ConditionIn extends Component {
                                         onChange={this.handleChange_stdnum}
                                         disabled={!this.state.editstdnum}
                                     />
-                                    <Button variant="primary" className="editdata ConIn" onClick={this.enable_stdnumedit} hidden={this.state.editstdnum}>
+                                    <Button variant="light" className="editdata ConIn" onClick={this.enable_stdnumedit} hidden={this.state.editstdnum}>
                                         <img src={editbt} className="editicon" alt="edit" />
                                     </Button>
                                     <Button variant="link" hidden={!this.state.editstdnum} onClick={() => this.disable_stdnumedit()}>ยกเลิก</Button>

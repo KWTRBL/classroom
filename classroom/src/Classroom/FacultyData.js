@@ -88,7 +88,7 @@ export default class FacultyData extends Component {
                         <td>{deptdata.dept_name}</td>
 
                         <td>
-                            <Button variant="light" className="editdata" >
+                            <Button variant="light" className="editFDdata" >
                                 <img src={editbt} className="editicon" alt="edit" />
                             </Button>
                         </td>
@@ -135,6 +135,10 @@ export default class FacultyData extends Component {
                                 {deptdata}
                             </tbody>
                         </Table>
+                        <Button variant="light" className="adddata">
+                            <img src={addbt} className="addicon" alt="add" />
+                        </Button>
+                        
                         <Pagination
                             activePage={this.state.pageclick}
                             itemsCountPerPage={this.state.itemperpage}
@@ -145,9 +149,7 @@ export default class FacultyData extends Component {
                             onChange={this.pageselectvalue}
 
                         />
-                        <Button variant="light" className="adddata">
-                            <img src={addbt} className="addicon" alt="add" />
-                        </Button>
+
                     </div>
                 </div>
                 <div className="footer">
