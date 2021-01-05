@@ -21,7 +21,7 @@ export default class FacultyData extends Component {
             deptid: null,
             editlist: [],
             olddata: [],
-            Officesearch: null,
+            Officesearch: 1,
             pageclick: 1,
             itemperpage: 10,
             firstitem: null,
@@ -32,7 +32,7 @@ export default class FacultyData extends Component {
 
     }
     componentWillMount() {
-        axios.get('http://localhost:7777/department')
+        axios.get('http://localhost:7777/t_office')
             .then(res => {
                 const newIds = this.state.editlist.slice()
                 for (var i = 0; i < res.data.length; i++) {
@@ -40,7 +40,7 @@ export default class FacultyData extends Component {
                 }
                 this.setState({
                     dept: res.data,
-                    deptid: res.data[0].dept_id,
+                    deptid: res.data[0].Office_id,
                     editlist: newIds,
                     olddata: JSON.stringify(res.data)
                 })
@@ -55,10 +55,7 @@ export default class FacultyData extends Component {
             })
 
     }
-    searchOffice = (event) => {
-        let keyword = event.target.value;
-        this.setState({ Officesearch: keyword })
-    }
+
     pageselectvalue(value) {
         let newId = this.state.editlist.slice()
         for (var i = 0; i < newId.length; i++) {
@@ -75,37 +72,49 @@ export default class FacultyData extends Component {
 
         })
     }
+
+    searchOffice = (event) => {
+        let keyword = event.target.value;
+        this.setState({ Officesearch: keyword })
+        this.pageselectvalue(1)
+    }
     render() {
         var editjson = []
         const deptdata = this.state.dept.filter((data, index) => {
-            return data
+            if(data.Office_type == this.state.Officesearch){
+                editjson.push(index)
+                return data
+            }
+            
         }).slice(this.state.firstitem, this.state.lastitem).map((deptdata, index) => {
             if (this.state.editlist[index] == 1) { }
             else {
-                return (
-                    <tr>
-                        <td>{deptdata.dept_id}</td>
-                        <td>{deptdata.dept_name}</td>
+                if(deptdata.Office_type == this.state.Officesearch){
+                    
+                    return (
+                        <tr>
+                            <td>{deptdata.Office_id}</td>
+                            <td>{deptdata.Office_name}</td>
+    
+                            <td>
+                                <Button variant="light" className="editFDdata" >
+                                    <img src={editbt} className="editicon" alt="edit" />
+                                </Button>
+                            </td>
+                            <td>
+                                <Button variant="light" className="deletedata" >
+                                    <img src={deletebt} className="deleteicon" alt="delete" />
+                                </Button>
+    
+                            </td>
+    
+                        </tr>
+                    )
+                }
 
-                        <td>
-                            <Button variant="light" className="editFDdata" >
-                                <img src={editbt} className="editicon" alt="edit" />
-                            </Button>
-                        </td>
-                        <td>
-                            <Button variant="light" className="deletedata" >
-                                <img src={deletebt} className="deleteicon" alt="delete" />
-                            </Button>
-
-                        </td>
-
-                    </tr>
-                )
             }
         })
-        let datalength = this.state.dept.map((data) => {
-                return data
-        }).length
+        let datalength = editjson.length
         return (
             <div className="page-container">
                 <div className="content-wrap">
@@ -117,8 +126,9 @@ export default class FacultyData extends Component {
                         <div className="filter">
                             <h5 className="Officefil">หน่วยงานในคณะ</h5>
                             <select className="selectOffice" onChange={(e) => this.searchOffice(e)}>
-                                <option value='1'>สำนักงานคณบดี</option>
-                                <option value='2'>ภาควิชา</option>
+                            <option value="1"> ภาควิชา </option>
+                            <option value="2"> สำนักงานคณบดี </option>
+
                             </select>
 
                         </div>

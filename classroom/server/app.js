@@ -60,6 +60,12 @@ const officer = require('./routes/officer')
 const teacherteach = require('./routes/teacherteach')
 const facultycondition = require('./routes/faculty_condition')
 const examweek = require('./routes/examweek')
+const t_condition = require('./routes/t_condition')
+const person = require('./routes/person')
+const t_exam_room = require('./routes/t_examroom')
+const t_office = require('./routes/t_office')
+const exam_schedule = require('./routes/exam_schedule')
+
 global.__basedir = __dirname;
 const app = express() // สร้าง Object เก็บไว้ในตัวแปร app เพื่อนำไปใช้งาน
 app.use(cookieParser())
@@ -408,6 +414,55 @@ app.get('/examweek', (req, res) => {   // Router เวลาเรียกใ�
         res.json(callback)
     })
 })
+
+
+//t_condition
+
+app.get('/t_condition', (req, res) => {   // Router เวลาเรียกใช้งาน
+    t_condition.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+app.post('/t_condition/update', (req, res) => {   // Router เวลาเรียกใช้งาน
+    //console.log(req.body.data.year)
+    t_condition.updatecondition(req, function (callback) {
+        res.json(callback)
+    })
+})
+
+
+
+//person
+app.get('/person', (req, res) => {   // Router เวลาเรียกใช้งาน
+    person.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+//t_examroom
+app.get('/t_examroombuilding', (req, res) => {   // Router เวลาเรียกใช้งาน
+    t_exam_room.building(function (callback) {
+        res.json(callback)
+    })
+})
+
+
+//t_office
+app.get('/t_office', (req, res) => {   // Router เวลาเรียกใช้งาน
+    t_office.read(function (callback) {
+        res.json(callback)
+    })
+})
+
+
+//exam_schedule
+app.get('/exam_schedule', (req, res) => {   // Router เวลาเรียกใช้งาน
+    exam_schedule.ownsubject(function (callback) {
+        res.json(callback)
+    })
+})
+
 
 app.listen(port, () => {     // 
     console.log('start port ' + port)

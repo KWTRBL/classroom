@@ -30,6 +30,9 @@ margin-top: revert;
     text-align: center;
 }
 
+.right{
+  float: right;
+}
 .conditionTB th:nth-of-type(1){
     width: 14.3%;
   }

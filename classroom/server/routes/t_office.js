@@ -2,12 +2,12 @@ const pool = require('./dbconfig')
 
 module.exports.read = function (callback){
 
-    let sql = 'SELECT * FROM teacher'  // คำสั่ง sql
+    let sql = 'SELECT * FROM `t_office`'  // คำสั่ง sql
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
         // console.log('connected as id ' + connection.threadId);
-        console.log('teacher')
+        console.log("t_office")
         pool.query(sql, (err, rows) => {
             
             if(err) throw err;

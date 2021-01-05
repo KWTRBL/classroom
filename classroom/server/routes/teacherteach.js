@@ -6,7 +6,8 @@ module.exports.read = function (callback){
 
     pool.getConnection((err, connection) => {
         if(err) throw err;
-        console.log('connected as id ' + connection.threadId);
+        // console.log('connected as id ' + connection.threadId);
+       console.log("teacher teach")
         pool.query(sql, (err, rows) => {
             
             if(err) throw err;

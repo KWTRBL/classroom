@@ -408,7 +408,7 @@ export default class BuildingData extends Component {
             //return this.selectbuildroomcondition(buildingcheck,data.building_no,this.state.building_no,data.teach_day,data.morning,data.noon,data.evening)
             if (!buildingcheck.includes(data.building_no)) {
                 if (this.state.yearsearch == data.year && this.state.semestersearch == data.semester && this.state.daysearch == data.teach_day) {
-
+                    console.log('test')
                     if (data.morning == 0 && this.state.starttime == "07:00") {
                         buildingcheck.push(data.building_no)
                         if (data.building_no == this.state.building_no) {
@@ -438,7 +438,7 @@ export default class BuildingData extends Component {
 
             }
         })
-        //console.log(buildinglist)
+        // console.log(this.state.available_room)
         const roomcheck = []
 
         const roomlist = this.state.available_room.map((data, index) => {
@@ -474,7 +474,7 @@ export default class BuildingData extends Component {
 
             }
         })
-        //console.log(roomcheck)
+        console.log(roomcheck)
         const item = this.state.name.filter((member, index) => {
             var teachtime = member.teach_time.split(/[- :]/);
             var searchtime = this.state.starttime.split(/[- :]/);
