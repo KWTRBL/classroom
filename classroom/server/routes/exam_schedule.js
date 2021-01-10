@@ -30,6 +30,7 @@ function getdataFromSql(query) {
 
 function removeItemOnce(arr, value) {
   var index = arr.indexOf(value);
+  // console.log(index)
   if (index > -1) {
     arr.splice(index, 1);
   }
@@ -60,9 +61,9 @@ module.exports.ownsubject = async function (callback) {
   // var faculty_id = req.body.faculty_id;
   var year = 2562;
   var semester = 1;
-  var mid_or_final = "F";
+  var mid_or_final = "M";
   var faculty_id = "05";
-
+  var returndata = null;
   //คำนวนจำนวนครั้งที่แต่ละคนต้องคุม
   var NumExam = await countNumExam(
     `SELECT ( ceiling( (SELECT sum(std_num) from t_exam_room WHERE t_exam_room.year = ? and t_exam_room.semester = ? and t_exam_room.mid_or_final = ?) / 30 ) -(SELECT count(*) from t_condition where condition_status = 2) )/ ( (SELECT count(*) from t_condition) - (SELECT count(*) from t_condition where condition_status = 2) - (SELECT count(*) from t_condition where condition_status = 0) )as result`,
@@ -94,7 +95,7 @@ module.exports.ownsubject = async function (callback) {
     `SELECT * FROM t_exam_week WHERE year = ${year} and semester = ${semester} and mid_or_final = '${mid_or_final}'  `
   );
 
-  console.log(examweek);
+  // console.log(examweek);
 
   //เก็บข้อมูลวันที่สอบ
   var examweekdata = examweek[0];
@@ -140,20 +141,10 @@ module.exports.ownsubject = async function (callback) {
     // dayInweekExam.push(daysInWeek[day.getDay()]);
   });
 
-  // console.log(dayInweekExam);
-  // week1start = examweekdata.week1_start;
-  // week1end = examweekdata.week1_end;
-  // week2start = examweekdata.week2_start;
-  // week2end = examweekdata.week2_end;
-  // week3start = examweekdata.week3_start;
-  // week3end = examweekdata.week3_end;
-  // week4start = examweekdata.week4_start;
-  // week4end = examweekdata.week4_end;
-
   //for แยกจารย์
   for (let index = 0; index < condition_result.length; index++) {
     const teacherdata = condition_result[index];
-
+    console.log("teacher_id : ", teacherdata.person_id);
     //query วิชาที่สอน
     var subjectList = await getdataFromSql(
       `SELECT t_exam_room.year,t_exam_room.semester,t_exam_room.mid_or_final,t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.building_no,t_exam_room.room_no,t_exam_room.subject_id,t_exam_room.section ,teacher_teach.teacher_id,t_exam_room.faculty_id  ,teacher_teach.section as t_section FROM t_exam_room, teacher_teach 
@@ -293,11 +284,14 @@ module.exports.ownsubject = async function (callback) {
     // เอาวันที่คุมไปแล้วออก
     for (let index = 0; index < examlist.length; index++) {
       const element = examlist[index];
+      // console.log(element)
       removeItemOnce(Day, element);
     }
 
-    if (teacherdata.person_id == "10521") console.log(Day);
+    // if (teacherdata.person_id == "10521") console.log(Day);
 
+    //เก็บข้อมูลวิชาที่มีคนคุมไปแล้ว
+    var subjectExam = [];
     for (
       let subjectindex = 0;
       subjectindex < subjectList.length;
@@ -309,166 +303,203 @@ module.exports.ownsubject = async function (callback) {
       );
 
       const isoDate = new Date(new Date(subjectdata.exam_date).toISOString());
-      isoDate.setFullYear(isoDate.getFullYear() + 543);
-      const mySQLDateString = isoDate
+      // isoDate.setFullYear(isoDate.getFullYear() + 543);
+      const mySQLDateString = isoDate.toJSON().slice(0, 19).replace("T", " ");
+
+      var t_exam_committee = await getdataFromSql(
+        `SELECT * FROM t_exam_committee WHERE year = ${subjectdata.year} and semester = ${subjectdata.semester} and mid_or_final = '${subjectdata.mid_or_final}' and person_type = '1' and building_no = '${subjectdata.building_no}' and room_no = '${subjectdata.room_no}' and exam_date = '${mySQLDateString}' and exam_time = '${subjectdata.exam_time}' and subject_id = '${subjectdata.subject_id}' `
+      );
+      if (t_exam_committee.length) {
+        for (let index = 0; index < Day.length; index++) {
+          const element = Day[index];
+          var datestring = subjectdata.exam_date.toISOString().toString();
+          if (element[0] == datestring && element[1] == subjectdata.exam_time) {
+            subjectExam.push(element);
+          }
+        }
+      }
+    }
+
+    // if (teacherdata.person_id == "10521") console.log(subjectExam);
+
+    for (let index = 0; index < subjectExam.length; index++) {
+      const element = subjectExam[index];
+      removeItemOnce(Day, element);
+    }
+
+    if (teacherdata.person_id == "10521") {
+      console.log(Day);
+    }
+
+    //
+
+    var SpecialSubject = [];
+    var NormalSubject = [];
+    for (let index = 0; index < subjectList.length; index++) {
+      const element = subjectList[index];
+
+      const subjectday = new Date(new Date(element.exam_date).toISOString());
+      //subjectday.setFullYear(subjectday.getFullYear() + 543);
+      const mySQLDateString = subjectday
         .toJSON()
         .slice(0, 19)
         .replace("T", " ");
 
-      var examdata = await getdataFromSql(
-        `SELECT * FROM t_exam_room WHERE year = ${subjectdata.year} and semester = ${subjectdata.semester} and mid_or_final = '${subjectdata.mid_or_final}' and exam_date = '${mySQLDateString}' and room_no = '${subjectdata.room_no}' and exam_time = '${subjectdata.exam_time}'`
-      );
-      if (teacherdata.person_id == "10521") {
-        console.log(examdata);
-        // console.log(subjectList.length);
-        // console.log(Examdaylist[0], teacherdata.person_id);
+      var exam_time = element.exam_time;
+
+      for (let dayindex = 0; dayindex < Day.length; dayindex++) {
+        const Daydata = Day[dayindex];
+        var convertday = new Date(Daydata[0]);
+        if (
+          subjectday.getTime() == convertday.getTime() &&
+          exam_time == Daydata[1]
+        ) {
+          subjectday.setFullYear(subjectday.getFullYear() + 543);
+          const mySQLDateString = subjectday
+            .toJSON()
+            .slice(0, 19)
+            .replace("T", " ");
+
+          var roomcount = await getdataFromSql(
+            `select * from t_exam_room where year = ${element.year} and semester = ${element.semester} and mid_or_final = '${element.mid_or_final}' and exam_time = '${element.exam_time}' and room_no = '${element.room_no}' and exam_date = '${mySQLDateString}'`
+          );
+          if (roomcount.length == 1) {
+            SpecialSubject.push(element);
+          }
+          if (roomcount.length == 2) {
+            NormalSubject.push(element);
+          }
+        }
+        // if(teacherdata.person_id == '10521'){
+        //   console.log(subjectday,convertday,subjectday.getTime() == convertday.getTime())
+        //   console.log(roomcount.length)
+        // }
       }
     }
 
+    console.log("Special subject : ", SpecialSubject.length);
+    console.log("Normal subject : ", NormalSubject.length);
+
+    var specialcount = 0;
+    var sum = 0;
+    // console.log(count);
+
+    //•	ถ้ามีข้อมูลใน special ให้
+    if (SpecialSubject.length > 0) {
+      console.log("special");
+      for (let index = 0; index < count; index++) {
+        const random = Math.floor(Math.random() * SpecialSubject.length);
+        console.log("random special : ", random);
+        var subject = SpecialSubject[random];
+
+        var daydata = new Date(subject.exam_date);
+        var mySQLDateString = daydata.toJSON().slice(0, 19).replace("T", " ");
+
+        //•	เช็คว่าจารย์คนนั้นคุมวันไหน เวลาไหน ไปแล้วบ้าง (เวลาจะได้ไม่ทับกัน)
+        var same = 0;
+        while (same == 0) {
+          var t_exam_committee = await getdataFromSql(
+            `SELECT * FROM t_exam_committee where year = ${subject.year} and semester = ${subject.semester} and mid_or_final = '${subject.mid_or_final}' and faculty_id = '${faculty_id}' and person_type = '1' and person_id = '${teacherdata.person_id}' and exam_date = '${mySQLDateString}' `
+          );
+
+          if (t_exam_committee.length > 0) {
+            //ไม่เหมือนให้เอาข้อมูลออก
+            removeItemOnce(SpecialSubject, subject);
+            //ลบข้อมูลจนหมด
+            if (SpecialSubject.length == 0) {
+              break;
+            }
+            const random = Math.floor(Math.random() * SpecialSubject.length);
+            subject = SpecialSubject[random];
+          }
+
+          if (t_exam_committee.length == 0) {
+            same = 1;
+          }
+        }
+        //case ลบ data หลังจาก checkหมดแล้ว
+        if (SpecialSubject.length == 0) {
+          console.log("break bec not same");
+          break;
+        }
+
+        await getdataFromSql(`INSERT INTO t_exam_committee (exam_date, exam_time, year, semester, mid_or_final, building_no,room_no,person_type,person_id,faculty_id,subject_id)
+        VALUES ('${mySQLDateString}', '${subject.exam_time}', ${subject.year}, '${subject.semester}', '${subject.mid_or_final}', '${subject.building_no}','${subject.room_no}','1','${subject.teacher_id}','${faculty_id}','${subject.subject_id}');
+        `);
+        specialcount = index + 1;
+
+        //ลบหลังจาก insert data
+        removeItemOnce(SpecialSubject, subject);
+        if (SpecialSubject.length == 0) {
+          break;
+        }
+      }
+    }
+
+    var countnormal = count - specialcount;
+    if (countnormal < 0) countnormal = 0;
+    NormalCount = 0;
+    console.log(specialcount);
+
+    if (NormalSubject.length > 0) {
+      console.log("normal", count, countnormal);
+
+      for (let index = 0; index < countnormal; index++) {
+        const random = Math.floor(Math.random() * NormalSubject.length);
+        var subject = NormalSubject[random];
+
+        var daydata = new Date(subject.exam_date);
+        var mySQLDateString = daydata.toJSON().slice(0, 19).replace("T", " ");
+
+        //•	เช็คว่าจารย์คนนั้นคุมวันไหน เวลาไหน ไปแล้วบ้าง (เวลาจะได้ไม่ทับกัน)
+        if (teacherdata.person_id == "10521") {
+          console.log(subject);
+          returndata = subjectList;
+        }
+
+        var same = 0;
+        while (same == 0) {
+          var t_exam_committee = await getdataFromSql(
+            `SELECT * FROM t_exam_committee where year = ${subject.year} and semester = ${subject.semester} and mid_or_final = '${subject.mid_or_final}' and faculty_id = '${faculty_id}' and person_type = '1' and person_id = '${teacherdata.person_id}' and exam_date = '${mySQLDateString}' `
+          );
+
+          if (t_exam_committee.length > 0) {
+            removeItemOnce(NormalSubject, subject);
+            //ลบข้อมูลจนหมด
+            if (NormalSubject.length == 0) {
+              break;
+            }
+            const random = Math.floor(Math.random() * NormalSubject.length);
+            subject = NormalSubject[random];
+          }
+          if (t_exam_committee.length == 0) {
+            same = 1;
+          }
+        }
+        if (NormalSubject.length == 0) {
+          break;
+        }
+
+        await getdataFromSql(`INSERT INTO t_exam_committee (exam_date, exam_time, year, semester, mid_or_final, building_no,room_no,person_type,person_id,faculty_id,subject_id)
+        VALUES ('${mySQLDateString}', '${subject.exam_time}', ${subject.year}, '${subject.semester}', '${subject.mid_or_final}', '${subject.building_no}','${subject.room_no}','1','${subject.teacher_id}','${faculty_id}','${subject.subject_id}');
+        `);
+        NormalCount = index + 1;
+     
+        //ลบหลังจาก insert data
+        removeItemOnce(NormalSubject, subject);
+        if (NormalSubject.length == 0) {
+          break;
+        }
+      }
+    }
+
+    //เอาข้อมูลวันที่มีสอบมาใส่ใหม่
     var Examdaylist = JSON.parse(JSON.stringify(backupExamdaylist));
 
     //เช็ควันว่าง จาก conditionresult
   }
 
-  /*
-  condition_result.map(async (teacherdata, teacherindex) => {
-    
-
-
-    var notfreesubject = [];
-    examdateinWeek = [];
-    subjectList.map((subjectdata, index) => {
-      var correct = 0;
-      var subjectdate = subjectdata.exam_date.setFullYear(
-        subjectdata.exam_date.getFullYear() - 543
-      );
-      if ((mid_or_final = "M")) {
-        // console.log(teacherdata.freetime_week1,teacherdata.freetime_week1 == '')
-        if (teacherdata.freetime_week1 != "") {
-          notfreetimes = teacherdata.freetime_week1.split(",");
-          for (i = 0; i < notfreetimes.length; i++) {
-            dayandtime = notfreetimes[i].split("x"); // [day,time]
-            examday = new Date(subjectdata.exam_date);
-            for (j = 0; j < dateArray.length; j++) {
-              dateinexamweek = new Date(dateArray[j]);
-              notfreeday = daysInWeek[dayandtime[0]];
-              notfreetime = dayandtime[1];
-              // console.log(notfreeday,dayandtime)
-              //check ว่าวันสอบมันตรงกับวันในสัปดาห์สอบมั้ย
-              if (dateinexamweek.getTime() === examday.getTime()) {
-                if (notfreeday == daysInWeek[examday.getDay()]) {
-                  if (notfreetime == subjectdata.exam_time) {
-s
-                    notfreesubject.push(subjectdata);
-                  }
-                }
-                examdateinWeek.push(subjectdata);
-              }
-            }
-          }
-        }
-      }
-    });
-
-    //ลบวิชาที่ไม่ว่างออกไป
-    notfreesubject.map((data) => {
-      removeItemOnce(subjectList, data);
-    });
-
-    // console.log(subjectList.length, teacherdata.person_id);
-
-    if (subjectList.length > 0) {
-      spacialsubject = [];
-      normalsubject = [];
-      await Promise.all(
-        subjectList.map(async (data, index) => {
-          //แปลงวันให้อยู่ในรูป mysql
-          const isoDate = new Date(new Date(data.exam_date).toISOString());
-          isoDate.setFullYear(isoDate.getFullYear() + 543);
-          const mySQLDateString = isoDate
-            .toJSON()
-            .slice(0, 19)
-            .replace("T", " ");
-
-          var roomcheck = await getdataFromSql(
-            `SELECT * FROM t_exam_room WHERE year = ${data.year} and semester = ${data.semester} and mid_or_final = '${data.mid_or_final}' and exam_date = '${mySQLDateString}' and room_no = '${data.room_no}' and exam_time = '${data.exam_time}'`
-          );
-          // console.log(roomcheck.length,teacherdata.person_id,'roomcheck');
-
-          if (roomcheck.length == 1) {
-            spacialsubject.push(data);
-          }
-          if (roomcheck.length > 1) {
-            normalsubject.push(data);
-          }
-        })
-      );
-
-      //ตัวนับว่าใช้ไปกี่ครั้งแล้ว
-      let countSubjectExam = 0;
-      if (spacialsubject.length > 0) {
-        for (let i = 0; i < count; i++) {
-          if (i == spacialsubject.length) {
-            countSubjectExam = i;
-            break;
-          }
-          var randomindex = Math.floor(Math.random() * spacialsubject.length);
-          const isoDate = new Date(
-            new Date(spacialsubject[randomindex].exam_date).toISOString()
-          );
-          const mySQLDateString = isoDate
-            .toJSON()
-            .slice(0, 19)
-            .replace("T", " ");
-
-          data = await getdataFromSql(`INSERT INTO t_exam_committee (exam_date,	exam_time	,year	,semester,	mid_or_final,	building_no	,room_no	,person_type	,person_id,faculty_id	)
-          VALUES ('${mySQLDateString}','${spacialsubject[randomindex].exam_time}',${spacialsubject[randomindex].year},${spacialsubject[randomindex].semester}, '${spacialsubject[randomindex].mid_or_final}', '${spacialsubject[randomindex].building_no}', '${spacialsubject[randomindex].room_no}','${teacherdata.person_type}','${teacherdata.person_id}','${teacherdata.faculty_id}');
-           `);
-          data = spacialsubject[randomindex];
-          removeItemOnce(spacialsubject, data);
-          countSubjectExam = i+1;
-
-        }
-      }
-
-      count = count - countSubjectExam;
-      console.log(count,countSubjectExam,teacherdata.person_id)
-
-      //จัดคุมสอบวิชาที่มีสอบ 2 วิชาใน 1 ห้อง
-      if (spacialsubject.length == 0 && normalsubject.length != 0) {
-        // console.log(
-        //   normalsubject.length,
-        //   "normal length",
-        //   teacherdata.person_id,
-        //   condition_result.length,
-        //   teacherindex
-        // );
-        for (let i = 0; i < count; i++) {
-          var randomindex = Math.floor(Math.random() * normalsubject.length);
-
-          const isoDate = new Date(
-            new Date(normalsubject[randomindex].exam_date).toISOString()
-          );
-          const mySQLDateString = isoDate
-            .toJSON()
-            .slice(0, 19)
-            .replace("T", " ");
-
-          data = await getdataFromSql(`INSERT INTO t_exam_committee (exam_date,	exam_time	,year	,semester,	mid_or_final,	building_no	,room_no	,person_type	,person_id,faculty_id	)
-          VALUES ('${mySQLDateString}','${normalsubject[randomindex].exam_time}',${normalsubject[randomindex].year},${normalsubject[randomindex].semester}, '${normalsubject[randomindex].mid_or_final}', '${normalsubject[randomindex].building_no}', '${normalsubject[randomindex].room_no}','${teacherdata.person_type}','${teacherdata.person_id}','${teacherdata.faculty_id}');
-           `);
-          data = normalsubject[randomindex];
-          removeItemOnce(normalsubject, data);
-        }
-      }
-    }
-
-    // console.log(spacialsubject.length, "special");
-    // console.log(normalsubject.length, "normal");
-    // console.log(normalsubject.length, "data");
-  });
-  */
-  callback(condition_result);
+  callback(returndata);
 };
 
 module.exports.othersubject = async function (callback) {};
