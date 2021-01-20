@@ -66,7 +66,7 @@ module.exports.ownsubject = async function (callback) {
   var returndata = null;
   //คำนวนจำนวนครั้งที่แต่ละคนต้องคุม
   var NumExam = await countNumExam(
-    `SELECT ( ceiling( (SELECT sum(std_num) from t_exam_room WHERE t_exam_room.year = ? and t_exam_room.semester = ? and t_exam_room.mid_or_final = ?) / 30 ) -(SELECT count(*) from t_condition where condition_status = 2) )/ ( (SELECT count(*) from t_condition) - (SELECT count(*) from t_condition where condition_status = 2) - (SELECT count(*) from t_condition where condition_status = 0) )as result`,
+    `SELECT ceiling (((select sum(sumstdnum.countstdnum) FROM (SELECT ceiling (sum(std_num)/30) as countstdnum from t_exam_room where t_exam_room.year = ? and t_exam_room.semester = ? and t_exam_room.mid_or_final = ? GROUP BY exam_date,exam_time,room_no ) as sumstdnum) -(SELECT count(*) from t_condition where condition_status = 2) )/ ( (SELECT count(*) from t_condition) - (SELECT count(*) from t_condition where condition_status = 2) - (SELECT count(*) from t_condition where condition_status = 0)) )as result`,
     year,
     semester,
     mid_or_final
