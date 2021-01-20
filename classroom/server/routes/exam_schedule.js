@@ -95,7 +95,7 @@ module.exports.ownsubject = async function (callback) {
     `SELECT * FROM t_exam_week WHERE year = ${year} and semester = ${semester} and mid_or_final = '${mid_or_final}'  `
   );
 
-  // console.log(examweek);
+
 
   //เก็บข้อมูลวันที่สอบ
   var examweekdata = examweek[0];
