@@ -95,8 +95,6 @@ module.exports.ownsubject = async function (callback) {
     `SELECT * FROM t_exam_week WHERE year = ${year} and semester = ${semester} and mid_or_final = '${mid_or_final}'  `
   );
 
-
-
   //เก็บข้อมูลวันที่สอบ
   var examweekdata = examweek[0];
   var Examweeklist = [];
@@ -484,7 +482,7 @@ module.exports.ownsubject = async function (callback) {
         VALUES ('${mySQLDateString}', '${subject.exam_time}', ${subject.year}, '${subject.semester}', '${subject.mid_or_final}', '${subject.building_no}','${subject.room_no}','1','${subject.teacher_id}','${faculty_id}','${subject.subject_id}');
         `);
         NormalCount = index + 1;
-     
+
         //ลบหลังจาก insert data
         removeItemOnce(NormalSubject, subject);
         if (NormalSubject.length == 0) {
@@ -503,3 +501,18 @@ module.exports.ownsubject = async function (callback) {
 };
 
 module.exports.othersubject = async function (callback) {};
+module.exports.read = function (callback) {
+  // คำสั่ง sql
+
+  let sql = "SELECT * FROM t_exam_committee";
+  pool.getConnection((err, connection) => {
+    if (err) throw err;
+    console.log('exam committee');
+    pool.query(sql, (err, rows) => {
+      if (err) throw err;
+      // console.log("The data from users table are: \n", rows);
+      callback(rows);
+      connection.release(); // return the connection to pool
+    });
+  });
+};

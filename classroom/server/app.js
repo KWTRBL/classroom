@@ -431,6 +431,13 @@ app.get("/exam_schedule", (req, res) => {
   });
 });
 
+app.get("/exam_committee", (req, res) => {
+    // Router เวลาเรียกใช้งาน
+    exam_schedule.read(function (callback) {
+      res.json(callback);
+    });
+  });
+
 app.listen(port, () => {
   console.log("start port " + port);
 });
