@@ -32,7 +32,7 @@ const person = require("./routes/person");
 const t_exam_room = require("./routes/t_examroom");
 const t_office = require("./routes/t_office");
 const exam_schedule = require("./routes/exam_schedule");
-
+const downloadfile = require("./routes/downloadfile");
 //insert examweekdata every semester
 cron.schedule("0 0 1 1,6,8 *", () => {
   console.log("detect new semester");
@@ -438,6 +438,18 @@ app.get("/exam_committee", (req, res) => {
     });
   });
 
+  //downloadfile
+app.post("/downloadfile", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  downloadfile.read(req, function (callback) {
+    console.log('send data :')
+    res.sendFile(callback,{ root: '.' });
+  });
+});
+
 app.listen(port, () => {
   console.log("start port " + port);
 });
+
+
+

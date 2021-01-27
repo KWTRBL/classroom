@@ -15,6 +15,8 @@ import { json } from 'body-parser';
 import Pagination from "react-js-pagination";
 import Modal from 'react-bootstrap/Modal'
 import './ManageCr.css'
+const FileDownload = require('js-file-download');
+
 export default class BuildingData extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +44,7 @@ export default class BuildingData extends Component {
             building_no: null,
             showsubmit: false,
             showfailed: false,
-            indextodel:null
+            indextodel: null
         }
         //modal
         this.handleClose = this.handleClose.bind(this);
@@ -67,13 +69,33 @@ export default class BuildingData extends Component {
 
     }
     //delete row button 
-    deletebt = (buildng_no, room_no,index) => {
+    deletebt = (buildng_no, room_no, index) => {
         this.setState({
             show: true,
             building_no: buildng_no,
             room_no: room_no,
-            indextodel:index
+            indextodel: index
         })
+    }
+
+    downloadexcel = () => {
+
+        axios
+            .post("http://localhost:7777/downloadfile", {
+                year: this.state.yearsearch,
+                semester: this.state.semestersearch,
+            }, {
+
+                responseType: 'arraybuffer',
+            })
+            .then(response => {
+                console.log("response: ", response)
+                FileDownload(response.data, 'report.xlsx');
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }
 
     componentWillMount() {
@@ -322,6 +344,7 @@ export default class BuildingData extends Component {
 
 
 
+
     //confirm edit data sent to database
     confirmdelete = () => {
         let index = this.state.indextodel
@@ -408,7 +431,7 @@ export default class BuildingData extends Component {
             //return this.selectbuildroomcondition(buildingcheck,data.building_no,this.state.building_no,data.teach_day,data.morning,data.noon,data.evening)
             if (!buildingcheck.includes(data.building_no)) {
                 if (this.state.yearsearch == data.year && this.state.semestersearch == data.semester && this.state.daysearch == data.teach_day) {
-                    console.log('test')
+
                     if (data.morning == 0 && this.state.starttime == "07:00") {
                         buildingcheck.push(data.building_no)
                         if (data.building_no == this.state.building_no) {
@@ -438,7 +461,7 @@ export default class BuildingData extends Component {
 
             }
         })
-        // console.log(this.state.available_room)
+        //console.log(buildinglist)
         const roomcheck = []
 
         const roomlist = this.state.available_room.map((data, index) => {
@@ -474,14 +497,14 @@ export default class BuildingData extends Component {
 
             }
         })
-        console.log(roomcheck)
+        //console.log(roomcheck)
         const item = this.state.name.filter((member, index) => {
             var teachtime = member.teach_time.split(/[- :]/);
             var searchtime = this.state.starttime.split(/[- :]/);
 
             if (this.state.yearsearch == null) {
                 editjson.push(index)
-                this.setState({ searchTime:"07:00",curr2search: "01", yearsearch: 2562, semestersearch: 1, daysearch: 1 })
+                this.setState({ searchTime: "07:00", curr2search: "01", yearsearch: 2562, semestersearch: 1, daysearch: 1 })
                 return member.curr2_id == "01" && member.year == 2562 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
@@ -497,11 +520,8 @@ export default class BuildingData extends Component {
             }
             else if ((member.curr2_id == this.state.curr2search) && (member.year == this.state.yearsearch) && (member.semester == this.state.semestersearch) && (member.teach_day == this.state.daysearch) && ((parseInt(teachtime[0]) > 16 && parseInt(searchtime[0]) == 16) || (parseInt(searchtime[0]) == 16 && parseInt(teachtime[0]) == 16 && parseInt(teachtime[1]) >= 30))) {
                 editjson.push(index)
-
                 return member
             }
-
-
 
 
         }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
@@ -554,7 +574,7 @@ export default class BuildingData extends Component {
                             <Button variant="light" className="editdata" onClick={() => this.enableedit(index, data.building_no, data.room_no)}>
                                 <img src={editbt} className="editicon" alt="edit" />
                             </Button>
-                            <Button variant="light" className="deletedata" onClick={() => this.deletebt(data.building_no, data.room_no,editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index])}>
+                            <Button variant="light" className="deletedata" onClick={() => this.deletebt(data.building_no, data.room_no, editjson[((this.state.pageclick - 1) * this.state.itemperpage) + index])}>
                                 <img src={deletebt} className="deleteicon" alt="delete" />
                             </Button>
                         </td>
@@ -572,7 +592,7 @@ export default class BuildingData extends Component {
             var searchtime = this.state.starttime.split(/[- :]/);
             if (this.state.yearsearch == null) {
 
-                this.setState({ starttime:"07:00",curr2search: "01", yearsearch: 2562, semestersearch: 1, daysearch: 1 })
+                this.setState({ starttime: "07:00", curr2search: "01", yearsearch: 2562, semestersearch: 1, daysearch: 1 })
                 return member.curr2_id == "01" && member.year == 2562 && member.semester == 1 && member.teach_day == 1 && ((parseInt(teachtime[0]) >= 7 && parseInt(teachtime[0]) < 12) || parseInt(teachtime[0]) == 12 && parseInt(teachtime[1]) < 45)
             }
 
@@ -676,8 +696,7 @@ export default class BuildingData extends Component {
                                 {item}
                             </tbody>
                         </Table>
-
-                        <Button variant="light" className="downloadbtn">Download เอกสาร</Button>
+                        <Button variant="light" className="downloadbtn" onClick={() => this.downloadexcel()}>Download เอกสาร</Button>
                         <Button variant="light" className="adddata">
                             <img src={addbt} className="addicon" alt="add" />
                         </Button>
