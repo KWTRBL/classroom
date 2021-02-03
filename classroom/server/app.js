@@ -431,6 +431,14 @@ app.get("/exam_schedule", (req, res) => {
   });
 });
 
+
+app.get("/exam_schedule_other", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.othersubject(function (callback) {
+    res.json(callback);
+  });
+});
+
 app.get("/exam_committee", (req, res) => {
     // Router เวลาเรียกใช้งาน
     exam_schedule.read(function (callback) {
