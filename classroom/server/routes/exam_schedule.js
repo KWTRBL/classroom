@@ -557,6 +557,37 @@ module.exports.othersubject = async function (callback) {
       }
     }
 
+    //เช็ค t_examcommittee
+
+    var exam_committee = await getdataFromSql(`
+     SELECT * FROM t_exam_committee where person_id = ${teacherdata.person_id}
+    `);
+
+    if (exam_committee.length) {
+      for (let index = 0; index < exam_committee.length; index++) {
+        var examdata = exam_committee[index];
+        for (let indexdata = 0; indexdata < 4; indexdata++) {
+          let examdayarray = Examdaylist[indexdata];
+          let dayInweekExamarray = Examdaylist[indexdata];
+          if (examdayarray.length == 0 || dayInweekExamarray.length == 0) {
+            continue;
+          }
+          for (let dayindex = 0; dayindex < examdayarray.length; dayindex++) {
+            let examday = examdayarray[dayindex];
+            let dayinweekdata = dayInweekExamarray[dayindex];
+            var day = new Date(examday[0]);
+            if (
+              day.getTime() === examday.exam_date.getTime() &&
+              dayinweekdata[1] == element.exam_time
+            ) {
+              removeItemOnce(examdayarray, examday);
+              removeItemOnce(dayInweekExamarray, dayinweekdata);
+            }
+          }
+        }
+      }
+    }
+
     /*
 
     //หาวันที่ไม่ว่าง
