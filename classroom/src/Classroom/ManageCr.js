@@ -84,6 +84,7 @@ export default class BuildingData extends Component {
             .post("http://localhost:7777/downloadfile", {
                 year: this.state.yearsearch,
                 semester: this.state.semestersearch,
+                curr2_id: this.state.curr2search
             }, {
 
                 responseType: 'arraybuffer',
