@@ -10,6 +10,7 @@ import React from 'react';
 import addbt from './icon/plus.png';
 import axios from 'axios';
 import Pagination from "react-js-pagination";
+import Modal from 'react-bootstrap/Modal'
 
 import './FacultyData.css'
 export default class FacultyData extends Component {
@@ -29,10 +30,19 @@ export default class FacultyData extends Component {
             Office_id: null,
             Office_name: null,
             name: [],
-
+            rows: null,
         }
         this.searchOffice = this.searchOffice.bind(this)
         this.pageselectvalue = this.pageselectvalue.bind(this);
+
+        //delete row
+        this.deletebt = this.deletebt.bind(this)
+        this.confirmdelete = this.confirmdelete.bind(this);
+
+        //modal
+        this.handleClose = this.handleClose.bind(this);
+        this.handleClosesubmit = this.handleClosesubmit.bind(this);
+        this.handleClosefailed = this.handleClosefailed.bind(this);
 
         //edit data
         this.enableedit = this.enableedit.bind(this)
@@ -41,7 +51,88 @@ export default class FacultyData extends Component {
         this.handleChange_editoffice_id = this.handleChange_editoffice_id.bind(this)
         this.handleChange_editoffice_name = this.handleChange_editoffice_name.bind(this)
 
+        //add row
+        this.addrow = this.addrow.bind(this);
+        this.handleChange_office_id = this.handleChange_office_id.bind(this)
+        this.handleChange_office_name = this.handleChange_office_name.bind(this)
+        
+
         this.componentWillMount = this.componentWillMount.bind(this);
+    }
+
+    //handle modal
+    handleClose() {
+        this.setState({
+            show: false
+        })
+    }
+    handleClosesubmit() {
+        this.setState({
+            showsubmit: false
+        })
+        window.location.reload(false);
+    }
+
+    handleClosefailed() {
+        this.setState({
+            showfailed: false
+        })
+        window.location.reload(false);
+
+    }
+
+    //handle addrow data 
+    handleChange_office_id(event) {
+        this.setState({ Office_id: event.target.value })
+    }
+
+    handleChange_office_name(event) {
+        this.setState({ Office_name: event.target.value })
+    }
+    
+
+    //delete row input
+    delrow = () => {
+        this.setState({
+            rows: null,
+            Office_id: null,
+            Office_name: null,
+            //Office_type: null
+        })
+        //console.log("aa")
+    }
+
+    //delete row button 
+    deletebt = (deptdata) => {
+        console.log(deptdata)
+        this.setState({
+            show: true,
+            Office_id: deptdata
+        })
+    }
+
+    //confirm delete row in table function
+    confirmdelete() {
+        axios
+            .delete("http://localhost:7777/t_office/delete", { data: { Office_id: this.state.Office_id } })
+            .then(response => {
+                console.log("response: ", response)
+                if (response.data == "Success") {
+                    this.setState({
+                        showsubmit: !this.state.showsubmit
+                    })
+                }
+                else {
+                    this.setState({
+                        showfailed: !this.state.showfailed
+                    })
+                }
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        this.handleClose()
     }
 
     //edit data handle
@@ -71,9 +162,6 @@ export default class FacultyData extends Component {
     //confirm edit data sent to database
     confirmedit = (index) => {
         let olddata = JSON.parse(this.state.olddata)
-        // console.log(this.state.dept[index].Office_id)
-        // console.log(this.state.dept[index].Office_name)
-        // console.log(olddata[index].Office_id)
         axios
             .put("http://localhost:7777/t_office/update", {
 
@@ -91,6 +179,62 @@ export default class FacultyData extends Component {
             })
         window.location.reload(false);
 
+    }
+
+    //insert row confirm
+    confirmdata = () => {
+        //console.log("aaaa")
+        axios
+            .post("http://localhost:7777/t_office/insert", {
+                data: {
+                    Office_id: this.state.Office_id,
+                    Office_name: this.state.Office_name,
+                    Office_type: this.state.Officesearch
+                }
+            })
+            .then(response => {
+                console.log("response: ", response)
+
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        window.location.reload(false);
+
+    }
+
+    //show row input for insert
+    addrow = () => {
+        //console.log("abc")
+        this.setState({
+            rows: <tr>
+                <td>
+                    <input
+                        value={this.state.Office_id}
+                        type="text"
+                        className="form-control"
+                        id="formGroupExampleInput"
+                        onChange={this.handleChange_office_id}
+                    />
+                </td>
+                <td>
+                    <input
+                        value={this.state.Office_name}
+                        type="text"
+                        className="form-control"
+                        id="formGroupExampleInput"
+                        onChange={this.handleChange_office_name}
+                    />
+                </td>
+                <td></td>
+                <td>
+                    <Button variant="link" onClick={() => this.delrow()}>ยกเลิก</Button>
+                    <Button variant="primary" onClick={() => this.confirmdata()} >ยืนยัน</Button>
+                </td>
+            </tr>
+        })
+        
     }
 
     //enable edit row
@@ -210,7 +354,7 @@ export default class FacultyData extends Component {
                                 </Button>
                             </td>
                             <td>
-                                <Button variant="light" className="deletedata" >
+                                <Button variant="light" className="deletedata" onClick={() => this.deletebt(deptdata.Office_id)}>
                                     <img src={deletebt} className="deleteicon" alt="delete" />
                                 </Button>
 
@@ -252,8 +396,9 @@ export default class FacultyData extends Component {
                             <tbody>
                                 {deptdata}
                             </tbody>
+                            {this.state.rows}
                         </Table>
-                        <Button variant="light" className="adddata">
+                        <Button variant="light" className="adddata" onClick={() => this.addrow()}>
                             <img src={addbt} className="addicon" alt="add" />
                         </Button>
 
@@ -269,6 +414,38 @@ export default class FacultyData extends Component {
                         />
 
                     </div>
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>คำเตือน</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.handleClose}>
+                                ยกเลิก
+                        </Button>
+                            <Button variant="primary" onClick={this.confirmdelete}>
+                                ยืนยัน
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Success</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Failed</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
                 <div className="footer">
                     <Foot />

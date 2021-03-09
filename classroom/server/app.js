@@ -429,9 +429,29 @@ app.get("/t_office", (req, res) => {
     res.json(callback);
   });
 });
+//t_office data edit
 app.put("/t_office/update", (req, res) => {
   // Router เวลาเรียกใช้งาน
   t_office.update(req, function (callback) {
+    res.send(callback);
+  });
+});
+//t_office data delete
+app.delete("/t_office/delete", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  t_office.delete(req.body.Office_id, function (callback) {
+    console.log(callback);
+    if (callback) {
+      res.send("Success");
+    } else {
+      res.send("Error");
+    }
+  });
+});
+//insert ข้อมูลลง t_office
+app.post("/t_office/insert", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  t_office.add(req, function (callback) {
     res.send(callback);
   });
 });
