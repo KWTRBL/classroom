@@ -7,7 +7,8 @@ module.exports.read = async function (req, callback) {
     let year = req.body.year
     let semester = req.body.semester
     let curr2_id = req.body.curr2_id
-    let sql = `SELECT teach_table.year as ปี,teach_table.semester as เทอม, curriculum2.curr2_tname as สาขาวิชา,teach_table.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,teach_table.class as ชั้นปี,teach_table.section as กลุ่ม,teacher.t_prename as คำนำหน้าชื่อ,teacher.teacher_tname as ชื่อผู้สอน,
+    let curr2_tname = req.body.curr2_tname
+    let sql = `SELECT teach_table.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,teach_table.class as ชั้นปี,teach_table.section as กลุ่ม,teacher.t_prename as คำนำหน้าชื่อ,teacher.teacher_tname as ชื่อผู้สอน,
     teach_table.studentnum as จำนวนนศ,teach_table.room_no as ห้องเรียน,teach_table.building_no as อาคารเรียน,
     IF(teach_table.teach_day=1,'อาทิตย์',IF(teach_table.teach_day=2,'จันทร์',
                                             IF(teach_table.teach_day=3,'อังคาร',
@@ -34,9 +35,6 @@ module.exports.read = async function (req, callback) {
 
             const data = rows
             const headingColumnNames = [
-                "ปีการศึกษา",
-                "ภาคการศึกษา",
-                "สาขาวิชา",
                 "รหัสวิชา",
                 "ชื่อวิชา",
                 "ชั้นปี",
@@ -53,19 +51,23 @@ module.exports.read = async function (req, callback) {
                 "การจัดห้อง",
             ]
 
+            ws.cell(1,7).string(`ประกาศ คณะวิศวกรรมศาสตร์`)
+            ws.cell(2,6).string(`เรื่อง ตารางเรียน - ตารางสอบ ประจำภาคเรียนที่ ${semester} ปีการศึกษา ${year}`)
+            ws.cell(3,7).string(`ภาควิชา ${curr2_tname}`)
+
             //Write Column Title in Excel file
             let headingColumnIndex = 1;
             headingColumnNames.forEach(heading => {
-                ws.cell(1, headingColumnIndex++)
+                ws.cell(4, headingColumnIndex++)
                     .string(heading)
             });
 
             //Write Data in Excel file
-            let rowIndex = 2;
+            let rowIndex = 5;
             data.forEach(record => {
                 let columnIndex = 1;
                 Object.keys(record).forEach(columnName => {
-                        ws.cell(rowIndex, columnIndex++)
+                    ws.cell(rowIndex, columnIndex++)
                         .string(record[columnName].toString())
                 });
                 rowIndex++;
