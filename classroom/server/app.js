@@ -389,6 +389,13 @@ app.get("/examweek", (req, res) => {
   });
 });
 
+app.get("/examweekrecent", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  examweek.readrecent(function (callback) {
+    res.json(callback);
+  });
+});
+
 
 //t_condition
 app.get("/t_condition", (req, res) => {
@@ -411,6 +418,18 @@ app.get("/person", (req, res) => {
   // Router เวลาเรียกใช้งาน
   person.read(function (callback) {
     res.json(callback);
+  });
+});
+//person data delete
+app.delete("/person/delete", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  person.delete(req.body.person_id, function (callback) {
+    console.log(callback);
+    if (callback) {
+      res.send("Success");
+    } else {
+      res.send("Error");
+    }
   });
 });
 
