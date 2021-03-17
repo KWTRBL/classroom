@@ -39,11 +39,11 @@ export default class FacultyData extends Component {
       office_type: 1,
       exam_week: [],
       daylist: [],
-      freetime_week1:[],
-      freetime_week2:[],
-      freetime_week3:[],
-      freetime_week4:[],
-      
+      freetime_week1: [],
+      freetime_week2: [],
+      freetime_week3: [],
+      freetime_week4: [],
+
       //person_id: nulll,
     };
     this.handleClose = this.handleClose.bind(this);
@@ -61,6 +61,13 @@ export default class FacultyData extends Component {
     this.handleClosesubmit = this.handleClosesubmit.bind(this);
     this.handleClosefailed = this.handleClosefailed.bind(this);
 
+    //edit
+    this.handleChange_editPrename = this.handleChange_editPrename.bind(this)
+    this.handleChange_editFirstname = this.handleChange_editFirstname.bind(this)
+    this.handleChange_editLastname = this.handleChange_editLastname.bind(this)
+    this.handleChange_editPosition = this.handleChange_editPosition.bind(this)
+
+
     this.componentWillMount = this.componentWillMount.bind(this);
   }
 
@@ -71,6 +78,32 @@ export default class FacultyData extends Component {
     this.setState({
       showdl: false
     })
+  }
+
+  //edit
+  handleChange_editPrename(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Prename = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editFirstname(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Firstname = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editLastname(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Lastname = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editPosition(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].position = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
   }
 
 
@@ -307,21 +340,21 @@ export default class FacultyData extends Component {
 
 
     var freetime_1 = this.state.t_condition[index].freetime_week1
-    var freetime_1_str = freetime_1.length != 0 ? freetime_1.split(','):[]
+    var freetime_1_str = freetime_1.length != 0 ? freetime_1.split(',') : []
     var freetime_2 = this.state.t_condition[index].freetime_week2
-    var freetime_2_str = freetime_2.length != 0 ? freetime_2.split(','):[]
+    var freetime_2_str = freetime_2.length != 0 ? freetime_2.split(',') : []
     var freetime_3 = this.state.t_condition[index].freetime_week3
-    var freetime_3_str = freetime_3.length != 0 ? freetime_3.split(','):[]
+    var freetime_3_str = freetime_3.length != 0 ? freetime_3.split(',') : []
     var freetime_4 = this.state.t_condition[index].freetime_week4
-    var freetime_4_str = freetime_4.length != 0 ? freetime_4.split(','):[]
+    var freetime_4_str = freetime_4.length != 0 ? freetime_4.split(',') : []
 
     this.setState({
       condition_index: index,
       show: true,
-      freetime_week1:freetime_1_str,
-      freetime_week2:freetime_2_str,
-      freetime_week3:freetime_3_str,
-      freetime_week4:freetime_4_str,
+      freetime_week1: freetime_1_str,
+      freetime_week2: freetime_2_str,
+      freetime_week3: freetime_3_str,
+      freetime_week4: freetime_4_str,
     });
   }
   handleClose() {
@@ -392,6 +425,10 @@ export default class FacultyData extends Component {
     console.log(this.state.t_condition[index], index);
     axios
       .post("http://localhost:7777/t_condition/update", {
+        Prename : this.state.t_condition[index].Prename,
+        Firstname : this.state.t_condition[index].Firstname,
+        Lastname : this.state.t_condition[index].Lastname,
+        Position : this.state.t_condition[index].position,
         condition_status: this.state.t_condition[index].condition_status,
         person_id: this.state.t_condition[index].person_id,
         building_no: this.state.t_condition[index].building_no,
@@ -399,10 +436,10 @@ export default class FacultyData extends Component {
         condition_week: this.state.t_condition[index].condition_week,
         condition_time: this.state.t_condition[index].condition_time,
         condition_weekend: this.state.t_condition[index].condition_weekend,
-        freetime_week1:this.state.freetime_week1.join(),
-        freetime_week2:this.state.freetime_week2.join(),
-        freetime_week3:this.state.freetime_week3.join(),
-        freetime_week4:this.state.freetime_week4.join(),
+        freetime_week1: this.state.freetime_week1.join(),
+        freetime_week2: this.state.freetime_week2.join(),
+        freetime_week3: this.state.freetime_week3.join(),
+        freetime_week4: this.state.freetime_week4.join(),
 
       })
       .then((response) => {
@@ -414,60 +451,60 @@ export default class FacultyData extends Component {
     window.location.reload(false);
   };
 
-  handleChangeWeek_1_toggle = (event,data) =>{
+  handleChangeWeek_1_toggle = (event, data) => {
     var freetimelist = this.state.freetime_week1
-    if(event.target.checked == false){
+    if (event.target.checked == false) {
       freetimelist.push(data)
-    }else{
-      freetimelist = this.state.freetime_week1.filter( (element,index)=>{
+    } else {
+      freetimelist = this.state.freetime_week1.filter((element, index) => {
         return element != data
       })
     }
     freetimelist.sort()
     this.setState({
-      freetime_week1:freetimelist
+      freetime_week1: freetimelist
     })
   }
-  handleChangeWeek_2_toggle = (event,data) =>{
+  handleChangeWeek_2_toggle = (event, data) => {
     var freetimelist = this.state.freetime_week2
-    if(event.target.checked == false){
+    if (event.target.checked == false) {
       freetimelist.push(data)
-    }else{
-      freetimelist = this.state.freetime_week2.filter( (element,index)=>{
+    } else {
+      freetimelist = this.state.freetime_week2.filter((element, index) => {
         return element != data
       })
     }
     freetimelist.sort()
     this.setState({
-      freetime_week2:freetimelist
+      freetime_week2: freetimelist
     })
   }
-  handleChangeWeek_3_toggle = (event,data) =>{
+  handleChangeWeek_3_toggle = (event, data) => {
     var freetimelist = this.state.freetime_week3
-    if(event.target.checked == false){
+    if (event.target.checked == false) {
       freetimelist.push(data)
-    }else{
-      freetimelist = this.state.freetime_week3.filter( (element,index)=>{
+    } else {
+      freetimelist = this.state.freetime_week3.filter((element, index) => {
         return element != data
       })
     }
     freetimelist.sort()
     this.setState({
-      freetime_week3:freetimelist
+      freetime_week3: freetimelist
     })
   }
-  handleChangeWeek_4_toggle = (event,data) =>{
+  handleChangeWeek_4_toggle = (event, data) => {
     var freetimelist = this.state.freetime_week4
-    if(event.target.checked == false){
+    if (event.target.checked == false) {
       freetimelist.push(data)
-    }else{
-      freetimelist = this.state.freetime_week4.filter( (element,index)=>{
+    } else {
+      freetimelist = this.state.freetime_week4.filter((element, index) => {
         return element != data
       })
     }
     freetimelist.sort()
     this.setState({
-      freetime_week4:freetimelist
+      freetime_week4: freetimelist
     })
   }
 
@@ -508,10 +545,58 @@ export default class FacultyData extends Component {
               return (
                 <tr>
                   <td>{tabledata.person_id}</td>
-                  <td>{tabledata.Prename}</td>
-                  <td>{tabledata.Firstname}</td>
-                  <td>{tabledata.Lastname}</td>
-                  <td>{tabledata.position}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Prename:(<input
+                      value={tabledata.Prename}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPrename(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Firstname:(<input
+                      value={tabledata.Firstname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editFirstname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Lastname:(<input
+                      value={tabledata.Lastname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editLastname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.position:(<input
+                      value={tabledata.position}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPosition(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
                   <td>
                     <Form>
                       {["radio"].map((type) => (
@@ -724,9 +809,45 @@ export default class FacultyData extends Component {
                 return (
                   <tr>
                     <td>{tabledata.person_id}</td>
-                    <td>{tabledata.Prename}</td>
-                    <td>{tabledata.Firstname}</td>
-                    <td>{tabledata.Lastname}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Prename:(<input
+                      value={tabledata.Prename}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPrename(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Firstname:(<input
+                      value={tabledata.Firstname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editFirstname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Lastname:(<input
+                      value={tabledata.Lastname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editLastname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
                     <td>{tabledata.Office_name}</td>
                     <td>
                       <Form>
@@ -947,7 +1068,7 @@ export default class FacultyData extends Component {
         var month = (element.getMonth() + 1)
         var day = element.getDate()
         var year = element.getFullYear()
-        listdata.push(<td colspan="2">{ day.toString().padStart(2,0) + '/' +  month.toString().padStart(2,0) + '/' + year}</td>)
+        listdata.push(<td colspan="2">{day.toString().padStart(2, 0) + '/' + month.toString().padStart(2, 0) + '/' + year}</td>)
       }
       return listdata
       // console.log(data)
@@ -1315,7 +1436,7 @@ export default class FacultyData extends Component {
                                 id={1}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('2x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'2x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '2x1')}
                               />
                             </Form>
                           </td>
@@ -1328,7 +1449,7 @@ export default class FacultyData extends Component {
                                 id={2}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('2x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'2x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '2x2')}
                               />
                             </Form>
                           </td>
@@ -1342,7 +1463,7 @@ export default class FacultyData extends Component {
                                 id={3}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('3x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'3x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '3x1')}
 
                               />
                             </Form>
@@ -1356,7 +1477,7 @@ export default class FacultyData extends Component {
                                 id={4}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('3x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'3x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '3x2')}
                               />
                             </Form>
                           </td>
@@ -1370,7 +1491,7 @@ export default class FacultyData extends Component {
                                 id={5}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('4x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'4x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '4x1')}
                               />
                             </Form>
                           </td>
@@ -1383,7 +1504,7 @@ export default class FacultyData extends Component {
                                 id={6}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('4x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'4x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '4x2')}
                               />
                             </Form>
                           </td>
@@ -1397,7 +1518,7 @@ export default class FacultyData extends Component {
                                 id={7}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('5x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'5x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '5x1')}
                               />
                             </Form>
                           </td>
@@ -1410,7 +1531,7 @@ export default class FacultyData extends Component {
                                 id={8}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('5x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'5x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '5x2')}
                               />
                             </Form>
                           </td>
@@ -1424,7 +1545,7 @@ export default class FacultyData extends Component {
                                 id={9}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('6x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'6x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '6x1')}
                               />
                             </Form>
                           </td>
@@ -1437,7 +1558,7 @@ export default class FacultyData extends Component {
                                 id={10}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('6x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'6x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '6x2')}
                               />
                             </Form>
                           </td>
@@ -1451,7 +1572,7 @@ export default class FacultyData extends Component {
                                 id={11}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('7x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'7x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '7x1')}
                               />
                             </Form>
                           </td>
@@ -1464,7 +1585,7 @@ export default class FacultyData extends Component {
                                 id={12}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('7x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'7x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '7x2')}
                               />
                             </Form>
                           </td>
@@ -1478,7 +1599,7 @@ export default class FacultyData extends Component {
                                 id={13}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('1x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'1x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '1x1')}
                               />
                             </Form>
                           </td>
@@ -1491,15 +1612,15 @@ export default class FacultyData extends Component {
                                 id={14}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('1x2')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'1x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '1x2')}
                               />
                             </Form>
                           </td>
                         </tr>
-                        <tr hidden = {this.state.daylist[1].length == 0} >
+                        <tr hidden={this.state.daylist[1].length == 0} >
                           {datedata[1]}
                         </tr>
-                        <tr hidden = {this.state.daylist[1].length == 0} >
+                        <tr hidden={this.state.daylist[1].length == 0} >
                           <td className="monweek2">
                             เช้า
                             <br></br>
@@ -1509,7 +1630,7 @@ export default class FacultyData extends Component {
                                 id={15}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('2x1')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'2x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '2x1')}
                               />
                             </Form>
                           </td>
@@ -1522,7 +1643,7 @@ export default class FacultyData extends Component {
                                 id={16}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('2x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'2x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '2x2')}
                               />
                             </Form>
                           </td>
@@ -1536,7 +1657,7 @@ export default class FacultyData extends Component {
                                 id={17}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('3x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'3x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '3x1')}
 
                               />
                             </Form>
@@ -1550,7 +1671,7 @@ export default class FacultyData extends Component {
                                 id={18}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('3x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'3x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '3x2')}
                               />
                             </Form>
                           </td>
@@ -1564,7 +1685,7 @@ export default class FacultyData extends Component {
                                 id={19}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('4x1')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'4x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '4x1')}
                               />
                             </Form>
                           </td>
@@ -1577,7 +1698,7 @@ export default class FacultyData extends Component {
                                 id={20}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('4x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'4x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '4x2')}
                               />
                             </Form>
                           </td>
@@ -1591,7 +1712,7 @@ export default class FacultyData extends Component {
                                 id={21}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('5x1')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'5x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '5x1')}
                               />
                             </Form>
                           </td>
@@ -1604,7 +1725,7 @@ export default class FacultyData extends Component {
                                 id={22}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('5x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'5x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '5x2')}
                               />
                             </Form>
                           </td>
@@ -1618,7 +1739,7 @@ export default class FacultyData extends Component {
                                 id={23}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('6x1')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'6x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '6x1')}
                               />
                             </Form>
                           </td>
@@ -1631,7 +1752,7 @@ export default class FacultyData extends Component {
                                 id={24}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('6x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'6x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '6x2')}
                               />
                             </Form>
                           </td>
@@ -1645,7 +1766,7 @@ export default class FacultyData extends Component {
                                 id={25}
                                 label=""
                                 checked={!this.state.freetime_week1.includes('7x1')}
-                                onClick={(e) => this.handleChangeWeek_1_toggle(e,'7x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '7x1')}
                               />
                             </Form>
                           </td>
@@ -1658,7 +1779,7 @@ export default class FacultyData extends Component {
                                 id={26}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('7x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'7x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '7x2')}
                               />
                             </Form>
                           </td>
@@ -1672,7 +1793,7 @@ export default class FacultyData extends Component {
                                 id={27}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('1x1')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'1x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '1x1')}
                               />
                             </Form>
                           </td>
@@ -1685,16 +1806,16 @@ export default class FacultyData extends Component {
                                 id={28}
                                 label=""
                                 checked={!this.state.freetime_week2.includes('1x2')}
-                                onClick={(e) => this.handleChangeWeek_2_toggle(e,'1x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '1x2')}
                               />
                             </Form>
                           </td>
                         </tr>
 
-                        <tr hidden = {this.state.daylist[2].length == 0} >
+                        <tr hidden={this.state.daylist[2].length == 0} >
                           {datedata[2]}
                         </tr>
-                        <tr hidden = {this.state.daylist[2].length == 0} >
+                        <tr hidden={this.state.daylist[2].length == 0} >
                           <td className="monweek2">
                             เช้า
                             <br></br>
@@ -1704,7 +1825,7 @@ export default class FacultyData extends Component {
                                 id={29}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('2x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'2x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '2x1')}
                               />
                             </Form>
                           </td>
@@ -1717,7 +1838,7 @@ export default class FacultyData extends Component {
                                 id={30}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('2x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'2x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '2x2')}
                               />
                             </Form>
                           </td>
@@ -1731,7 +1852,7 @@ export default class FacultyData extends Component {
                                 id={31}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('3x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'3x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '3x1')}
 
                               />
                             </Form>
@@ -1745,7 +1866,7 @@ export default class FacultyData extends Component {
                                 id={32}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('3x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'3x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '3x2')}
                               />
                             </Form>
                           </td>
@@ -1759,7 +1880,7 @@ export default class FacultyData extends Component {
                                 id={33}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('4x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'4x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '4x1')}
                               />
                             </Form>
                           </td>
@@ -1772,7 +1893,7 @@ export default class FacultyData extends Component {
                                 id={34}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('4x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'4x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '4x2')}
                               />
                             </Form>
                           </td>
@@ -1786,7 +1907,7 @@ export default class FacultyData extends Component {
                                 id={35}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('5x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'5x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '5x1')}
                               />
                             </Form>
                           </td>
@@ -1799,7 +1920,7 @@ export default class FacultyData extends Component {
                                 id={36}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('5x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'5x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '5x2')}
                               />
                             </Form>
                           </td>
@@ -1813,7 +1934,7 @@ export default class FacultyData extends Component {
                                 id={37}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('6x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'6x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '6x1')}
                               />
                             </Form>
                           </td>
@@ -1826,7 +1947,7 @@ export default class FacultyData extends Component {
                                 id={38}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('6x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'6x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '6x2')}
                               />
                             </Form>
                           </td>
@@ -1840,7 +1961,7 @@ export default class FacultyData extends Component {
                                 id={39}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('7x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'7x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '7x1')}
                               />
                             </Form>
                           </td>
@@ -1853,7 +1974,7 @@ export default class FacultyData extends Component {
                                 id={40}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('7x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'7x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '7x2')}
                               />
                             </Form>
                           </td>
@@ -1867,7 +1988,7 @@ export default class FacultyData extends Component {
                                 id={41}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('1x1')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'1x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '1x1')}
                               />
                             </Form>
                           </td>
@@ -1880,16 +2001,16 @@ export default class FacultyData extends Component {
                                 id={42}
                                 label=""
                                 checked={!this.state.freetime_week3.includes('1x2')}
-                                onClick={(e) => this.handleChangeWeek_3_toggle(e,'1x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '1x2')}
                               />
                             </Form>
                           </td>
                         </tr>
 
-                        <tr hidden = {this.state.daylist[3].length == 0} >
+                        <tr hidden={this.state.daylist[3].length == 0} >
                           {datedata[3]}
                         </tr>
-                        <tr hidden = {this.state.daylist[3].length == 0} >
+                        <tr hidden={this.state.daylist[3].length == 0} >
                           <td className="monweek2">
                             เช้า
                             <br></br>
@@ -1899,7 +2020,7 @@ export default class FacultyData extends Component {
                                 id={43}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('2x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'2x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '2x1')}
                               />
                             </Form>
                           </td>
@@ -1912,7 +2033,7 @@ export default class FacultyData extends Component {
                                 id={44}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('2x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'2x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '2x2')}
                               />
                             </Form>
                           </td>
@@ -1926,7 +2047,7 @@ export default class FacultyData extends Component {
                                 id={45}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('3x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'3x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '3x1')}
 
                               />
                             </Form>
@@ -1940,7 +2061,7 @@ export default class FacultyData extends Component {
                                 id={46}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('3x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'3x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '3x2')}
                               />
                             </Form>
                           </td>
@@ -1954,7 +2075,7 @@ export default class FacultyData extends Component {
                                 id={47}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('4x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'4x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '4x1')}
                               />
                             </Form>
                           </td>
@@ -1967,7 +2088,7 @@ export default class FacultyData extends Component {
                                 id={48}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('4x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'4x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '4x2')}
                               />
                             </Form>
                           </td>
@@ -1981,7 +2102,7 @@ export default class FacultyData extends Component {
                                 id={49}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('5x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'5x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '5x1')}
                               />
                             </Form>
                           </td>
@@ -1994,7 +2115,7 @@ export default class FacultyData extends Component {
                                 id={50}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('5x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'5x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '5x2')}
                               />
                             </Form>
                           </td>
@@ -2008,7 +2129,7 @@ export default class FacultyData extends Component {
                                 id={51}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('6x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'6x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '6x1')}
                               />
                             </Form>
                           </td>
@@ -2021,7 +2142,7 @@ export default class FacultyData extends Component {
                                 id={52}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('6x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'6x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '6x2')}
                               />
                             </Form>
                           </td>
@@ -2035,7 +2156,7 @@ export default class FacultyData extends Component {
                                 id={53}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('7x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'7x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '7x1')}
                               />
                             </Form>
                           </td>
@@ -2048,7 +2169,7 @@ export default class FacultyData extends Component {
                                 id={54}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('7x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'7x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '7x2')}
                               />
                             </Form>
                           </td>
@@ -2062,7 +2183,7 @@ export default class FacultyData extends Component {
                                 id={55}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('1x1')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'1x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '1x1')}
                               />
                             </Form>
                           </td>
@@ -2075,7 +2196,7 @@ export default class FacultyData extends Component {
                                 id={56}
                                 label=""
                                 checked={!this.state.freetime_week4.includes('1x2')}
-                                onClick={(e) => this.handleChangeWeek_4_toggle(e,'1x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '1x2')}
                               />
                             </Form>
                           </td>
