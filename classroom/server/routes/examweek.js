@@ -18,7 +18,22 @@ module.exports.read = function (callback){
     });
 }
 
+module.exports.readrecent = function (callback){
+    var sql = `SELECT * FROM t_exam_week  where week1_start != 0
+    ORDER BY t_exam_week.year DESC, t_exam_week.semester DESC, t_exam_week.mid_or_final ASC LIMIT 1`
 
+    pool.getConnection((err, connection) => {
+        if(err) throw err;
+        console.log('connected as id ' + connection.threadId);
+        pool.query(sql, (err, rows) => {
+            if(err) throw err;
+            // console.log('The data from users table are: \n', rows);
+            callback(rows)
+            connection.release(); // return the connection to pool
+        });
+    });
+
+}
 
 module.exports.update = function (callback){
     let date = new Date()

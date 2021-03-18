@@ -20,6 +20,7 @@ export default class FacultyData extends Component {
     super(props);
     this.state = {
       show: false,
+      showdl: false,
       dept: [],
       teacher: [],
       officer: [],
@@ -36,6 +37,14 @@ export default class FacultyData extends Component {
       condition_index: 0,
       t_examroombuilding: [],
       office_type: 1,
+      exam_week: [],
+      daylist: [],
+      freetime_week1: [],
+      freetime_week2: [],
+      freetime_week3: [],
+      freetime_week4: [],
+
+      //person_id: nulll,
     };
     this.handleClose = this.handleClose.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -43,9 +52,136 @@ export default class FacultyData extends Component {
     this.searchType = this.searchType.bind(this);
     this.enableEdit = this.enableEdit.bind(this);
     this.pageselectvalue = this.pageselectvalue.bind(this);
+
+    //delete row
+    this.deletebt = this.deletebt.bind(this)
+    this.confirmdelete = this.confirmdelete.bind(this);
+    //modal
+    this.handleClosedl = this.handleClosedl.bind(this);
+    this.handleClosesubmit = this.handleClosesubmit.bind(this);
+    this.handleClosefailed = this.handleClosefailed.bind(this);
+
+    //edit
+    this.handleChange_editPrename = this.handleChange_editPrename.bind(this)
+    this.handleChange_editFirstname = this.handleChange_editFirstname.bind(this)
+    this.handleChange_editLastname = this.handleChange_editLastname.bind(this)
+    this.handleChange_editPosition = this.handleChange_editPosition.bind(this)
+
+
+    this.componentWillMount = this.componentWillMount.bind(this);
+  }
+
+
+
+  //handle modal
+  handleClosedl() {
+    this.setState({
+      showdl: false
+    })
+  }
+
+  //edit
+  handleChange_editPrename(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Prename = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editFirstname(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Firstname = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editLastname(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Lastname = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editPosition(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].position = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+
+
+  handleClosesubmit() {
+    this.setState({
+      showsubmit: false
+    })
+    window.location.reload(false);
+  }
+
+  handleClosefailed() {
+    this.setState({
+      showfailed: false
+    })
+    window.location.reload(false);
+
+  }
+
+  //delete row input
+  delrow = () => {
+    this.setState({
+      rows: null,
+      person_id: null,
+    })
+    //console.log("aa")
+  }
+
+  //delete row button 
+  deletebt = (tabledata) => {
+    //console.log(tabledata)
+    this.setState({
+      showdl: true,
+      person_id: tabledata
+    })
+  }
+
+  //confirm delete row in table function
+  confirmdelete() {
+    axios
+      .delete("http://localhost:7777/person/delete", { data: { person_id: this.state.person_id } })
+      .then(response => {
+        console.log("response: ", response)
+        if (response.data == "Success") {
+          this.setState({
+            showsubmit: !this.state.showsubmit
+          })
+        }
+        else {
+          this.setState({
+            showfailed: !this.state.showfailed
+          })
+        }
+        // do something about response
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    this.handleClosedl()
   }
 
   componentWillMount() {
+    Date.prototype.addDays = function (days) {
+      var dat = new Date(this.valueOf());
+      dat.setDate(dat.getDate() + days);
+      return dat;
+    };
+
+    console.log(new Date().addDays(1))
+    function getDates(startDate, stopDate) {
+      var dateArray = new Array();
+      var currentDate = startDate;
+      while (currentDate <= stopDate) {
+        dateArray.push(currentDate);
+        currentDate = currentDate.addDays(1);
+      }
+      return dateArray;
+    }
+
     axios
       .get("http://localhost:7777/t_office")
       .then((res) => {
@@ -77,6 +213,8 @@ export default class FacultyData extends Component {
           newIds.push(0);
         }
 
+        console.log(res.data)
+
         this.setState({
           t_condition: res.data,
           editlist: newIds,
@@ -97,6 +235,29 @@ export default class FacultyData extends Component {
       .catch(function (error) {
         console.log(error);
       });
+
+    axios
+      .get("http://localhost:7777/examweekrecent")
+      .then((res) => {
+        // console.log(res.data[0].year, res.data[0].week1_start, res.data[0].week1_end)
+        var listdata = []
+        var datearray = getDates(new Date(res.data[0].week1_start), new Date(res.data[0].week1_end))
+        listdata.push(datearray)
+        var datearray = getDates(new Date(res.data[0].week2_start), new Date(res.data[0].week2_end))
+        listdata.push(datearray)
+        var datearray = getDates(new Date(res.data[0].week3_start), new Date(res.data[0].week3_end))
+        listdata.push(datearray)
+        var datearray = getDates(new Date(res.data[0].week4_start), new Date(res.data[0].week4_end))
+        listdata.push(datearray)
+        this.setState({
+          exam_week: res.data,
+          daylist: listdata
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
 
     this.setState({
       firstitem: 0,
@@ -149,7 +310,7 @@ export default class FacultyData extends Component {
     let keyword = event.target.value;
     this.setState({
       office_type: 1,
-      deptid:"01",
+      deptid: "01",
       Typesearch: parseInt(keyword),
       editlist: newId,
       teacher: JSON.parse(this.state.olddata),
@@ -167,17 +328,33 @@ export default class FacultyData extends Component {
     }
     let keyword = event.target.value;
     this.setState({
-      deptid:"01",
+      deptid: "01",
       office_type: parseInt(keyword),
       editlist: newId,
       teacher: JSON.parse(this.state.olddata),
     });
     this.pageselectvalue(1);
   };
+
   handleOpen(index) {
+
+
+    var freetime_1 = this.state.t_condition[index].freetime_week1
+    var freetime_1_str = freetime_1.length != 0 ? freetime_1.split(',') : []
+    var freetime_2 = this.state.t_condition[index].freetime_week2
+    var freetime_2_str = freetime_2.length != 0 ? freetime_2.split(',') : []
+    var freetime_3 = this.state.t_condition[index].freetime_week3
+    var freetime_3_str = freetime_3.length != 0 ? freetime_3.split(',') : []
+    var freetime_4 = this.state.t_condition[index].freetime_week4
+    var freetime_4_str = freetime_4.length != 0 ? freetime_4.split(',') : []
+
     this.setState({
       condition_index: index,
       show: true,
+      freetime_week1: freetime_1_str,
+      freetime_week2: freetime_2_str,
+      freetime_week3: freetime_3_str,
+      freetime_week4: freetime_4_str,
     });
   }
   handleClose() {
@@ -248,6 +425,10 @@ export default class FacultyData extends Component {
     console.log(this.state.t_condition[index], index);
     axios
       .post("http://localhost:7777/t_condition/update", {
+        Prename : this.state.t_condition[index].Prename,
+        Firstname : this.state.t_condition[index].Firstname,
+        Lastname : this.state.t_condition[index].Lastname,
+        Position : this.state.t_condition[index].position,
         condition_status: this.state.t_condition[index].condition_status,
         person_id: this.state.t_condition[index].person_id,
         building_no: this.state.t_condition[index].building_no,
@@ -255,6 +436,11 @@ export default class FacultyData extends Component {
         condition_week: this.state.t_condition[index].condition_week,
         condition_time: this.state.t_condition[index].condition_time,
         condition_weekend: this.state.t_condition[index].condition_weekend,
+        freetime_week1: this.state.freetime_week1.join(),
+        freetime_week2: this.state.freetime_week2.join(),
+        freetime_week3: this.state.freetime_week3.join(),
+        freetime_week4: this.state.freetime_week4.join(),
+
       })
       .then((response) => {
         console.log("response: ", response);
@@ -264,6 +450,63 @@ export default class FacultyData extends Component {
       });
     window.location.reload(false);
   };
+
+  handleChangeWeek_1_toggle = (event, data) => {
+    var freetimelist = this.state.freetime_week1
+    if (event.target.checked == false) {
+      freetimelist.push(data)
+    } else {
+      freetimelist = this.state.freetime_week1.filter((element, index) => {
+        return element != data
+      })
+    }
+    freetimelist.sort()
+    this.setState({
+      freetime_week1: freetimelist
+    })
+  }
+  handleChangeWeek_2_toggle = (event, data) => {
+    var freetimelist = this.state.freetime_week2
+    if (event.target.checked == false) {
+      freetimelist.push(data)
+    } else {
+      freetimelist = this.state.freetime_week2.filter((element, index) => {
+        return element != data
+      })
+    }
+    freetimelist.sort()
+    this.setState({
+      freetime_week2: freetimelist
+    })
+  }
+  handleChangeWeek_3_toggle = (event, data) => {
+    var freetimelist = this.state.freetime_week3
+    if (event.target.checked == false) {
+      freetimelist.push(data)
+    } else {
+      freetimelist = this.state.freetime_week3.filter((element, index) => {
+        return element != data
+      })
+    }
+    freetimelist.sort()
+    this.setState({
+      freetime_week3: freetimelist
+    })
+  }
+  handleChangeWeek_4_toggle = (event, data) => {
+    var freetimelist = this.state.freetime_week4
+    if (event.target.checked == false) {
+      freetimelist.push(data)
+    } else {
+      freetimelist = this.state.freetime_week4.filter((element, index) => {
+        return element != data
+      })
+    }
+    freetimelist.sort()
+    this.setState({
+      freetime_week4: freetimelist
+    })
+  }
 
   render() {
     var editjson = [];
@@ -302,10 +545,58 @@ export default class FacultyData extends Component {
               return (
                 <tr>
                   <td>{tabledata.person_id}</td>
-                  <td>{tabledata.Prename}</td>
-                  <td>{tabledata.Firstname}</td>
-                  <td>{tabledata.Lastname}</td>
-                  <td>{tabledata.position}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Prename:(<input
+                      value={tabledata.Prename}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPrename(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Firstname:(<input
+                      value={tabledata.Firstname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editFirstname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Lastname:(<input
+                      value={tabledata.Lastname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editLastname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.position:(<input
+                      value={tabledata.position}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPosition(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
                   <td>
                     <Form>
                       {["radio"].map((type) => (
@@ -318,19 +609,19 @@ export default class FacultyData extends Component {
                               value="0"
                               disabled={
                                 !this.state.editlist[
-                                  editjson[
-                                    (this.state.pageclick - 1) *
-                                      this.state.itemperpage +
-                                      tableindex
-                                  ]
+                                editjson[
+                                (this.state.pageclick - 1) *
+                                this.state.itemperpage +
+                                tableindex
+                                ]
                                 ]
                               }
                               onClick={(e) =>
                                 this.OnChangeCondition_status(
                                   editjson[
-                                    (this.state.pageclick - 1) *
-                                      this.state.itemperpage +
-                                      tableindex
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
                                   ],
                                   e
                                 )
@@ -347,19 +638,19 @@ export default class FacultyData extends Component {
                               value="1"
                               disabled={
                                 !this.state.editlist[
-                                  editjson[
-                                    (this.state.pageclick - 1) *
-                                      this.state.itemperpage +
-                                      tableindex
-                                  ]
+                                editjson[
+                                (this.state.pageclick - 1) *
+                                this.state.itemperpage +
+                                tableindex
+                                ]
                                 ]
                               }
                               onClick={(e) =>
                                 this.OnChangeCondition_status(
                                   editjson[
-                                    (this.state.pageclick - 1) *
-                                      this.state.itemperpage +
-                                      tableindex
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
                                   ],
                                   e
                                 )
@@ -375,19 +666,19 @@ export default class FacultyData extends Component {
                               value="2"
                               disabled={
                                 !this.state.editlist[
-                                  editjson[
-                                    (this.state.pageclick - 1) *
-                                      this.state.itemperpage +
-                                      tableindex
-                                  ]
+                                editjson[
+                                (this.state.pageclick - 1) *
+                                this.state.itemperpage +
+                                tableindex
+                                ]
                                 ]
                               }
                               onClick={(e) =>
                                 this.OnChangeCondition_status(
                                   editjson[
-                                    (this.state.pageclick - 1) *
-                                      this.state.itemperpage +
-                                      tableindex
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
                                   ],
                                   e
                                 )
@@ -406,19 +697,19 @@ export default class FacultyData extends Component {
                       type="primary"
                       disabled={
                         !this.state.editlist[
-                          editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
-                          ]
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
                         ]
                       }
                       onClick={() =>
                         this.handleOpen(
                           editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
                           ]
                         )
                       }
@@ -432,19 +723,19 @@ export default class FacultyData extends Component {
                       className="editdata"
                       hidden={
                         this.state.editlist[
-                          editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
-                          ]
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
                         ]
                       }
                       onClick={() =>
                         this.enableEdit(
                           editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
                           ]
                         )
                       }
@@ -455,20 +746,20 @@ export default class FacultyData extends Component {
                     <Button
                       hidden={
                         !this.state.editlist[
-                          editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
-                          ]
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
                         ]
                       }
                       variant="link"
                       onClick={() =>
                         this.cancelEdit(
                           editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
                           ]
                         )
                       }
@@ -479,20 +770,20 @@ export default class FacultyData extends Component {
                     <Button
                       hidden={
                         !this.state.editlist[
-                          editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
-                          ]
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
                         ]
                       }
                       variant="primary"
                       onClick={() =>
                         this.condition_confirm(
                           editjson[
-                            (this.state.pageclick - 1) *
-                              this.state.itemperpage +
-                              tableindex
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
                           ]
                         )
                       }
@@ -501,7 +792,7 @@ export default class FacultyData extends Component {
                     </Button>
                   </td>
                   <td>
-                    <Button variant="light" className="deletedata">
+                    <Button variant="light" className="deletedata" onClick={() => this.deletebt(tabledata.person_id)}>
                       <img src={deletebt} className="deleteicon" alt="delete" />
                     </Button>
                   </td>
@@ -518,9 +809,45 @@ export default class FacultyData extends Component {
                 return (
                   <tr>
                     <td>{tabledata.person_id}</td>
-                    <td>{tabledata.Prename}</td>
-                    <td>{tabledata.Firstname}</td>
-                    <td>{tabledata.Lastname}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Prename:(<input
+                      value={tabledata.Prename}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPrename(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Firstname:(<input
+                      value={tabledata.Firstname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editFirstname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Lastname:(<input
+                      value={tabledata.Lastname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editLastname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                      ,e)}
+                    />)}</td>
                     <td>{tabledata.Office_name}</td>
                     <td>
                       <Form>
@@ -533,20 +860,20 @@ export default class FacultyData extends Component {
                                 name="line"
                                 disabled={
                                   !this.state.editlist[
-                                    editjson[
-                                      (this.state.pageclick - 1) *
-                                        this.state.itemperpage +
-                                        tableindex
-                                    ]
+                                  editjson[
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
+                                  ]
                                   ]
                                 }
                                 value="0"
                                 onClick={(e) =>
                                   this.OnChangeCondition_status(
                                     editjson[
-                                      (this.state.pageclick - 1) *
-                                        this.state.itemperpage +
-                                        tableindex
+                                    (this.state.pageclick - 1) *
+                                    this.state.itemperpage +
+                                    tableindex
                                     ],
                                     e
                                   )
@@ -563,19 +890,19 @@ export default class FacultyData extends Component {
                                 value="1"
                                 disabled={
                                   !this.state.editlist[
-                                    editjson[
-                                      (this.state.pageclick - 1) *
-                                        this.state.itemperpage +
-                                        tableindex
-                                    ]
+                                  editjson[
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
+                                  ]
                                   ]
                                 }
                                 onClick={(e) =>
                                   this.OnChangeCondition_status(
                                     editjson[
-                                      (this.state.pageclick - 1) *
-                                        this.state.itemperpage +
-                                        tableindex
+                                    (this.state.pageclick - 1) *
+                                    this.state.itemperpage +
+                                    tableindex
                                     ],
                                     e
                                   )
@@ -590,19 +917,19 @@ export default class FacultyData extends Component {
                                 value="2"
                                 disabled={
                                   !this.state.editlist[
-                                    editjson[
-                                      (this.state.pageclick - 1) *
-                                        this.state.itemperpage +
-                                        tableindex
-                                    ]
+                                  editjson[
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
+                                  ]
                                   ]
                                 }
                                 onClick={(e) =>
                                   this.OnChangeCondition_status(
                                     editjson[
-                                      (this.state.pageclick - 1) *
-                                        this.state.itemperpage +
-                                        tableindex
+                                    (this.state.pageclick - 1) *
+                                    this.state.itemperpage +
+                                    tableindex
                                     ],
                                     e
                                   )
@@ -622,19 +949,19 @@ export default class FacultyData extends Component {
                         type="primary"
                         disabled={
                           !this.state.editlist[
-                            editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
-                            ]
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
                           ]
                         }
                         onClick={() =>
                           this.handleOpen(
                             editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
                             ]
                           )
                         }
@@ -648,19 +975,19 @@ export default class FacultyData extends Component {
                         className="editdata"
                         hidden={
                           this.state.editlist[
-                            editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
-                            ]
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
                           ]
                         }
                         onClick={() =>
                           this.enableEdit(
                             editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
                             ]
                           )
                         }
@@ -671,20 +998,20 @@ export default class FacultyData extends Component {
                       <Button
                         hidden={
                           !this.state.editlist[
-                            editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
-                            ]
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
                           ]
                         }
                         variant="link"
                         onClick={() =>
                           this.cancelEdit(
                             editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
                             ]
                           )
                         }
@@ -695,20 +1022,20 @@ export default class FacultyData extends Component {
                       <Button
                         hidden={
                           !this.state.editlist[
-                            editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
-                            ]
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
                           ]
                         }
                         variant="primary"
                         onClick={() =>
                           this.condition_confirm(
                             editjson[
-                              (this.state.pageclick - 1) *
-                                this.state.itemperpage +
-                                tableindex
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
                             ]
                           )
                         }
@@ -717,7 +1044,7 @@ export default class FacultyData extends Component {
                       </Button>
                     </td>
                     <td>
-                      <Button variant="light" className="deletedata">
+                      <Button variant="light" className="deletedata" onClick={() => this.deletebt(tabledata.person_id)}>
                         <img
                           src={deletebt}
                           className="deleteicon"
@@ -731,8 +1058,25 @@ export default class FacultyData extends Component {
           }
         }
       });
-    console.log(editjson);
+    // console.log(editjson);
     datalength = editjson.length;
+    // var listdata = []
+    var datedata = this.state.daylist.map((data, indexdata) => {
+      var listdata = []
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        var month = (element.getMonth() + 1)
+        var day = element.getDate()
+        var year = element.getFullYear()
+        listdata.push(<td colspan="2">{day.toString().padStart(2, 0) + '/' + month.toString().padStart(2, 0) + '/' + year}</td>)
+      }
+      return listdata
+      // console.log(data)
+      // var month = (data.getMonth() + 1)
+      // var day = data.getDate()
+      // var year = data.getFullYear()
+      // return  (<td colspan="2">{ day.toString().padStart(2,0) + '/' +  month.toString().padStart(2,0) + '/' + year}</td>)
+    })
 
     return (
       <div className="page-container">
@@ -778,17 +1122,17 @@ export default class FacultyData extends Component {
                 onChange={(e) => this.searchDept(e)}
               >
                 {this.state.dept.map((data) => {
-                  if(data.Office_type == 1){
-                    if(this.state.deptid == data.Office_id){
+                  if (data.Office_type == 1) {
+                    if (this.state.deptid == data.Office_id) {
                       return (
                         <option selected value={data.Office_id}>{data.Office_name}</option>
                       )
-                    }else{
+                    } else {
                       return (
-                        <option  value={data.Office_id}>{data.Office_name}</option>
+                        <option value={data.Office_id}>{data.Office_name}</option>
                       )
                     }
-                    
+
                   }
                 })}
               </select>
@@ -827,7 +1171,6 @@ export default class FacultyData extends Component {
         <div className="footer">
           <Foot />
         </div>
-
         <Modal
           show={this.state.show}
           onHide={this.handleClose}
@@ -840,9 +1183,9 @@ export default class FacultyData extends Component {
               <span aria-hidden="true">×</span>
               <span class="sr-only">Close</span>
             </button>
-
             {this.state.t_condition.map((data, index) => {
               if (this.state.condition_index == index) {
+
                 return (
                   <div>
                     <div className="filter">
@@ -1081,16 +1424,10 @@ export default class FacultyData extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td colspan="2">02/03/63</td>
-                          <td colspan="2">03/03/63</td>
-                          <td colspan="2">04/03/63</td>
-                          <td colspan="2">05/03/63</td>
-                          <td colspan="2">06/03/63</td>
-                          <td colspan="2">07/03/63</td>
-                          <td colspan="2">08/03/63</td>
+                          {datedata[0]}
                         </tr>
                         <tr>
-                          <td>
+                          <td className="monweek1">
                             เช้า
                             <br></br>
                             <Form>
@@ -1098,7 +1435,8 @@ export default class FacultyData extends Component {
                                 type="switch"
                                 id={1}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('2x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '2x1')}
                               />
                             </Form>
                           </td>
@@ -1108,21 +1446,25 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={2}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('2x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '2x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="tueweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={3}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('3x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '3x1')}
+
                               />
                             </Form>
                           </td>
@@ -1132,21 +1474,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={4}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('3x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '3x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="wedweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={5}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('4x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '4x1')}
                               />
                             </Form>
                           </td>
@@ -1156,21 +1501,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={6}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('4x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '4x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="thuweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={7}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('5x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '5x1')}
                               />
                             </Form>
                           </td>
@@ -1180,21 +1528,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={8}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('5x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '5x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="friweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={9}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('6x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '6x1')}
                               />
                             </Form>
                           </td>
@@ -1204,21 +1555,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={10}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('6x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '6x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="satweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={11}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('7x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '7x1')}
                               />
                             </Form>
                           </td>
@@ -1228,21 +1582,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={12}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('7x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '7x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="sunweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={13}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('1x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '1x1')}
                               />
                             </Form>
                           </td>
@@ -1252,32 +1609,28 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={14}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week1.includes('1x2')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '1x2')}
                               />
                             </Form>
                           </td>
                         </tr>
-                        <tr>
-                          <td colspan="2">09/03/63</td>
-                          <td colspan="2">10/03/63</td>
-                          <td colspan="2">11/03/63</td>
-                          <td colspan="2">12/03/63</td>
-                          <td colspan="2">13/03/63</td>
-                          <td colspan="2">14/03/63</td>
-                          <td colspan="2">15/03/63</td>
+                        <tr hidden={this.state.daylist[1].length == 0} >
+                          {datedata[1]}
                         </tr>
-                        <tr>
-                          <td>
+                        <tr hidden={this.state.daylist[1].length == 0} >
+                          <td className="monweek2">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={15}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week2.includes('2x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '2x1')}
                               />
                             </Form>
                           </td>
@@ -1287,21 +1640,25 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={16}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('2x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '2x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="tueweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={17}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('3x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '3x1')}
+
                               />
                             </Form>
                           </td>
@@ -1311,21 +1668,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={18}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('3x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '3x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="wedweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={19}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week2.includes('4x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '4x1')}
                               />
                             </Form>
                           </td>
@@ -1335,21 +1695,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={20}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('4x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '4x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="thuweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={21}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week2.includes('5x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '5x1')}
                               />
                             </Form>
                           </td>
@@ -1359,21 +1722,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={22}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('5x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '5x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="friweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={23}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week2.includes('6x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '6x1')}
                               />
                             </Form>
                           </td>
@@ -1383,21 +1749,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={24}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('6x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '6x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="satweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={25}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week1.includes('7x1')}
+                                onClick={(e) => this.handleChangeWeek_1_toggle(e, '7x1')}
                               />
                             </Form>
                           </td>
@@ -1407,21 +1776,24 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={26}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('7x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '7x2')}
                               />
                             </Form>
                           </td>
-                          <td>
+
+                          <td className="sunweek1">
                             เช้า
                             <br></br>
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={27}
                                 label=""
-                                checked={1}
+                                checked={!this.state.freetime_week2.includes('1x1')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '1x1')}
                               />
                             </Form>
                           </td>
@@ -1431,9 +1803,400 @@ export default class FacultyData extends Component {
                             <Form>
                               <Form.Check
                                 type="switch"
-                                id={1}
+                                id={28}
                                 label=""
-                                checked={0}
+                                checked={!this.state.freetime_week2.includes('1x2')}
+                                onClick={(e) => this.handleChangeWeek_2_toggle(e, '1x2')}
+                              />
+                            </Form>
+                          </td>
+                        </tr>
+
+                        <tr hidden={this.state.daylist[2].length == 0} >
+                          {datedata[2]}
+                        </tr>
+                        <tr hidden={this.state.daylist[2].length == 0} >
+                          <td className="monweek2">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={29}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('2x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '2x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={30}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('2x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '2x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="tueweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={31}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('3x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '3x1')}
+
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={32}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('3x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '3x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="wedweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={33}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('4x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '4x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={34}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('4x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '4x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="thuweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={35}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('5x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '5x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={36}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('5x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '5x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="friweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={37}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('6x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '6x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={38}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('6x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '6x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="satweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={39}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('7x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '7x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={40}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('7x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '7x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="sunweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={41}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('1x1')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '1x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={42}
+                                label=""
+                                checked={!this.state.freetime_week3.includes('1x2')}
+                                onClick={(e) => this.handleChangeWeek_3_toggle(e, '1x2')}
+                              />
+                            </Form>
+                          </td>
+                        </tr>
+
+                        <tr hidden={this.state.daylist[3].length == 0} >
+                          {datedata[3]}
+                        </tr>
+                        <tr hidden={this.state.daylist[3].length == 0} >
+                          <td className="monweek2">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={43}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('2x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '2x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={44}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('2x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '2x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="tueweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={45}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('3x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '3x1')}
+
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={46}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('3x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '3x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="wedweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={47}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('4x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '4x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={48}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('4x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '4x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="thuweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={49}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('5x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '5x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={50}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('5x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '5x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="friweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={51}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('6x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '6x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={52}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('6x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '6x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="satweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={53}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('7x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '7x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={54}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('7x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '7x2')}
+                              />
+                            </Form>
+                          </td>
+
+                          <td className="sunweek1">
+                            เช้า
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={55}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('1x1')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '1x1')}
+                              />
+                            </Form>
+                          </td>
+                          <td>
+                            บ่าย
+                            <br></br>
+                            <Form>
+                              <Form.Check
+                                type="switch"
+                                id={56}
+                                label=""
+                                checked={!this.state.freetime_week4.includes('1x2')}
+                                onClick={(e) => this.handleChangeWeek_4_toggle(e, '1x2')}
                               />
                             </Form>
                           </td>
@@ -1455,7 +2218,42 @@ export default class FacultyData extends Component {
             })}
           </Modal.Body>
         </Modal>
+        <Modal show={this.state.showdl} onHide={this.handleClosedl}>
+          <Modal.Header closeButton>
+            <Modal.Title>คำเตือน</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClosedl}>
+              ยกเลิก
+                        </Button>
+            <Button variant="primary" onClick={this.confirmdelete}>
+              ยืนยัน
+                        </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Success</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+          <Modal.Header closeButton>
+            <Modal.Title>Failed</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Modal>
+
+
       </div>
+
     );
   }
 }

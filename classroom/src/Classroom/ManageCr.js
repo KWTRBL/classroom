@@ -79,11 +79,18 @@ export default class BuildingData extends Component {
     }
 
     downloadexcel = () => {
-
+        var curr2_tname = null
+        this.state.curr2.map((data,index) =>{
+            if (this.state.curr2search == data.curr2_id){
+                curr2_tname = data.curr2_tname
+            }
+        })
         axios
             .post("http://localhost:7777/downloadfile", {
                 year: this.state.yearsearch,
                 semester: this.state.semestersearch,
+                curr2_id: this.state.curr2search,
+                curr2_tname : curr2_tname
             }, {
 
                 responseType: 'arraybuffer',
