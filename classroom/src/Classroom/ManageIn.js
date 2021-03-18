@@ -9,6 +9,9 @@ import deletebt from "./icon/trash.png";
 import React from "react";
 import addbt from "./icon/plus.png";
 import axios from "axios";
+import Pagination from "react-js-pagination";
+import Modal from 'react-bootstrap/Modal'
+
 
 import "./ManageIn.css";
 export default class ManageIn extends Component {
@@ -20,19 +23,38 @@ export default class ManageIn extends Component {
       semestersearch: null,
       mid_or_final: null,
       departsearch: null,
+      deptlist: [],
       persontype: null,
+      personfilter: [],
       firstitem: 0,
       lastitem: null,
       pageclick: 1,
       itemperpage: 10,
       editlist: [],
       olddata: [],
+      filter: [],
+      buildingdata: [],
+      show: false,
+      deldata: null,
+      ownsubjecthide: true,
+      normalsubjecthide: true,
+      buttonstatedata: []
     };
+
+    this.pageselect = this.pageselect.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.remove = this.remove.bind(this);
+
   }
   componentWillMount() {
     axios
       .get("http://localhost:7777/exam_committee")
       .then((res) => {
+        // console.log(res.data);
+        var datain = JSON.stringify(res.data[0].list);
+        var jsondata = JSON.parse(res.data[0].list);
+        // console.log(res.data[0].list[91],res.data[0].list[92])
+        // console.log(typeof res.data[0].list,typeof jsondata,jsondata)
         const newIds = this.state.editlist.slice();
         for (var i = 0; i < res.data.length; i++) {
           newIds.push(0);
@@ -47,6 +69,99 @@ export default class ManageIn extends Component {
         console.log(error);
       });
 
+    axios
+      .get("http://localhost:7777/exam_committee")
+      .then((res) => {
+        // console.log(res.data);
+        var datain = JSON.stringify(res.data[0].list);
+        var jsondata = JSON.parse(res.data[0].list);
+        // console.log(res.data[0].list[91],res.data[0].list[92])
+        // console.log(typeof res.data[0].list,typeof jsondata,jsondata)
+        const newIds = this.state.editlist.slice();
+        for (var i = 0; i < res.data.length; i++) {
+          newIds.push(0);
+        }
+        this.setState({
+          editlist: newIds,
+          olddata: JSON.stringify(res.data),
+          exam_committee: res.data,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+    axios
+      .get("http://localhost:7777/exam_committee_filter")
+      .then((res) => {
+        var data = JSON.parse(res.data[0].filter);
+        // console.log(JSON.parse(res.data[0].filter));
+        this.setState({
+          filter: res.data,
+          yearsearch: res.data[0].year,
+          semestersearch: data[0].semester,
+          mid_or_final: data[0].mid_or_final,
+          persontype: 1
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios
+      .get("http://localhost:7777/t_office")
+      .then((res) => {
+        this.setState({
+          deptlist: res.data
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios
+      .get("http://localhost:7777/personfilter")
+      .then((res) => {
+
+        this.setState({
+          departsearch: res.data[0].Office_id,
+          personfilter: res.data
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+
+    axios
+      .get("http://localhost:7777/exam_committee_check")
+      .then((res) => {
+
+
+        this.setState({
+          buttonstatedata: res.data
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:7777/building")
+      .then((res) => {
+        this.setState({
+          buildingdata: res.data
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+
+
+
     this.setState({
       firstitem: 0,
       lastitem: this.state.itemperpage,
@@ -54,35 +169,622 @@ export default class ManageIn extends Component {
   }
 
 
+  change_year = (e) => {
+    var value = e.target.value
+    this.state.filter.map((data, index) => {
+      if (value == data.year) {
+        var filterjson = JSON.parse(data.filter);
+        console.log(data)
+        console.log(filterjson[0].semester, filterjson[0].mid_or_final)
+        this.setState({
+          yearsearch: value,
+          semestersearch: filterjson[0].semester,
+          mid_or_final: filterjson[0].mid_or_final,
+          persontype: 1,
+          departsearch: '01'
+        })
+      }
+    })
+
+    // console.log(value)
+  }
+
+  change_persontype = (e, id) => {
+    var value = e.target.value
+    var data = this.state.firstdept
+    this.setState({
+      persontype: value,
+      departsearch: '01'
+    })
+  }
+
+  change_depart = (e) => {
+    var value = e.target.value
+    this.setState({
+      departsearch: value
+    })
+  }
+
+  change_mid_or_final = (e) => {
+    var value = e.target.value
+    this.setState({
+      mid_or_final: value
+    })
+  }
+  change_semester = (e) => {
+    var value = e.target.value
+    this.setState({
+      semestersearch: value,
+      mid_or_final: 'M'
+    })
+  }
+
   pageselect(pageNumber) {
-    let newId = this.state.editlist.slice()
+    let newId = this.state.editlist.slice();
     for (var i = 0; i < newId.length; i++) {
-        if (newId[i] == 1) {
-            newId[i] = 0
-        }
+      if (newId[i] == 1) {
+        newId[i] = 0;
+      }
     }
     this.setState({
-        pageclick: pageNumber,
-        firstitem: (this.state.itemperpage * pageNumber) - this.state.itemperpage,
-        lastitem: (this.state.itemperpage * pageNumber),
-        editlist: newId,
-        exam_committee: JSON.parse(this.state.olddata),
+      pageclick: pageNumber,
+      firstitem: this.state.itemperpage * pageNumber - this.state.itemperpage,
+      lastitem: this.state.itemperpage * pageNumber,
+      editlist: newId,
+      exam_committee: JSON.parse(this.state.olddata),
+    });
+  }
 
+
+  deletebt = (data) => {
+    this.setState({
+      show: true,
+      deldata: data
     })
-}
+  }
+
+  remove() {
+    var value = this.state.deldata
+    axios.delete('http://localhost:7777/exam_committee/delete',
+      {
+        data: {
+          person_id: value.person_id,
+          year: this.state.yearsearch,
+          semester: this.state.semestersearch,
+          mid_or_final: this.state.mid_or_final,
+          exam_date: value.exam_date,
+          exam_time: value.exam_time
+        }
+      }
+    ).then(response => {
+
+      // do something about response
+    })
+      .catch(err => {
+        console.error(err)
+      })
+    window.location.reload(false);
+
+
+  }
+
+  adddata(value) {
+    axios.post('http://localhost:7777/exam_committee/adddata',
+      {
+
+        person_id: value.person_id,
+        year: this.state.yearsearch,
+        semester: this.state.semestersearch,
+        mid_or_final: this.state.mid_or_final,
+        exam_date: value.exam_date,
+        exam_time: value.exam_time,
+        faculty_id: this.state.departsearch
+
+      }
+    )
+    window.location.reload(false);
+
+  }
+
+  ownsubject_exam() {
+    axios.post('http://localhost:7777/exam_schedule',
+      {
+        year: this.state.yearsearch,
+        semester: this.state.semestersearch,
+        mid_or_final: this.state.mid_or_final,
+        faculty_id: this.state.departsearch
+      }
+    ).then((res) => {
+      console.log(res.data)
+      axios
+        .get("http://localhost:7777/exam_committee")
+        .then((res) => {
+          const newIds = this.state.editlist.slice();
+          for (var i = 0; i < res.data.length; i++) {
+            newIds.push(0);
+          }
+          this.setState({
+            editlist: newIds,
+            olddata: JSON.stringify(res.data),
+            exam_committee: res.data,
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      axios
+        .get("http://localhost:7777/exam_committee_check")
+        .then((res) => {
+
+          this.setState({
+            buttonstatedata: res.data
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    )
+    // window.location.reload(false);
+
+  }
+
+  normalsubject() {
+    if (this.state.persontype == 1) {
+      axios.post('http://localhost:7777/exam_schedule_other',
+        {
+          year: this.state.yearsearch,
+          semester: this.state.semestersearch,
+          mid_or_final: this.state.mid_or_final,
+          faculty_id: this.state.departsearch
+        }
+      ).then((res) => {
+
+        axios
+        .get("http://localhost:7777/exam_committee")
+        .then((res) => {
+          const newIds = this.state.editlist.slice();
+          for (var i = 0; i < res.data.length; i++) {
+            newIds.push(0);
+          }
+          this.setState({
+            editlist: newIds,
+            olddata: JSON.stringify(res.data),
+            exam_committee: res.data,
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      axios
+        .get("http://localhost:7777/exam_committee_check")
+        .then((res) => {
+
+          this.setState({
+            buttonstatedata: res.data
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    
+      })
+    }
+    if (this.state.persontype == 2) {
+      axios.post('http://localhost:7777/exam_committee_officer',
+        {
+          year: this.state.yearsearch,
+          semester: this.state.semestersearch,
+          mid_or_final: this.state.mid_or_final,
+        }
+      ).then((res)=>{
+
+        axios
+        .get("http://localhost:7777/exam_committee")
+        .then((res) => {
+          const newIds = this.state.editlist.slice();
+          for (var i = 0; i < res.data.length; i++) {
+            newIds.push(0);
+          }
+          this.setState({
+            editlist: newIds,
+            olddata: JSON.stringify(res.data),
+            exam_committee: res.data,
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      axios
+        .get("http://localhost:7777/exam_committee_check")
+        .then((res) => {
+
+          this.setState({
+            buttonstatedata: res.data
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      })
+    }
+
+    // window.location.reload(false);
+
+
+  }
+
+  handleClose() {
+    this.setState({
+      show: false
+    })
+  }
 
 
   render() {
+    var own_subjecthidden = false
+    var normaldisable = false
+    var own_subjectdisable = false
+    if (this.state.persontype == 2) {
+      own_subjecthidden = true
+      own_subjectdisable = true
+    }
+    this.state.buttonstatedata.map((data, index) => {
+      console.log('data in ', this.state.yearsearch, this.state.semestersearch, this.state.mid_or_final, this.state.persontype, this.state.departsearch)
+      console.log(data.year, data.semester, data.mid_or_final, data.person_type, data.office_id)
+      //
+      if (data.year == this.state.yearsearch && data.semester == this.state.semestersearch && data.mid_or_final == this.state.mid_or_final && data.office_id == this.state.departsearch && data.person_type == this.state.persontype) {
+        console.log(true)
+        if (data.status == 1) {
+          own_subjectdisable = true
+        }
+        if (data.status == 2) {
+          normaldisable = true
+        }
+      }
+      //เจอเจ้าหน้้าที่
+      if(data.year == this.state.yearsearch && data.semester == this.state.semestersearch && data.mid_or_final == this.state.mid_or_final && data.office_id == '00' && this.state.persontype == 2){
+        normaldisable = true
+      }
+    })
 
-    //
-    var tabledata = this.state.exam_committee
-      .filter((data, index) => {
-        return data;
-      })
-      .slice(this.state.firstitem, this.state.lastitem)
-      .map((tabledata, tableindex) => {});
+    if (own_subjectdisable == false) {
+      normaldisable = true
+    }
+
+    var yeardata = this.state.filter.map((data, index) => {
+      return <option value={data.year.toString()}>{data.year}</option>;
+    });
+    var mid_or_final = this.state.filter.map((data, index) => {
+      // this.state.yearsearch
+      if (data.year == this.state.yearsearch) {
+        var filterjson = JSON.parse(data.filter);
+        var listdata = [];
+        return filterjson.map((jsondata, index) => {
+          if (jsondata.semester == this.state.semestersearch) {
+            if (!listdata.includes(jsondata.mid_or_final)) {
+              listdata.push(jsondata.mid_or_final);
+              return (
+                <option value={jsondata.mid_or_final} >
+                  {jsondata.mid_or_final == "M" ? "กลางภาค" : "ปลายภาค"}
+                </option>
+              );
+            }
+          }
+        });
+      }
+    });
+
+    var semester = this.state.filter.map((data, index) => {
+      if (data.year == this.state.yearsearch) {
+        var filterjson = JSON.parse(data.filter);
+        var listdata = [];
+        return filterjson.map((jsondata, index) => {
+          if (!listdata.includes(jsondata.semester)) {
+            listdata.push(jsondata.semester);
+            return (
+              <option selected={this.state.semestersearch == jsondata.semester ? true : false} value={jsondata.semester} > {jsondata.semester} </option>
+            );
+          }
+        });
+      }
+    });
+
+    var listdata = [];
+
+    var person_type = this.state.personfilter.map((data, index) => {
+      // console.log(listdata)
+      if (!listdata.includes(data.Office_type)) {
+        listdata.push(data.Office_type);
+        // console.log('datatype ', (data.Office_type))
+
+        return (
+          <option value={data.Office_type} selected={data.Office_type == this.state.persontype ? true : false} >
+            {data.Office_type == "1" ? "อาจารย์" : "เจ้าหน้าที่"}
+          </option>
+
+        )
+
+      }
+    })
+
+    var count = 0
+    var firstid = null
+    var dept = this.state.personfilter.map((data, index) => {
+      if (data.Office_type == this.state.persontype) {
+        // console.log(this.state.personfilter.length)
+        return (
+          <option value={data.Office_id} >
+            {data.Office_name}
+          </option>
+        )
+
+      } else {
+        if (count == 0) {
+          firstid = data.Office_id
+          count = 1;
+        }
+        if (this.state.persontype == 2) {
+          return (
+            <option value={data.Office_id} >
+              {data.Office_name}
+            </option>
+          )
+
+        }
+
+      }
+
+    })
+
+    var editjson = []
+    var tabledata = this.state.exam_committee.filter((member, index) => {
+      if  ( (member.Office_id == this.state.departsearch && member.Person_type == this.state.persontype && this.state.persontype == 1 )|| (this.state.persontype == 2 && member.Person_type == this.state.persontype)) {
+        editjson.push(index)
+        console.log(member)
+        return member
+      }
+    }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
+      if ((data.Office_id == this.state.departsearch && data.Person_type == this.state.persontype && this.state.persontype == 1 )|| (this.state.persontype == 2 && data.Person_type == this.state.persontype)) {
+        // console.log('index : ', index)
+        var jsondata = JSON.parse(data.list)
+        var examlist = []
+        var result = []
+        jsondata.map((datajson, index) => {
+          if (datajson.year == this.state.yearsearch && datajson.semester == this.state.semestersearch && datajson.mid_or_final == this.state.mid_or_final) {
+            // console.log(datajson)
+            var date = new Date(datajson.exam_date)
+            date.setFullYear(date.getFullYear() - 543)
+            var strdate = date.toLocaleDateString('th-TH', {
+              year: '2-digit',
+              month: 'long',
+              day: 'numeric',
+              weekday: 'short',
+            })
+            datajson['person_id'] = data.person_id
+            examlist.push(datajson)
+            result.push(strdate)
+
+          }
+        })
+        return (
+          <tr>
+            <td>
+              {data.name}
+            </td>
+            <td>
+              <div className="flex-container">
+                <div>
+                  {
+                    examlist.length != 0 ? (
+                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
+                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+
+                    ) : ''
+                  }
+                </div>
+
+                <div>
+
+                  {
+                    examlist.length != 0 ?
+                      (
+                        <Button variant="light" className="deleteIndata">
+                          <img
+                            src={deletebt}
+                            className="deleteInicon"
+                            alt="delete"
+                            onClick={() => this.deletebt(examlist[0])}
+
+                          />
+                        </Button>
+                      ) : (
+                        <Button variant="light" className="deleteIndata">
+                          <img
+                            src={addbt}
+                            className="deleteInicon"
+                            alt="delete"
+                            onClick={() => this.adddata(examlist[0])}
+                          />
+                        </Button>
+                      )
+                  }
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className="flex-container">
+                <div>
+                  {
+                    examlist.length > 1 ? (
+                      result[1] + ' ' + (examlist[1].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
+                      examlist[1].building_no + ' ห้อง ' + examlist[1].room_no
+                    ) : (
+                      <Button variant="light" className="deleteIndata">
+                        <img
+                          src={addbt}
+                          className="deleteInicon"
+                          alt="delete"
+                          onClick={() => this.adddata(examlist[0])}
+                        />
+                      </Button>
+                    )
+                  }
+                </div>
+                <div>
+                  {
+                    examlist.length > 1 ?
+                      (
+                        <Button variant="light" className="deleteIndata">
+                          <img
+                            src={deletebt}
+                            className="deleteInicon"
+                            alt="delete"
+                            onClick={() => this.deletebt(examlist[1])}
+                          />
+                        </Button>
+                      ) : ' '
+                  }
+                </div>
+              </div>
 
 
+
+            </td>
+            <td>
+              <div className="flex-container">
+                <div>
+                  {
+                    examlist.length > 2 ? (
+                      result[2] + ' ' + (examlist[2].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
+                      examlist[2].building_no + ' ห้อง ' + examlist[2].room_no
+                    ) : (
+                      <Button variant="light" className="deleteIndata">
+                        <img
+                          src={addbt}
+                          className="deleteInicon"
+                          alt="delete"
+                        />
+                      </Button>
+                    )
+                  }
+                </div>
+                <div>
+
+                  {
+                    examlist.length > 2 ?
+                      (
+                        <Button variant="light" className="deleteIndata">
+                          <img
+                            src={deletebt}
+                            className="deleteInicon"
+                            alt="delete"
+                            onClick={() => this.deletebt(examlist[2])}
+
+                          />
+                        </Button>
+                      ) : ' '
+                  }
+                </div>
+              </div>
+
+
+            </td>
+            <td>
+              <div className="flex-container">
+                <div>
+                  {
+                    examlist.length > 3 ? (
+                      result[3] + ' ' + (examlist[3].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
+                      examlist[3].building_no + ' ห้อง ' + examlist[3].room_no
+                    ) : (
+                      <Button variant="light" className="deleteIndata">
+                        <img
+                          src={addbt}
+                          className="deleteInicon"
+                          alt="delete"
+                        />
+                      </Button>
+                    )
+                  }
+                </div>
+                <div>
+
+                  {
+                    examlist.length > 3 ?
+                      (
+                        <Button variant="light" className="deleteIndata">
+                          <img
+                            src={deletebt}
+                            className="deleteInicon"
+                            alt="delete"
+                            onClick={() => this.deletebt(examlist[3])}
+
+                          />
+                        </Button>
+                      ) : ' '
+                  }
+                </div>
+              </div>
+
+
+            </td>
+            <td>
+              <div className="flex-container">
+                <div>
+                  {
+                    examlist.length > 4 ? (
+                      result[4] + ' ' + (examlist[4].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
+                      examlist[4].building_no + ' ห้อง ' + examlist[4].room_no
+                    ) : (
+                      <Button variant="light" className="deleteIndata">
+                        <img
+                          src={addbt}
+                          className="deleteInicon"
+                          alt="delete"
+                        />
+                      </Button>
+                    )
+                  }
+                </div>
+                <div>
+                  {
+                    examlist.length > 4 ?
+                      (
+                        <Button variant="light" className="deleteIndata">
+                          <img
+                            src={deletebt}
+                            className="deleteInicon"
+                            alt="delete"
+                            onClick={() => this.deletebt(examlist[4])}
+
+                          />
+                        </Button>
+                      ) : ' '
+                  }
+                </div>
+              </div>
+
+
+            </td>
+
+          </tr>
+        )
+      }
+    })
+    // console.log(editjson)
+
+    var data_num = this.state.exam_committee.filter((member, index) => {
+      if ((member.Office_id == this.state.departsearch && member.Person_type == this.state.persontype && this.state.persontype == 1 )|| (this.state.persontype == 2 && member.Person_type == this.state.persontype)) {
+        return member
+      }
+    }).length
+
+    var deptselecthidden = false
+    if(this.state.persontype == 2 ){
+      deptselecthidden = true
+    }
 
     return (
       <div className="page-container">
@@ -92,38 +794,32 @@ export default class ManageIn extends Component {
           <div id="detail">
             <div className="filter">
               <h5 className="yearDLfil">ปีการศึกษา</h5>
-              <select className="selectyearDL">
-                <option value="13:00">2563</option>
-              </select>
+              <select className="selectyearDL" onChange={(e) => this.change_year(e)}>{yeardata}</select>
               <h5 className="termDLfil">ภาคการศึกษา</h5>
-              <select className="selecttermDL">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+              <select className="selecttermDL" onChange={(e) => this.change_semester(e)}>
+                {semester}
               </select>
               <h5 className="termDLfil">การสอบ</h5>
-              <select className="selectime">
-                <option value="7:00">กลางภาค</option>
-                <option value="13:00">ปลายภาค</option>
-              </select>
+              <select className="selectime" onChange={(e) => this.change_mid_or_final(e)}>{mid_or_final}</select>
             </div>
             <div className="filter">
-              <h5 className="departManfil2">ภาควิชา</h5>
-              <select className="selectdepart">
-                <option value="13:00">วิศวกรรมคอมพิวเตอร์</option>
+              <h5 className="termDLfil">กรรมการ</h5>
+              <select className="selecttermDL" onChange={(e) => this.change_persontype(e, firstid)}>
+                {person_type}
               </select>
 
-              <h5 className="termDLfil">กรรมการ</h5>
-              <select className="selecttermDL">
-                <option value="13:00">อาจารย์</option>
+              <h5 className="departManfil2" hidden = {deptselecthidden}>ภาควิชา</h5>
+              <select className="selectdepart" hidden = { deptselecthidden} onChange={(e) => this.change_depart(e)}>
+                {dept}
               </select>
+
               <div id="ManageInbtn">
-                <Button variant="primary" className="ManageInbtn">
+                <Button variant="primary" hidden={own_subjecthidden} disabled={own_subjectdisable} onClick={() => this.ownsubject_exam()} className="ManageInbtn">
                   จัดคุมวิชาที่สอน
                 </Button>
               </div>
               <div id="">
-                <Button variant="primary" className="ManageInbtn">
+                <Button variant="primary" disabled={normaldisable} onClick={() => this.normalsubject()} className="ManageInbtn">
                   จัดคุมสอบปกติ
                 </Button>
               </div>
@@ -140,242 +836,39 @@ export default class ManageIn extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td> ผศ.ดร. ปกรณ์ วัฒนจตุรพร</td>
-                  <td>
-                    ส 7 มีค.63 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-410
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td> ผศ.ดร. ชมพูนุท จินจาคาม</td>
-                  <td>
-                    จ 2 มีค.63 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-409
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    พฤ 5 มีค.63 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-410
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    ศ 6 มีค.63 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-302
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td> ผศ. ธนา หงษ์สุวรรณ</td>
-                  <td>
-                    อ 3 มีค.63 13:30-16:30 อาคาร HM ห้อง HM-405
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    พฤ 5 มีค.63 13:30-16:30 อาคาร 12 ชั้น ห้อง E12-503
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    ศ 6 มีค.63 09:30-12:30 อาคาร HM ห้อง HM-501
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td> รศ.ดร. เกียรติกูล เจียรนัยธนะกิจ</td>
-                  <td>
-                    อ 3 มีค.63 13:30-16:30 อาคารเครื่องกล ห้อง ME-408
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    พ 4 มีค.63 09:30-12:30 อาคาร HM ห้อง HM-301
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    พ 4 มีค.63 13:30-16:30 อาคาร 12 ชั้น ห้อง E12-502
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>อ. เกียรติณรงค์ ทองประเสริฐ</td>
-                  <td>
-                    อ 3 มีค.63 13:30-16:30 อาคารเครื่องกล ห้อง ME-402
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    พฤ 5 มีค.63 09:30-12:30 อาคาร 12 ชั้น ห้อง E12-405
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td>
-                    พฤ 5 มีค.63 13:30-16:30 อาคาร 12 ชั้น ห้อง E12-501
-                    <Button variant="light" className="editIndata">
-                      <img src={editbt} className="editInicon" alt="edit" />
-                    </Button>
-                    <Button variant="light" className="deleteIndata">
-                      <img
-                        src={deletebt}
-                        className="deleteInicon"
-                        alt="delete"
-                      />
-                    </Button>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>รศ.ดร.อรฉัตร จิตต์โสภักตร์</td>
-                  <td>
-                    <p>
-                      <br></br>
-                      <br></br>
-                    </p>
-                  </td>
-                  <td>
-                    <p>
-                      <br></br>
-                      <br></br>
-                    </p>
-                  </td>
-                  <td>
-                    <p>
-                      <br></br>
-                      <br></br>
-                    </p>
-                  </td>
-                  <td>
-                    <p>
-                      <br></br>
-                      <br></br>
-                    </p>
-                  </td>
-                  <td>
-                    <p>
-                      <br></br>
-                      <br></br>
-                    </p>
-                  </td>
-                </tr>
+                {tabledata}
               </tbody>
             </Table>
+            <Pagination
+              activePage={this.state.pageclick}
+              itemsCountPerPage={this.state.itemperpage}
+              totalItemsCount={data_num}
+              itemClass="page-item"
+              linkClass="page-link"
+              pageRangeDisplayed={5}
+              onChange={this.pageselect}
+
+            />
           </div>
         </div>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>คำเตือน</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              ยกเลิก
+                        </Button>
+            <Button variant="primary" onClick={this.remove}>
+              ยืนยัน
+                        </Button>
+          </Modal.Footer>
+        </Modal>
         <div className="footer">
           <Foot />
         </div>
+
       </div>
     );
   }

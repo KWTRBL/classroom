@@ -402,6 +402,8 @@ export default class ClassroomData extends Component {
                 return member
             }
         }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
+            console.log('index : ',index)
+            console.log(this.state.editlist)
             if (this.state.editlist[index] == 1) {
                 return (
 

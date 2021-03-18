@@ -407,6 +407,15 @@ app.get("/person", (req, res) => {
   });
 });
 
+//person filter
+app.get("/personfilter", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  person.getfilter(function (callback) {
+    res.json(callback);
+  });
+});
+
+
 //t_examroom
 app.get("/t_examroombuilding", (req, res) => {
   // Router เวลาเรียกใช้งาน
@@ -424,17 +433,17 @@ app.get("/t_office", (req, res) => {
 });
 
 //exam_schedule
-app.get("/exam_schedule", (req, res) => {
+app.post("/exam_schedule", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.ownsubject(function (callback) {
+  exam_schedule.ownsubject(req,function (callback) {
     res.json(callback);
   });
 });
 
 
-app.get("/exam_schedule_other", (req, res) => {
+app.post("/exam_schedule_other", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.othersubject(function (callback) {
+  exam_schedule.othersubject(req,function (callback) {
     res.json(callback);
   });
 });
@@ -446,12 +455,132 @@ app.get("/exam_committee", (req, res) => {
     });
   });
 
+
+  app.post("/exam_committee_officer", (req, res) => {
+    // Router เวลาเรียกใช้งาน
+    exam_schedule.officersubject(req,function (callback) {
+      res.json(callback);
+    });
+  });
+  //building data delete
+app.delete("/exam_committee/delete", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.removedata(req, function (callback) {
+    // console.log(callback);
+    // if (callback) {
+    //   res.send("Success");
+    // } else {
+    //   res.send("Error");
+    // }
+  });
+});
+
+app.post("/exam_committee/adddata", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.teacher_exam(req, function (callback) {
+    // console.log(callback);
+    // if (callback) {
+    //   res.send("Success");
+    // } else {
+    //   res.send("Error");
+    // }
+  });
+});
+
   //downloadfile
 app.post("/downloadfile", (req, res) => {
   // Router เวลาเรียกใช้งาน
   downloadfile.read(req, function (callback) {
     console.log('send data :')
     res.sendFile(callback,{ root: '.' });
+  });
+});
+
+//exportdata from t_exam_committee
+app.post("/exportfile", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.exportfile(req, function (callback) {
+    console.log('send data :')
+    res.sendFile(callback,{ root: '.' });
+  });
+});
+
+//exportdata from t_exam_committee
+app.post("/exportnamefile", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.exportnamefile(req, function (callback) {
+    console.log('send data :')
+    res.sendFile(callback,{ root: '.' });
+  });
+});
+
+
+app.get("/exam_committee_filter", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.getfilter(function (callback) {
+    res.json(callback);
+  });
+});
+
+app.get("/report_filter", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.report_filter(function (callback) {
+    res.json(callback);
+  });
+});
+
+app.get("/exam_committee_check", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.committeecheck(function (callback) {
+    // console.log('callback :',callback[0].year)
+    var data = callback
+    res.json(data);
+  });
+});
+
+app.post("/exam_committee_getdata", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.examdata(req,function (callback) {
+    if(callback == "ไม่มีข้อมูลที่ต้องการ"){
+      res.status(404).send(callback)
+    }else{
+      res.status(200).json(callback);
+    }
+  });
+});
+
+app.post("/exam_committee_insteaddata", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.examdatainstead(req,function (callback) {
+    if(callback == "ไม่มีข้อมูลที่ต้องการ"){
+      res.status(404).send(callback)
+    }else{
+      res.status(200).json(callback);
+    }
+
+  });
+});
+
+app.post("/exam_committee_swap", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.swapdata(req,function (callback) {
+    if (callback == 'swapp failed') {
+      res.status(500).send(callback)
+    }else{
+      res.status(200).send(callback)
+    }
+  });
+});
+
+
+app.post("/exam_committee_instead", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.examinstead(req,function (callback) {
+    if(callback == "success"){
+      res.status(200).send(callback)
+    }else{
+      res.status(500).json(callback);
+    }
   });
 });
 

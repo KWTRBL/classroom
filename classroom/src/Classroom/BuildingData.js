@@ -198,6 +198,7 @@ export default class BuildingData extends Component {
             building_name: null,
             floor_num: null
         })
+        
     }
 
     //delete row button 

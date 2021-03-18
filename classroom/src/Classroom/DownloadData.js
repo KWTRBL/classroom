@@ -376,8 +376,8 @@ export default class BuildingData extends Component {
       return data == 1
     })
     if (!result) {
-      const newIds = this.state.editlist.slice() //copy the array
-      newIds[index] = 1//execute the manipulations
+      const newIds = this.state.editlist.slice() 
+      newIds[index] = 1
       console.log('new editlist', newIds)
       this.setState({ editlist: newIds }) //set the new state
     }

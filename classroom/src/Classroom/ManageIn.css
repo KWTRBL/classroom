@@ -75,3 +75,8 @@
     float: left;
 
   }
+
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+  }

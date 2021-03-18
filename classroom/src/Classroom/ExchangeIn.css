@@ -1,9 +1,31 @@
-.textbox{
+.textbox {
     margin-left: 10px;
     margin-right: 10px;
 
 }
 
-.btnIn{
+.state-center {
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+.selectExchange {
+    margin-left: 10px;
+    width: fit-content;
+}
+
+.btnIn {
     justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.btnspace {
+    margin-right: 10px;
+    color: #393939;
+    border-color: #707070;
+    border-width: thin;
+
 }
