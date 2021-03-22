@@ -342,19 +342,19 @@ app.post("/availableroom/delete", (req, res) => {
 });
 
 //Manage room
-// app.post("/manageroom", (req, res) => {
-//   // Router เวลาเรียกใช้งาน
-//   manageroom.read(req, function (callback) {
-//     res.json(callback);
-//   });
-// });
-//manageroom test
-app.get("/manageroom", (req, res) => {
+app.post("/manageroom", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  manageroom.read(function (callback) {
+  manageroom.read(req, function (callback) {
     res.json(callback);
   });
 });
+//manageroom test
+// app.get("/manageroom", (req, res) => {
+//   // Router เวลาเรียกใช้งาน
+//   manageroom.read(function (callback) {
+//     res.json(callback);
+//   });
+// });
 
 //teacherteach data
 app.get("/teacherteach", (req, res) => {
@@ -410,6 +410,13 @@ app.post("/t_condition/update", (req, res) => {
   // Router เวลาเรียกใช้งาน
   t_condition.updatecondition(req, function (callback) {
     res.json(callback);
+  });
+});
+//insert ข้อมูลลง t_condition
+app.post("/t_condition/insert", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  t_condition.add(req, function (callback) {
+    res.send(callback);
   });
 });
 

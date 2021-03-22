@@ -33,6 +33,7 @@ export default class FacultyData extends Component {
       firstitem: null,
       lastitem: null,
       t_condition: [],
+      t_conditionIn: null,
       person: [],
       condition_index: 0,
       t_examroombuilding: [],
@@ -43,7 +44,10 @@ export default class FacultyData extends Component {
       freetime_week2: [],
       freetime_week3: [],
       freetime_week4: [],
-
+      office_type_search: "",
+      person_type_search: "",
+      office_id_search: "",
+      rows: null,
       //person_id: nulll,
     };
     this.handleClose = this.handleClose.bind(this);
@@ -66,7 +70,17 @@ export default class FacultyData extends Component {
     this.handleChange_editFirstname = this.handleChange_editFirstname.bind(this)
     this.handleChange_editLastname = this.handleChange_editLastname.bind(this)
     this.handleChange_editPosition = this.handleChange_editPosition.bind(this)
+    this.handleChange_editOffice_id = this.handleChange_editOffice_id.bind(this)
 
+    //add row
+    this.addrow = this.addrow.bind(this);
+    this.handleChange_Person_id = this.handleChange_Person_id.bind(this)
+    this.handleChange_Prename = this.handleChange_Prename.bind(this)
+    this.handleChange_Firstname = this.handleChange_Firstname.bind(this)
+    this.handleChange_Lastname = this.handleChange_Lastname.bind(this)
+    this.handleChange_Position = this.handleChange_Position.bind(this)
+    this.handleChange_Office_id = this.handleChange_Office_id.bind(this)
+    this.handleChange_conditionstatus = this.handleChange_conditionstatus.bind(this)
 
     this.componentWillMount = this.componentWillMount.bind(this);
   }
@@ -104,6 +118,407 @@ export default class FacultyData extends Component {
     const newIds = this.state.t_condition; //copy the array
     newIds[index].position = e.target.value; //execute the manipulations
     this.setState({ t_condition: newIds }); //set the new state
+  }
+  handleChange_editOffice_id(index, e) {
+    //console.log(index, e.target.value);
+    const newIds = this.state.t_condition; //copy the array
+    newIds[index].Office_id = e.target.value; //execute the manipulations
+    this.setState({ t_condition: newIds }); //set the new state
+  }
+
+  //handle addrow data 
+  handleChange_Person_id(event) {
+    this.setState({ person_id: event.target.value })
+  }
+  handleChange_Office_id(event) {
+    this.setState({ Office_id: event.target.value })
+  }
+  handleChange_Prename(event) {
+    this.setState({ Prename: event.target.value })
+  }
+  handleChange_Firstname(event) {
+    this.setState({ Firstname: event.target.value })
+  }
+  handleChange_Lastname(event) {
+    this.setState({ Lastname: event.target.value })
+  }
+  handleChange_Position(event) {
+    this.setState({ position: event.target.value })
+  }
+  handleChange_conditionstatus = (event) => {
+    console.log(event.target.value);
+    // const newIds = this.state.t_conditionIn; //copy the array
+    // newIds.condition_status = event.target.value; //execute the manipulations
+    this.setState({ t_conditionIn: event.target.value }); //set the new state
+    console.log(this.state.t_conditionIn);
+    //console.log(newIds)
+    //this.setState({ t_condition: event.target.value }); //set the new state
+  };
+
+  //insert row confirm 
+  confirmdata = () => {
+    axios
+      .post("http://localhost:7777/t_condition/insert", {
+        data: {
+          Prename: this.state.Prename,
+          Firstname: this.state.Firstname,
+          Lastname: this.state.Lastname,
+          Position: this.state.position,
+          Office_id: this.state.Office_id == null? this.state.deptid:this.state.Office_id,
+          office_type: this.state.office_type_search,
+          condition_status: this.state.t_conditionIn,
+          person_id: this.state.person_id,
+          person_type: this.state.Typesearch
+        }
+      })
+      .then(response => {
+        console.log("response: ", response)
+
+        // do something about response
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    window.location.reload(false);
+
+  }
+
+  //show row input for insert  บรรทัดนี้
+  addrow = () => {
+    //console.log("add")
+    this.setState({
+      office_id_search:"01"
+    })
+    const office_check = []
+    const office_nameList = this.state.dept.map((tabledata, index) => {
+      office_check.push(tabledata.Office_id)
+      if (tabledata.Office_id >= 50)
+        return <option value={tabledata.Office_id} >{tabledata.Office_name}</option>
+    })
+    if (this.state.Typesearch == 1) {
+      return (
+        this.setState({
+          rows: <tr>
+            <td>
+              <input
+                value={this.state.person_id}
+                type="text"
+                className="form-control"
+                id="formGroupExampleInput"
+                onChange={this.handleChange_Person_id}
+              />
+            </td>
+            <td>
+              <input
+                value={this.state.Prename}
+                type="text"
+                className="form-control"
+                id="formGroupExampleInput"
+                onChange={this.handleChange_Prename}
+              />
+            </td>
+            <td>
+              <input
+                value={this.state.Firstname}
+                type="text"
+                className="form-control"
+                id="formGroupExampleInput"
+                onChange={this.handleChange_Firstname}
+              />
+            </td>
+            <td>
+              <input
+                value={this.state.Lastname}
+                type="text"
+                className="form-control"
+                id="formGroupExampleInput"
+                onChange={this.handleChange_Lastname}
+              />
+            </td>
+            <td>
+              <input
+                value={this.state.position}
+                type="text"
+                className="form-control"
+                id="formGroupExampleInput"
+                onChange={this.handleChange_Position}
+              />
+            </td>
+            <td>
+              <Form>
+                {["radio"].map((type) => (
+                  <div key={`inline-${type}`}>
+                    <Form.Group className="radiotable">
+                      <Form.Check
+                        inline
+                        label="ไม่คุม"
+                        name="line"
+                        value="0"
+                        //onClick={this.handleChangeCondition_status}
+                        onClick={(e) => this.handleChange_conditionstatus(e)}
+                        type={type}
+                        id={`inline-${type}-1`}
+                      />
+
+                      <Form.Check
+                        inline
+                        label="คุม"
+                        name="line"
+                        value="1"
+                        //onClick={this.handleChangeCondition_status}
+                        onClick={(e) => this.handleChange_conditionstatus(e)}
+                        type={type}
+                        id={`inline-${type}-1`}
+                      />
+                      <Form.Check
+                        inline
+                        label="คุม 1 ครั้ง"
+                        name="line"
+                        value="2"
+                        //onClick={this.handleChangeCondition_status}
+                        onClick={(e) => this.handleChange_conditionstatus(e)}
+                        type={type}
+                        id={`inline-${type}-2`}
+                      />
+                    </Form.Group>
+                  </div>
+                ))}
+              </Form>
+            </td>
+            <td>
+              <Button type="primary" disabled>กำหนดเงื่อนไข</Button>
+            </td>
+            <td>
+              <Button variant="link" onClick={() => this.delrow()}>ยกเลิก</Button>
+              <Button variant="primary" onClick={() => this.confirmdata()} >ยืนยัน</Button>
+            </td>
+            <td>
+              <Button variant="light" className="deletedata">
+                <img src={deletebt} className="deleteicon" alt="delete" />
+              </Button>
+            </td>
+          </tr>
+
+
+        })
+      )
+    }
+    else{
+      this.setState({
+        position: "",
+      })
+      if(this.state.office_type_search==1){
+        return (
+          this.setState({
+            rows: <tr>
+              <td>
+                <input
+                  value={this.state.person_id}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Person_id}
+                />
+              </td>
+              <td>
+                <input
+                  value={this.state.Prename}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Prename}
+                />
+              </td>
+              <td>
+                <input
+                  value={this.state.Firstname}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Firstname}
+                />
+              </td>
+              <td>
+                <input
+                  value={this.state.Lastname}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Lastname}
+                />
+              </td>
+              <td>
+                {this.state.dept.map((data) => {
+                  if (this.state.office_id_search == data.Office_id){
+                  return (
+                    <option selected value={data.Office_id}>{data.Office_name}</option>
+                  )
+                }
+                })
+              }
+              </td>
+              <td>
+                <Form>
+                  {["radio"].map((type) => (
+                    <div key={`inline-${type}`}>
+                      <Form.Group className="radiotable">
+                        <Form.Check
+                          inline
+                          label="ไม่คุม"
+                          name="line"
+                          value="0"
+                          //onClick={this.handleChangeCondition_status}
+                          onClick={(e) => this.handleChange_conditionstatus(e)}
+                          type={type}
+                          id={`inline-${type}-1`}
+                        />
+  
+                        <Form.Check
+                          inline
+                          label="คุม"
+                          name="line"
+                          value="1"
+                          //onClick={this.handleChangeCondition_status}
+                          onClick={(e) => this.handleChange_conditionstatus(e)}
+                          type={type}
+                          id={`inline-${type}-1`}
+                        />
+                        <Form.Check
+                          inline
+                          label="คุม 1 ครั้ง"
+                          name="line"
+                          value="2"
+                          //onClick={this.handleChangeCondition_status}
+                          onClick={(e) => this.handleChange_conditionstatus(e)}
+                          type={type}
+                          id={`inline-${type}-2`}
+                        />
+                      </Form.Group>
+                    </div>
+                  ))}
+                </Form>
+              </td>
+              <td>
+                <Button type="primary" disabled>กำหนดเงื่อนไข</Button>
+              </td>
+              <td>
+                <Button variant="link" onClick={() => this.delrow()}>ยกเลิก</Button>
+                <Button variant="primary" onClick={() => this.confirmdata()} >ยืนยัน</Button>
+              </td>
+              <td>
+                <Button variant="light" className="deletedata">
+                  <img src={deletebt} className="deleteicon" alt="delete" />
+                </Button>
+              </td>
+            </tr>
+          })
+        )
+      }
+      if(this.state.office_type_search==2){
+        return (
+          this.setState({
+            rows: <tr>
+              <td>
+                <input
+                  value={this.state.person_id}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Person_id}
+                />
+              </td>
+              <td>
+                <input
+                  value={this.state.Prename}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Prename}
+                />
+              </td>
+              <td>
+                <input
+                  value={this.state.Firstname}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Firstname}
+                />
+              </td>
+              <td>
+                <input
+                  value={this.state.Lastname}
+                  type="text"
+                  className="form-control"
+                  id="formGroupExampleInput"
+                  onChange={this.handleChange_Lastname}
+                />
+              </td>
+              <td>
+                <select onChange={(e)=>  this.handleChange_Office_id(e)}>
+                  {
+                    office_nameList
+                  }
+                </select>
+              </td>
+              <td>
+                <Form>
+                  {["radio"].map((type) => (
+                    <div key={`inline-${type}`}>
+                      <Form.Group className="radiotable">
+                        <Form.Check
+                          inline
+                          label="ไม่คุม"
+                          name="line"
+                          value="0"
+                          //onClick={this.handleChangeCondition_status}
+                          onClick={(e) => this.handleChange_conditionstatus(e)}
+                          type={type}
+                          id={`inline-${type}-1`}
+                        />
+  
+                        <Form.Check
+                          inline
+                          label="คุม"
+                          name="line"
+                          value="1"
+                          //onClick={this.handleChangeCondition_status}
+                          onClick={(e) => this.handleChange_conditionstatus(e)}
+                          type={type}
+                          id={`inline-${type}-1`}
+                        />
+                        <Form.Check
+                          inline
+                          label="คุม 1 ครั้ง"
+                          name="line"
+                          value="2"
+                          //onClick={this.handleChangeCondition_status}
+                          onClick={(e) => this.handleChange_conditionstatus(e)}
+                          type={type}
+                          id={`inline-${type}-2`}
+                        />
+                      </Form.Group>
+                    </div>
+                  ))}
+                </Form>
+              </td>
+              <td>
+                <Button type="primary" disabled>กำหนดเงื่อนไข</Button>
+              </td>
+              <td>
+                <Button variant="link" onClick={() => this.delrow()}>ยกเลิก</Button>
+                <Button variant="primary" onClick={() => this.confirmdata()} >ยืนยัน</Button>
+              </td>
+              <td>
+                <Button variant="light" className="deletedata">
+                  <img src={deletebt} className="deleteicon" alt="delete" />
+                </Button>
+              </td>
+            </tr>
+          })
+        )
+      }
+    }
   }
 
 
@@ -212,13 +627,14 @@ export default class FacultyData extends Component {
         for (var i = 0; i < res.data.length; i++) {
           newIds.push(0);
         }
-
         console.log(res.data)
-
         this.setState({
+          office_type_search: "1",
           t_condition: res.data,
           editlist: newIds,
           olddata: JSON.stringify(res.data),
+          office_id_search:"01"
+
         });
       })
       .catch(function (error) {
@@ -292,6 +708,7 @@ export default class FacultyData extends Component {
     let keyword = event.target.value;
     this.setState({
       deptid: keyword,
+      office_id_search: keyword,
       editlist: newId,
       teacher: JSON.parse(this.state.olddata),
     });
@@ -299,7 +716,7 @@ export default class FacultyData extends Component {
   };
 
   searchType = (event) => {
-    console.log(!(this.state.Typesearch == 1) || this.state.Typesearch == 2);
+    //console.log(!(this.state.Typesearch == 1) || this.state.Typesearch == 2);
 
     let newId = this.state.editlist.slice();
     for (var i = 0; i < newId.length; i++) {
@@ -311,9 +728,11 @@ export default class FacultyData extends Component {
     this.setState({
       office_type: 1,
       deptid: "01",
+      person_type_search: keyword,
       Typesearch: parseInt(keyword),
       editlist: newId,
       teacher: JSON.parse(this.state.olddata),
+
     });
     this.pageselectvalue(1);
   };
@@ -330,6 +749,7 @@ export default class FacultyData extends Component {
     this.setState({
       deptid: "01",
       office_type: parseInt(keyword),
+      office_type_search: keyword,
       editlist: newId,
       teacher: JSON.parse(this.state.olddata),
     });
@@ -408,7 +828,11 @@ export default class FacultyData extends Component {
   enableEdit = (index) => {
     const newIds = this.state.editlist; //copy the array
     newIds[index] = 1; //execute the manipulations
-    this.setState({ editlist: newIds }); //set the new state
+    this.setState({
+      editlist: newIds,
+      condition_index: index
+
+    }); //set the new state
   };
 
   cancelEdit = (index) => {
@@ -425,10 +849,11 @@ export default class FacultyData extends Component {
     console.log(this.state.t_condition[index], index);
     axios
       .post("http://localhost:7777/t_condition/update", {
-        Prename : this.state.t_condition[index].Prename,
-        Firstname : this.state.t_condition[index].Firstname,
-        Lastname : this.state.t_condition[index].Lastname,
-        Position : this.state.t_condition[index].position,
+        Prename: this.state.t_condition[index].Prename,
+        Firstname: this.state.t_condition[index].Firstname,
+        Lastname: this.state.t_condition[index].Lastname,
+        Position: this.state.t_condition[index].position,
+        Office_id: this.state.t_condition[index].Office_id,
         condition_status: this.state.t_condition[index].condition_status,
         person_id: this.state.t_condition[index].person_id,
         building_no: this.state.t_condition[index].building_no,
@@ -516,6 +941,23 @@ export default class FacultyData extends Component {
     var person_type = ["อาจารย์", "เจ้าหน้าที่"];
     var type_search = this.state.Typesearch;
 
+    const office_check = []
+    var office_id_data = this.state.t_condition.filter((data, index) => {
+      if (index == this.state.condition_index) {
+        console.log('data edit', index)
+        return data.faculty_id
+      }
+    }
+    )
+    console.log(office_id_data)
+    const office_nameList = this.state.dept.map((tabledata, index) => {
+      office_check.push(tabledata.Office_id)
+      console.log(office_id_data)
+      let officedata = office_id_data.length == 0 ? '9999' : office_id_data[0].faculty_id
+      if (tabledata.Office_id >= 50)
+        return <option value={tabledata.Office_id} selected={officedata == tabledata.Office_id} >{tabledata.Office_name}</option>
+    })
+
     tabledata = this.state.t_condition
       .filter((data, index) => {
         if (type_search == parseInt(data.person_type)) {
@@ -545,58 +987,58 @@ export default class FacultyData extends Component {
               return (
                 <tr>
                   <td>{tabledata.person_id}</td>
-                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Prename:(<input
-                      value={tabledata.Prename}
-                      type="text"
-                      className="form-control"
-                      id="formGroupExampleInput"
-                      onChange={(e) => this.handleChange_editPrename(
-                        editjson[
-                        (this.state.pageclick - 1) *
-                        this.state.itemperpage +
-                        tableindex
-                        ]
-                      ,e)}
-                    />)}</td>
-                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Firstname:(<input
-                      value={tabledata.Firstname}
-                      type="text"
-                      className="form-control"
-                      id="formGroupExampleInput"
-                      onChange={(e) => this.handleChange_editFirstname(
-                        editjson[
-                        (this.state.pageclick - 1) *
-                        this.state.itemperpage +
-                        tableindex
-                        ]
-                      ,e)}
-                    />)}</td>
-                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Lastname:(<input
-                      value={tabledata.Lastname}
-                      type="text"
-                      className="form-control"
-                      id="formGroupExampleInput"
-                      onChange={(e) => this.handleChange_editLastname(
-                        editjson[
-                        (this.state.pageclick - 1) *
-                        this.state.itemperpage +
-                        tableindex
-                        ]
-                      ,e)}
-                    />)}</td>
-                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.position:(<input
-                      value={tabledata.position}
-                      type="text"
-                      className="form-control"
-                      id="formGroupExampleInput"
-                      onChange={(e) => this.handleChange_editPosition(
-                        editjson[
-                        (this.state.pageclick - 1) *
-                        this.state.itemperpage +
-                        tableindex
-                        ]
-                      ,e)}
-                    />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Prename : (<input
+                    value={tabledata.Prename}
+                    type="text"
+                    className="form-control"
+                    id="formGroupExampleInput"
+                    onChange={(e) => this.handleChange_editPrename(
+                      editjson[
+                      (this.state.pageclick - 1) *
+                      this.state.itemperpage +
+                      tableindex
+                      ]
+                      , e)}
+                  />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Firstname : (<input
+                    value={tabledata.Firstname}
+                    type="text"
+                    className="form-control"
+                    id="formGroupExampleInput"
+                    onChange={(e) => this.handleChange_editFirstname(
+                      editjson[
+                      (this.state.pageclick - 1) *
+                      this.state.itemperpage +
+                      tableindex
+                      ]
+                      , e)}
+                  />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Lastname : (<input
+                    value={tabledata.Lastname}
+                    type="text"
+                    className="form-control"
+                    id="formGroupExampleInput"
+                    onChange={(e) => this.handleChange_editLastname(
+                      editjson[
+                      (this.state.pageclick - 1) *
+                      this.state.itemperpage +
+                      tableindex
+                      ]
+                      , e)}
+                  />)}</td>
+                  <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.position : (<input
+                    value={tabledata.position}
+                    type="text"
+                    className="form-control"
+                    id="formGroupExampleInput"
+                    onChange={(e) => this.handleChange_editPosition(
+                      editjson[
+                      (this.state.pageclick - 1) *
+                      this.state.itemperpage +
+                      tableindex
+                      ]
+                      , e)}
+                  />)}</td>
                   <td>
                     <Form>
                       {["radio"].map((type) => (
@@ -802,14 +1244,13 @@ export default class FacultyData extends Component {
           } else {
             if (tabledata.Office_type == this.state.office_type) {
               if (
-                tabledata.Office_type == 2 ||
                 (this.state.deptid == tabledata.faculty_id &&
                   tabledata.Office_type == 1)
               )
                 return (
                   <tr>
                     <td>{tabledata.person_id}</td>
-                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Prename:(<input
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Prename : (<input
                       value={tabledata.Prename}
                       type="text"
                       className="form-control"
@@ -820,9 +1261,9 @@ export default class FacultyData extends Component {
                         this.state.itemperpage +
                         tableindex
                         ]
-                      ,e)}
+                        , e)}
                     />)}</td>
-                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Firstname:(<input
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Firstname : (<input
                       value={tabledata.Firstname}
                       type="text"
                       className="form-control"
@@ -833,9 +1274,9 @@ export default class FacultyData extends Component {
                         this.state.itemperpage +
                         tableindex
                         ]
-                      ,e)}
+                        , e)}
                     />)}</td>
-                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) *this.state.itemperpage +tableindex]] == 0?tabledata.Lastname:(<input
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Lastname : (<input
                       value={tabledata.Lastname}
                       type="text"
                       className="form-control"
@@ -846,7 +1287,7 @@ export default class FacultyData extends Component {
                         this.state.itemperpage +
                         tableindex
                         ]
-                      ,e)}
+                        , e)}
                     />)}</td>
                     <td>{tabledata.Office_name}</td>
                     <td>
@@ -1054,6 +1495,263 @@ export default class FacultyData extends Component {
                     </td>
                   </tr>
                 );
+              if (
+                tabledata.Office_type == 2
+              )
+                return (
+                  <tr>
+                    <td>{tabledata.person_id}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Prename : (<input
+                      value={tabledata.Prename}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editPrename(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                        , e)}
+                    />)}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Firstname : (<input
+                      value={tabledata.Firstname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editFirstname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                        , e)}
+                    />)}</td>
+                    <td>{this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Lastname : (<input
+                      value={tabledata.Lastname}
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      onChange={(e) => this.handleChange_editLastname(
+                        editjson[
+                        (this.state.pageclick - 1) *
+                        this.state.itemperpage +
+                        tableindex
+                        ]
+                        , e)}
+                    />)}</td>
+                    <td>
+                      {this.state.editlist[editjson[(this.state.pageclick - 1) * this.state.itemperpage + tableindex]] == 0 ? tabledata.Office_name : (<select onChange={(e) => this.handleChange_editOffice_id(editjson[((this.state.pageclick - 1) * this.state.itemperpage) + tableindex], e)}>
+                        {
+                          office_nameList
+                        }
+                      </select>)}
+                    </td>
+                    <td>
+                      <Form>
+                        {["radio"].map((type) => (
+                          <div key={`inline-${type}`}>
+                            <Form.Group className="radiotable">
+                              <Form.Check
+                                inline
+                                label="ไม่คุม"
+                                name="line"
+                                disabled={
+                                  !this.state.editlist[
+                                  editjson[
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
+                                  ]
+                                  ]
+                                }
+                                value="0"
+                                onClick={(e) =>
+                                  this.OnChangeCondition_status(
+                                    editjson[
+                                    (this.state.pageclick - 1) *
+                                    this.state.itemperpage +
+                                    tableindex
+                                    ],
+                                    e
+                                  )
+                                }
+                                checked={tabledata.condition_status % 3 == 0}
+                                type={type}
+                                id={`inline-${type}-1`}
+                              />
+
+                              <Form.Check
+                                inline
+                                label="คุม"
+                                name="line"
+                                value="1"
+                                disabled={
+                                  !this.state.editlist[
+                                  editjson[
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
+                                  ]
+                                  ]
+                                }
+                                onClick={(e) =>
+                                  this.OnChangeCondition_status(
+                                    editjson[
+                                    (this.state.pageclick - 1) *
+                                    this.state.itemperpage +
+                                    tableindex
+                                    ],
+                                    e
+                                  )
+                                }
+                                checked={tabledata.condition_status % 3 == 1}
+                                type={type}
+                                id={`inline-${type}-1`}
+                              />
+                              <Form.Check
+                                inline
+                                label="คุม 1 ครั้ง"
+                                value="2"
+                                disabled={
+                                  !this.state.editlist[
+                                  editjson[
+                                  (this.state.pageclick - 1) *
+                                  this.state.itemperpage +
+                                  tableindex
+                                  ]
+                                  ]
+                                }
+                                onClick={(e) =>
+                                  this.OnChangeCondition_status(
+                                    editjson[
+                                    (this.state.pageclick - 1) *
+                                    this.state.itemperpage +
+                                    tableindex
+                                    ],
+                                    e
+                                  )
+                                }
+                                name="line"
+                                checked={tabledata.condition_status % 3 == 2}
+                                type={type}
+                                id={`inline-${type}-2`}
+                              />
+                            </Form.Group>
+                          </div>
+                        ))}
+                      </Form>
+                    </td>
+                    <td>
+                      <Button
+                        type="primary"
+                        disabled={
+                          !this.state.editlist[
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
+                          ]
+                        }
+                        onClick={() =>
+                          this.handleOpen(
+                            editjson[
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
+                            ]
+                          )
+                        }
+                      >
+                        กำหนดเงื่อนไข
+                        </Button>
+                    </td>
+                    <td>
+                      <Button
+                        variant="light"
+                        className="editdata"
+                        hidden={
+                          this.state.editlist[
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
+                          ]
+                        }
+                        onClick={() =>
+                          this.enableEdit(
+                            editjson[
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
+                            ]
+                          )
+                        }
+                      >
+                        <img src={editbt} className="editicon" alt="edit" />
+                      </Button>
+
+                      <Button
+                        hidden={
+                          !this.state.editlist[
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
+                          ]
+                        }
+                        variant="link"
+                        onClick={() =>
+                          this.cancelEdit(
+                            editjson[
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
+                            ]
+                          )
+                        }
+                      >
+                        ยกเลิก
+                        </Button>
+
+                      <Button
+                        hidden={
+                          !this.state.editlist[
+                          editjson[
+                          (this.state.pageclick - 1) *
+                          this.state.itemperpage +
+                          tableindex
+                          ]
+                          ]
+                        }
+                        variant="primary"
+                        onClick={() =>
+                          this.condition_confirm(
+                            editjson[
+                            (this.state.pageclick - 1) *
+                            this.state.itemperpage +
+                            tableindex
+                            ]
+                          )
+                        }
+                      >
+                        ยืนยัน
+                        </Button>
+                    </td>
+                    <td>
+                      <Button variant="light" className="deletedata" onClick={() => this.deletebt(tabledata.person_id)}>
+                        <img
+                          src={deletebt}
+                          className="deleteicon"
+                          alt="delete"
+                        />
+                      </Button>
+                    </td>
+                  </tr>
+                );
             }
           }
         }
@@ -1152,8 +1850,9 @@ export default class FacultyData extends Component {
                 </tr>
               </thead>
               <tbody>{tabledata}</tbody>
+              {this.state.rows}
             </Table>
-            <Button variant="light" className="adddata">
+            <Button variant="light" className="adddata" onClick={() => this.addrow()}>
               <img src={addbt} className="addicon" alt="add" />
             </Button>
             <Pagination
