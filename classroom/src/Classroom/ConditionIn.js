@@ -1,4 +1,6 @@
 import { Component } from 'react';
+//import React, { useState } from 'react';
+//import Calendar from 'react-calendar';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from '../Navbar/NavIn'
@@ -28,12 +30,26 @@ export default class ConditionIn extends Component {
             result: [],
             searchYear: null,
             searchTerm: null,
-            searchPart: 'M'
-
+            searchPart: 'M',
+            editweek1: false,
+            editweek2: false,
+            editweek3: false,
+            editweek4: false,
         }
 
         this.handleChange_stdnum = this.handleChange_stdnum.bind(this)
-
+        //edit week1
+        this.handleChange_week1_start = this.handleChange_week1_start.bind(this)
+        this.handleChange_week1_end = this.handleChange_week1_end.bind(this)
+        //edit week2
+        this.handleChange_week2_start = this.handleChange_week2_start.bind(this)
+        this.handleChange_week2_end = this.handleChange_week2_end.bind(this)
+        //edit week3
+        this.handleChange_week3_start = this.handleChange_week3_start.bind(this)
+        this.handleChange_week3_end = this.handleChange_week3_end.bind(this)
+        //edit week4
+        this.handleChange_week4_start = this.handleChange_week4_start.bind(this)
+        this.handleChange_week4_end = this.handleChange_week4_end.bind(this)
     }
 
     componentWillMount() {
@@ -101,6 +117,65 @@ export default class ConditionIn extends Component {
         })
 
     }
+    //edit week1
+    handleChange_week1_start = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week1_start: value.substring(0, 10)
+        })
+    }
+    handleChange_week1_end = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week1_end: value.substring(0, 10)
+        })
+    }
+    // componentDidUpdate() {
+    //     console.log(this.state.week1_start)
+    //     console.log(this.state.week1_end)
+    // }
+    //edit week2
+    handleChange_week2_start = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week2_start: value.substring(0, 10)
+        })
+    }
+    handleChange_week2_end = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week2_end: value.substring(0, 10)
+        })
+    }
+
+    //edit week3
+    handleChange_week3_start = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week3_start: value.substring(0, 10)
+        })
+    }
+    handleChange_week3_end = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week3_end: value.substring(0, 10)
+        })
+    }
+
+    //edit week4
+    handleChange_week4_start = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week4_start: value.substring(0, 10)
+        })
+    }
+    handleChange_week4_end = (event) => {
+        const value = new Date(event.target.value).toISOString().substring(0, 10)
+        this.setState({
+            week4_end: value.substring(0, 10)
+        })
+    }
+
 
     searchYear = (event) => {
 
@@ -191,6 +266,218 @@ export default class ConditionIn extends Component {
         }
 
     }
+    //edit week1
+    enable_week1edit = () => {
+
+        this.setState({
+            editweek1: true
+        })
+
+    }
+
+    disable_week1edit = () => {
+
+        this.setState({
+            editweek1: false,
+
+        })
+
+    }
+    confirm_week1edit = () => {
+        //console.log(this.state.week1_start)
+        if (this.state.week1_start != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek1", {
+                    week1_start: this.state.week1_start,
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        if (this.state.week1_end != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek1_end", {
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                    week1_end: this.state.week1_end
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        window.location.reload(false);
+    }
+    //edit week2
+    enable_week2edit = () => {
+
+        this.setState({
+            editweek2: true
+        })
+
+    }
+
+    disable_week2edit = () => {
+
+        this.setState({
+            editweek2: false,
+
+        })
+
+    }
+    confirm_week2edit = () => {
+        //console.log(this.state.week1_start)
+        if (this.state.week2_start != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek2", {
+                    week2_start: this.state.week2_start,
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        if (this.state.week2_end != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek2_end", {
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                    week2_end: this.state.week2_end
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        window.location.reload(false);
+    }
+    //edit week3
+    enable_week3edit = () => {
+
+        this.setState({
+            editweek3: true
+        })
+
+    }
+
+    disable_week3edit = () => {
+
+        this.setState({
+            editweek3: false,
+
+        })
+
+    }
+    confirm_week3edit = () => {
+        //console.log(this.state.week1_start)
+        if (this.state.week3_start != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek3", {
+                    week3_start: this.state.week3_start,
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        if (this.state.week3_end != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek3_end", {
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                    week3_end: this.state.week3_end
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        window.location.reload(false);
+    }
+    //edit week4
+    enable_week4edit = () => {
+
+        this.setState({
+            editweek4: true
+        })
+
+    }
+
+    disable_week4edit = () => {
+
+        this.setState({
+            editweek4: false,
+
+        })
+
+    }
+    confirm_week4edit = () => {
+        //console.log(this.state.week1_start)
+        if (this.state.week4_start != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek4", {
+                    week4_start: this.state.week4_start,
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        if (this.state.week4_end != null) {
+            axios
+                .post("http://localhost:7777/facultycondition/updateweek4_end", {
+                    year: this.state.searchYear,
+                    semester: this.state.searchTerm,
+                    mid_or_final: this.state.searchPart,
+                    week4_end: this.state.week4_end
+                })
+                .then(response => {
+                    console.log("response: ", response)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+        window.location.reload(false);
+    }
 
     deldata_modalclose = () => {
         this.setState({
@@ -199,8 +486,6 @@ export default class ConditionIn extends Component {
         this.disable_stdnumedit()
     }
     render() {
-
-
         const term_num = this.state.semester.map((member) => {
 
             if (member.year == this.state.searchYear) {
@@ -208,7 +493,7 @@ export default class ConditionIn extends Component {
                     this.state.result.pop();
                 }
                 for (let number = 1; number <= member.semester; number++) {
-                    console.log(number)
+                    //console.log(number)
                     this.state.result.push(number)
                 }
 
@@ -221,57 +506,341 @@ export default class ConditionIn extends Component {
         )
 
         const tabledata = this.state.examweek.map((data) => {
-            if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final) {
-                return (
-                    <tbody>
+            //edit week1
+            if (this.state.editweek1 == true) {
+                if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
+                    return (
+                        <tbody>
+                            <tr>
+                                <td>{1}</td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week1_start.substring(0, 10)}
+                                        value={this.state.week1_start}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week1_start}
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week1_end.substring(0, 10)}
+                                        value={this.state.week1_end}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week1_end}
+                                    />
+                                </td>
+                                <td>
+                                    <Button variant="link" onClick={() => this.disable_week1edit()}>ยกเลิก</Button>
 
-                        <tr>
-                            <td>{1}</td>
-                            <td>{data.week1_start.substring(8,10) + '-' + data.week1_start.substring(5,7) +'-' +data.week1_start.substring(0,4)}</td>
-                            <td>{data.week1_end.substring(8,10) + '-' + data.week1_end.substring(5,7) +'-' +data.week1_end.substring(0,4)}</td>
-                            <td>
-                                <Button variant="light" className="editdata" >
-                                    <img src={editbt} className="editicon" alt="edit" />
-                                </Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{2}</td>
-                            <td>{data.week2_start.substring(8,10) + '-' + data.week2_start.substring(5,7) +'-' +data.week2_start.substring(0,4)}</td>
-                            <td>{data.week2_end.substring(8,10) + '-' + data.week2_end.substring(5,7) +'-' +data.week2_end.substring(0,4)}</td>
-                            <td>
-                                <Button variant="light" className="editdata" >
-                                    <img src={editbt} className="editicon" alt="edit" />
-                                </Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{3}</td>
-                            <td>{data.week3_start.substring(8,10) + '-' + data.week3_start.substring(5,7) +'-' +data.week3_start.substring(0,4)}</td>
-                            <td>{data.week3_end.substring(8,10) + '-' + data.week3_end.substring(5,7) +'-' +data.week3_end.substring(0,4)}</td>
-                            <td>
-                                <Button variant="light" className="editdata" >
-                                    <img src={editbt} className="editicon" alt="edit" />
-                                </Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{4}</td>
-                            <td>{data.week4_start.substring(8,10) + '-' + data.week4_start.substring(5,7) +'-' +data.week4_start.substring(0,4)}</td>
-                            <td>{data.week4_end.substring(8,10) + '-' + data.week4_end.substring(5,7) +'-' +data.week4_end.substring(0,4)}</td>
-                            <td>
-                                <Button variant="light" className="editdata" >
-                                    <img src={editbt} className="editicon" alt="edit" />
-                                </Button>
-                            </td>
-                        </tr>
+                                    <Button variant="primary" onClick={() => this.confirm_week1edit()} >ยืนยัน</Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{2}</td>
+                                <td>{data.week2_start.substring(8, 10) + '-' + data.week2_start.substring(5, 7) + '-' + data.week2_start.substring(0, 4)}</td>
+                                <td>{data.week2_end.substring(8, 10) + '-' + data.week2_end.substring(5, 7) + '-' + data.week2_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" >
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{3}</td>
+                                <td>{data.week3_start.substring(8, 10) + '-' + data.week3_start.substring(5, 7) + '-' + data.week3_start.substring(0, 4)}</td>
+                                <td>{data.week3_end.substring(8, 10) + '-' + data.week3_end.substring(5, 7) + '-' + data.week3_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" >
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{4}</td>
+                                <td>{data.week4_start.substring(8, 10) + '-' + data.week4_start.substring(5, 7) + '-' + data.week4_start.substring(0, 4)}</td>
+                                <td>{data.week4_end.substring(8, 10) + '-' + data.week4_end.substring(5, 7) + '-' + data.week4_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" >
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
 
-                    </tbody>
+                        </tbody>
 
 
-                )
+                    )
             }
+            //edit week2
+            if (this.state.editweek2 == true) {
+                if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
+                    return (
+                        <tbody>
+                            <tr>
+                                <td>{1}</td>
+                                <td>{data.week1_start.substring(8, 10) + '-' + data.week1_start.substring(5, 7) + '-' + data.week1_start.substring(0, 4)}
+                                </td>
+                                <td>{data.week1_end.substring(8, 10) + '-' + data.week1_end.substring(5, 7) + '-' + data.week1_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata">
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
 
+                                <td>{2}</td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week2_start.substring(0, 10)}
+                                        value={this.state.week2_start}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week2_start}
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week2_end.substring(0, 10)}
+                                        value={this.state.week2_end}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week2_end}
+                                    />
+                                </td>
+                                <td>
+                                    <Button variant="link" onClick={() => this.disable_week2edit()}>ยกเลิก</Button>
+
+                                    <Button variant="primary" onClick={() => this.confirm_week2edit()} >ยืนยัน</Button>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>{3}</td>
+                                <td>{data.week3_start.substring(8, 10) + '-' + data.week3_start.substring(5, 7) + '-' + data.week3_start.substring(0, 4)}</td>
+                                <td>{data.week3_end.substring(8, 10) + '-' + data.week3_end.substring(5, 7) + '-' + data.week3_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" >
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{4}</td>
+                                <td>{data.week4_start.substring(8, 10) + '-' + data.week4_start.substring(5, 7) + '-' + data.week4_start.substring(0, 4)}</td>
+                                <td>{data.week4_end.substring(8, 10) + '-' + data.week4_end.substring(5, 7) + '-' + data.week4_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" >
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+
+                    )
+            }
+            //edit week3
+            if (this.state.editweek3 == true) {
+                if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
+                    return (
+                        <tbody>
+                            <tr>
+                                <td>{1}</td>
+                                <td>{data.week1_start.substring(8, 10) + '-' + data.week1_start.substring(5, 7) + '-' + data.week1_start.substring(0, 4)}
+                                </td>
+                                <td>{data.week1_end.substring(8, 10) + '-' + data.week1_end.substring(5, 7) + '-' + data.week1_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata">
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{2}</td>
+                                <td>{data.week2_start.substring(8, 10) + '-' + data.week2_start.substring(5, 7) + '-' + data.week2_start.substring(0, 4)}</td>
+                                <td>{data.week2_end.substring(8, 10) + '-' + data.week2_end.substring(5, 7) + '-' + data.week2_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week2edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{3}</td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week3_start.substring(0, 10)}
+                                        value={this.state.week3_start}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week3_start}
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week3_end.substring(0, 10)}
+                                        value={this.state.week3_end}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week3_end}
+                                    />
+                                </td>
+                                <td>
+                                    <Button variant="link" onClick={() => this.disable_week3edit()}>ยกเลิก</Button>
+
+                                    <Button variant="primary" onClick={() => this.confirm_week3edit()} >ยืนยัน</Button>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>{4}</td>
+                                <td>{data.week4_start.substring(8, 10) + '-' + data.week4_start.substring(5, 7) + '-' + data.week4_start.substring(0, 4)}</td>
+                                <td>{data.week4_end.substring(8, 10) + '-' + data.week4_end.substring(5, 7) + '-' + data.week4_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" >
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+
+                    )
+            }
+            //edit week4
+            if (this.state.editweek4 == true) {
+                if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
+                    return (
+                        <tbody>
+                            <tr>
+                                <td>{1}</td>
+                                <td>{data.week1_start.substring(8, 10) + '-' + data.week1_start.substring(5, 7) + '-' + data.week1_start.substring(0, 4)}
+                                </td>
+                                <td>{data.week1_end.substring(8, 10) + '-' + data.week1_end.substring(5, 7) + '-' + data.week1_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata">
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{2}</td>
+                                <td>{data.week2_start.substring(8, 10) + '-' + data.week2_start.substring(5, 7) + '-' + data.week2_start.substring(0, 4)}</td>
+                                <td>{data.week2_end.substring(8, 10) + '-' + data.week2_end.substring(5, 7) + '-' + data.week2_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week2edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{3}</td>
+                                <td>{data.week3_start.substring(8, 10) + '-' + data.week3_start.substring(5, 7) + '-' + data.week3_start.substring(0, 4)}</td>
+                                <td>{data.week3_end.substring(8, 10) + '-' + data.week3_end.substring(5, 7) + '-' + data.week3_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week3edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>{4}</td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week4_start.substring(0, 10)}
+                                        value={this.state.week4_start}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week4_start}
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        defaultValue={data.week4_end.substring(0, 10)}
+                                        value={this.state.week4_end}
+                                        type="date"
+                                        className="form-control"
+                                        id="formGroupExampleInput"
+                                        onChange={this.handleChange_week4_end}
+                                    />
+                                </td>
+                                <td>
+                                    <Button variant="link" onClick={() => this.disable_week4edit()}>ยกเลิก</Button>
+
+                                    <Button variant="primary" onClick={() => this.confirm_week4edit()} >ยืนยัน</Button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+
+                    )
+            }
+            else {
+                if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final) {
+                    return (
+                        <tbody>
+                            <tr>
+                                <td>{1}</td>
+                                <td>{data.week1_start.substring(8, 10) + '-' + data.week1_start.substring(5, 7) + '-' + data.week1_start.substring(0, 4)}
+                                </td>
+                                <td>{data.week1_end.substring(8, 10) + '-' + data.week1_end.substring(5, 7) + '-' + data.week1_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week1edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{2}</td>
+                                <td>{data.week2_start.substring(8, 10) + '-' + data.week2_start.substring(5, 7) + '-' + data.week2_start.substring(0, 4)}</td>
+                                <td>{data.week2_end.substring(8, 10) + '-' + data.week2_end.substring(5, 7) + '-' + data.week2_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week2edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{3}</td>
+                                <td>{data.week3_start.substring(8, 10) + '-' + data.week3_start.substring(5, 7) + '-' + data.week3_start.substring(0, 4)}</td>
+                                <td>{data.week3_end.substring(8, 10) + '-' + data.week3_end.substring(5, 7) + '-' + data.week3_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week3edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{4}</td>
+                                <td>{data.week4_start.substring(8, 10) + '-' + data.week4_start.substring(5, 7) + '-' + data.week4_start.substring(0, 4)}</td>
+                                <td>{data.week4_end.substring(8, 10) + '-' + data.week4_end.substring(5, 7) + '-' + data.week4_end.substring(0, 4)}</td>
+                                <td>
+                                    <Button variant="light" className="editdata" onClick={this.enable_week4edit}>
+                                        <img src={editbt} className="editicon" alt="edit" />
+                                    </Button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+
+                    )
+                }
+            }
         })
         return (
             <div className="page-container" >
@@ -343,9 +912,9 @@ export default class ConditionIn extends Component {
                                 </tr>
 
                             </thead>
-                            
-                                {tabledata}
-                            
+
+                            {tabledata}
+
                         </Table>
 
                     </div>

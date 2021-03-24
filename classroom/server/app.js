@@ -380,6 +380,56 @@ app.post("/facultycondition/update", (req, res) => {
     res.json(callback);
   });
 });
+app.post("/facultycondition/updateweek1", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  console.log("123")
+  facultycondition.updateweek1(req, function (callback) {
+    res.json(callback);
+    console.log("abc")
+  });
+});
+app.post("/facultycondition/updateweek1_end", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek1_end(req, function (callback) {
+    res.json(callback);
+  });
+});
+app.post("/facultycondition/updateweek2", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek2(req, function (callback) {
+    res.json(callback);
+  });
+});
+app.post("/facultycondition/updateweek2_end", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek2_end(req, function (callback) {
+    res.json(callback);
+  });
+});
+app.post("/facultycondition/updateweek3", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek3(req, function (callback) {
+    res.json(callback);
+  });
+});
+app.post("/facultycondition/updateweek3_end", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek3_end(req, function (callback) {
+    res.json(callback);
+  });
+});
+app.post("/facultycondition/updateweek4", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek4(req, function (callback) {
+    res.json(callback);
+  });
+});
+app.post("/facultycondition/updateweek4_end", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  facultycondition.updateweek4_end(req, function (callback) {
+    res.json(callback);
+  });
+});
 
 //examweek Data
 app.get("/examweek", (req, res) => {
