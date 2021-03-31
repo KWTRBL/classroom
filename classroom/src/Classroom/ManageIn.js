@@ -68,7 +68,7 @@ export default class ManageIn extends Component {
       .catch(function (error) {
         console.log(error);
       });
-
+      
     axios
       .get("http://localhost:7777/exam_committee")
       .then((res) => {
@@ -269,20 +269,25 @@ export default class ManageIn extends Component {
   }
 
   adddata(value) {
+    console.log(value)
     axios.post('http://localhost:7777/exam_committee/adddata',
       {
 
-        person_id: value.person_id,
+        person_id: value,
         year: this.state.yearsearch,
         semester: this.state.semestersearch,
         mid_or_final: this.state.mid_or_final,
-        exam_date: value.exam_date,
-        exam_time: value.exam_time,
         faculty_id: this.state.departsearch
 
       }
-    )
-    window.location.reload(false);
+    ).then((res) => {
+      console.log(res.data)
+      window.location.reload(false);
+
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
   }
 
@@ -431,8 +436,8 @@ export default class ManageIn extends Component {
       own_subjectdisable = true
     }
     this.state.buttonstatedata.map((data, index) => {
-      console.log('data in ', this.state.yearsearch, this.state.semestersearch, this.state.mid_or_final, this.state.persontype, this.state.departsearch)
-      console.log(data.year, data.semester, data.mid_or_final, data.person_type, data.office_id)
+      // console.log('data in ', this.state.yearsearch, this.state.semestersearch, this.state.mid_or_final, this.state.persontype, this.state.departsearch)
+      // console.log(data.year, data.semester, data.mid_or_final, data.person_type, data.office_id)
       //
       if (data.year == this.state.yearsearch && data.semester == this.state.semestersearch && data.mid_or_final == this.state.mid_or_final && data.office_id == this.state.departsearch && data.person_type == this.state.persontype) {
         console.log(true)
@@ -542,7 +547,7 @@ export default class ManageIn extends Component {
     var tabledata = this.state.exam_committee.filter((member, index) => {
       if  ( (member.Office_id == this.state.departsearch && member.Person_type == this.state.persontype && this.state.persontype == 1 )|| (this.state.persontype == 2 && member.Person_type == this.state.persontype)) {
         editjson.push(index)
-        console.log(member)
+        // console.log(member)
         return member
       }
     }).slice(this.state.firstitem, this.state.lastitem).map((data, index) => {
@@ -571,202 +576,236 @@ export default class ManageIn extends Component {
         return (
           <tr>
             <td>
-              {data.name}
+              {data.name }
             </td>
             <td>
               <div className="flex-container">
                 <div>
                   {
                     examlist.length != 0 ? (
-                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
+                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+
+                    ) : ''
+                  }
+                </div>
+                <div>
+                  {
+                    examlist.length != 0 ? (
                       examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
 
                     ) : ''
                   }
                 </div>
-
                 <div>
-
                   {
                     examlist.length != 0 ?
                       (
-                        <Button variant="light" className="deleteIndata">
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
                             alt="delete"
-                            onClick={() => this.deletebt(examlist[0])}
 
                           />
                         </Button>
                       ) : (
-                        <Button variant="light" className="deleteIndata">
+                        <Button variant="light" className="deleteIndata" onClick={() => this.adddata(data.person_id)}>
                           <img
                             src={addbt}
                             className="deleteInicon"
-                            alt="delete"
-                            onClick={() => this.adddata(examlist[0])}
-                          />
+                            alt="delete" 
+                            
+                          />       
                         </Button>
                       )
                   }
                 </div>
               </div>
             </td>
+
+
             <td>
               <div className="flex-container">
                 <div>
                   {
                     examlist.length > 1 ? (
-                      result[1] + ' ' + (examlist[1].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
-                      examlist[1].building_no + ' ห้อง ' + examlist[1].room_no
-                    ) : (
-                      <Button variant="light" className="deleteIndata">
-                        <img
-                          src={addbt}
-                          className="deleteInicon"
-                          alt="delete"
-                          onClick={() => this.adddata(examlist[0])}
-                        />
-                      </Button>
-                    )
+                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+
+                    ) : ''
+                  }
+                </div>
+                <div>
+                  {
+                    examlist.length > 1 ? (
+                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+
+                    ) : ''
                   }
                 </div>
                 <div>
                   {
                     examlist.length > 1 ?
                       (
-                        <Button variant="light" className="deleteIndata">
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
                             alt="delete"
-                            onClick={() => this.deletebt(examlist[1])}
+
                           />
                         </Button>
-                      ) : ' '
+                      ) : (
+                        <Button variant="light" className="deleteIndata" onClick={() => this.adddata(data.person_id)}>
+                          <img
+                            src={addbt}
+                            className="deleteInicon"
+                            alt="delete" 
+                            
+                          />       
+                        </Button>
+                      )
                   }
                 </div>
               </div>
-
-
-
             </td>
+
+
+
             <td>
               <div className="flex-container">
                 <div>
                   {
                     examlist.length > 2 ? (
-                      result[2] + ' ' + (examlist[2].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
-                      examlist[2].building_no + ' ห้อง ' + examlist[2].room_no
-                    ) : (
-                      <Button variant="light" className="deleteIndata">
-                        <img
-                          src={addbt}
-                          className="deleteInicon"
-                          alt="delete"
-                        />
-                      </Button>
-                    )
+                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+
+                    ) : ''
                   }
                 </div>
                 <div>
+                  {
+                    examlist.length > 2 ? (
+                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
 
+                    ) : ''
+                  }
+                </div>
+                <div>
                   {
                     examlist.length > 2 ?
                       (
-                        <Button variant="light" className="deleteIndata">
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
                             alt="delete"
-                            onClick={() => this.deletebt(examlist[2])}
 
                           />
                         </Button>
-                      ) : ' '
+                      ) : (
+                        <Button variant="light" className="deleteIndata" onClick={() => this.adddata(data.person_id)}>
+                          <img
+                            src={addbt}
+                            className="deleteInicon"
+                            alt="delete" 
+                            
+                          />       
+                        </Button>
+                      )
                   }
                 </div>
               </div>
-
-
             </td>
+
+
             <td>
               <div className="flex-container">
                 <div>
                   {
                     examlist.length > 3 ? (
-                      result[3] + ' ' + (examlist[3].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
-                      examlist[3].building_no + ' ห้อง ' + examlist[3].room_no
-                    ) : (
-                      <Button variant="light" className="deleteIndata">
-                        <img
-                          src={addbt}
-                          className="deleteInicon"
-                          alt="delete"
-                        />
-                      </Button>
-                    )
+                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+
+                    ) : ''
                   }
                 </div>
                 <div>
+                  {
+                    examlist.length > 3 ? (
+                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
 
+                    ) : ''
+                  }
+                </div>
+                <div>
                   {
                     examlist.length > 3 ?
                       (
-                        <Button variant="light" className="deleteIndata">
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
                             alt="delete"
-                            onClick={() => this.deletebt(examlist[3])}
 
                           />
                         </Button>
-                      ) : ' '
+                      ) : (
+                        <Button variant="light" className="deleteIndata" onClick={() => this.adddata(data.person_id)}>
+                          <img
+                            src={addbt}
+                            className="deleteInicon"
+                            alt="delete" 
+                            
+                          />       
+                        </Button>
+                      )
                   }
                 </div>
               </div>
-
-
             </td>
+
+
             <td>
               <div className="flex-container">
                 <div>
                   {
                     examlist.length > 4 ? (
-                      result[4] + ' ' + (examlist[4].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') + ' ' +
-                      examlist[4].building_no + ' ห้อง ' + examlist[4].room_no
-                    ) : (
-                      <Button variant="light" className="deleteIndata">
-                        <img
-                          src={addbt}
-                          className="deleteInicon"
-                          alt="delete"
-                        />
-                      </Button>
-                    )
+                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+
+                    ) : ''
+                  }
+                </div>
+                <div>
+                  {
+                    examlist.length > 4 ? (
+                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+
+                    ) : ''
                   }
                 </div>
                 <div>
                   {
                     examlist.length > 4 ?
                       (
-                        <Button variant="light" className="deleteIndata">
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
                             alt="delete"
-                            onClick={() => this.deletebt(examlist[4])}
 
                           />
                         </Button>
-                      ) : ' '
+                      ) : (
+                        <Button variant="light" className="deleteIndata" onClick={() => this.adddata(data.person_id)}>
+                          <img
+                            src={addbt}
+                            className="deleteInicon"
+                            alt="delete" 
+                            
+                          />       
+                        </Button>
+                      )
                   }
                 </div>
               </div>
-
-
             </td>
 
           </tr>

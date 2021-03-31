@@ -1,4 +1,4 @@
-const pool = require('./dbconfig')
+const {pool} = require('./dbconfig')
 
 
 module.exports.read = function (callback) {

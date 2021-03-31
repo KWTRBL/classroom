@@ -1,7 +1,7 @@
-const {
-  off
-} = require("./dbconfig");
-const pool = require("./dbconfig");
+// const {
+//   off
+// } = require("./dbconfig");
+const { pool } = require("./dbconfig");
 
 function countNumExam(query_subject, year, semester, mid_or_final) {
   return new Promise(function (resolve, reject) {
@@ -863,7 +863,7 @@ module.exports.othersubject = async function (req, callback) {
         `)
         if (subjectList.length == 0) {
           checkroomempty = true
-        //ถ้าคุมทุกห้องแล้ว
+          //ถ้าคุมทุกห้องแล้ว
           subjectList = await getdataFromSql(
             `SELECT t_exam_room.* FROM t_exam_room left JOIN t_exam_committee on t_exam_room.year = t_exam_committee.year and t_exam_room.semester = t_exam_committee.semester and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_room.building_no = t_exam_committee.building_no AND t_exam_room.room_no = t_exam_committee.room_no WHERE t_exam_committee.year is null and t_exam_committee.semester is null and t_exam_committee.mid_or_final is null and t_exam_committee.exam_date is null and t_exam_committee.exam_time is null and t_exam_committee.subject_id is null and t_exam_committee.building_no is null AND t_exam_committee.room_no is null and t_exam_room.year = ${year} and t_exam_room.semester = ${semester} and t_exam_room.mid_or_final = '${mid_or_final}' `
           )
@@ -1006,7 +1006,7 @@ module.exports.othersubject = async function (req, callback) {
                   checkdata = true
                   break
                 }
-              }else{
+              } else {
                 checkday = true
               }
             }
@@ -1029,7 +1029,7 @@ module.exports.othersubject = async function (req, callback) {
             }
 
           }
-          if (checkday == true  || checkdata == true) {
+          if (checkday == true || checkdata == true) {
             break
           }
         }
@@ -1198,7 +1198,7 @@ module.exports.othersubject = async function (req, callback) {
                     UPDATE t_condition
                     SET mark = ${count - teachercount},markcount= ${teachercount}
                     WHERE person_id = '${teacherdata.person_id}'`);
-                    
+
                   teacherdata.condition_time = 0
                   removeItemOnce(subjectList, subject);
                   removeItemOnce(Day, element);
@@ -1781,7 +1781,7 @@ module.exports.officersubject = async function (req, callback) {
                   checkdata = true
                   break
                 }
-              }else{
+              } else {
                 checkday = true
               }
             }
@@ -1804,12 +1804,12 @@ module.exports.officersubject = async function (req, callback) {
             }
 
           }
-          if (checkday == true  || checkdata == true) {
+          if (checkday == true || checkdata == true) {
             break
           }
         }
 
-      }  else {
+      } else {
         console.log('not weekend', teacherdata.condition_time)
         shuffle(subjectList);
         for (let index = 0; index < subjectList.length; index++) {
@@ -2441,7 +2441,7 @@ having checkdata > count(*)
                   checkdata = true
                   break
                 }
-              }else{
+              } else {
                 checkday = true
               }
             }
@@ -2464,12 +2464,12 @@ having checkdata > count(*)
             }
 
           }
-          if (checkday == true  || checkdata == true) {
+          if (checkday == true || checkdata == true) {
             break
           }
         }
 
-      }  else {
+      } else {
         // console.log('not weekend', teacherdata.condition_time)
         shuffle(subjectList);
         for (let index = 0; index < subjectList.length; index++) {
@@ -2682,7 +2682,7 @@ module.exports.teacher_exam = async function (req, callback) {
   var faculty_id = req.body.faculty_id
   // query ข้อมูลอาจารย์ตาม filter
 
-  // console.log(req.body)
+  console.log(req.body)
   // return 0
   // callback(1)
   var teacher_list = await getdataFromSql(
@@ -3417,7 +3417,8 @@ module.exports.teacher_exam = async function (req, callback) {
     }
   }
   // backup ที่เปลี่ยนข้อมูลไปกลับมา
-
+  console.log('success teacher exam')
+  callback('success')
 }
 
 module.exports.removedata = function (req, callback) {
@@ -3462,16 +3463,50 @@ module.exports.examdata = async function (req, callback) {
   var surname2 = req.body.surname2
   // name = name.split(' ')
 
-  var data = await getdataFromSql(`
-  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name1}' and person.Lastname = '${surname1}'
-  
+  var datayear = await getdataFromSql(`
+  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name1}' and person.Lastname = '${surname1}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
   `)
-  var data1 = await getdataFromSql(`
-  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name2}' and person.Lastname = '${surname2}'
+  var data1year = await getdataFromSql(`
+  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name2}' and person.Lastname = '${surname2}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
   
   `)
 
+  // console.log(datayear[0].year,data1year[0].year,datayear[0].semester,data1year[0].semester)
+  if (datayear[0].year != data1year[0].year || datayear[0].semester != data1year[0].semester || datayear[0].mid_or_final != data1year[0].mid_or_final) {
+    callback('ไม่สามารถแลกวันคุมสอบได้')
+    return
+  }
+  var data = null
+  var data1 = null
+  if (datayear[0].mid_or_final = 'm') {
+    data = await getdataFromSql(`
+    select DISTINCT t_exam_committee.* , DATE_FORMAT(teach_table.mexam_time, '%H:%i')  as start, DATE_FORMAT(teach_table.mexam_time2, '%H:%i')  as end ,person.Firstname,person.Lastname from t_exam_committee,person,teach_table where person.Person_id = t_exam_committee.person_id and t_exam_committee.year = teach_table.year and t_exam_committee.semester = teach_table.semester and t_exam_committee.subject_id = teach_table.subject_id and 
+     person.Firstname = '${name1}' and person.Lastname = '${surname1}' and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}' and teach_table.mexam_time != '00:00:00'
+    
+    `)
+    data1 = await getdataFromSql(`
+    select DISTINCT t_exam_committee.* ,DATE_FORMAT(teach_table.mexam_time, '%H:%i')  as start, DATE_FORMAT(teach_table.mexam_time2, '%H:%i')  as end ,person.Firstname,person.Lastname from t_exam_committee,person,teach_table where person.Person_id = t_exam_committee.person_id and t_exam_committee.year = teach_table.year and t_exam_committee.semester = teach_table.semester and t_exam_committee.subject_id = teach_table.subject_id and 
+     person.Firstname = '${name2}' and person.Lastname = '${surname2}' and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}' and teach_table.mexam_time != '00:00:00'
+    `)
+
+  }
+  else {
+    data = await getdataFromSql(`
+    select DISTINCT t_exam_committee.* ,DATE_FORMAT(teach_table.exam_time, '%H:%i')  as start, DATE_FORMAT(teach_table.exam_time2, '%H:%i')  as end ,person.Firstname,person.Lastname from t_exam_committee,person,teach_table where person.Person_id = t_exam_committee.person_id and t_exam_committee.year = teach_table.year and t_exam_committee.semester = teach_table.semester and t_exam_committee.subject_id = teach_table.subject_id and 
+     person.Firstname = '${name1}' and person.Lastname = '${surname1}' and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}' and teach_table.exam_time != '00:00:00'
+    
+    `)
+    data1 = await getdataFromSql(`
+    select DISTINCT t_exam_committee.* ,DATE_FORMAT(teach_table.exam_time, '%H:%i')  as start, DATE_FORMAT(teach_table.exam_time2, '%H:%i')  as end ,person.Firstname,person.Lastname from t_exam_committee,person,teach_table where person.Person_id = t_exam_committee.person_id and t_exam_committee.year = teach_table.year and t_exam_committee.semester = teach_table.semester and t_exam_committee.subject_id = teach_table.subject_id and 
+     person.Firstname = '${name2}' and person.Lastname = '${surname2}' and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}' and teach_table.exam_time != '00:00:00'
+    `)
+
+  }
+
+  // console.log(data.length,data1.length)
+
   if (!data.length || !data1.length) {
+    console.log('object')
     callback('ไม่มีข้อมูลที่ต้องการ')
     return
   }
@@ -3541,11 +3576,29 @@ module.exports.examdatainstead = async function (req, callback) {
   console.log(req.body)
   var name1 = req.body.name1
   var surname1 = req.body.surname1
-
+  var datayear = await getdataFromSql(`
+  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name1}' and person.Lastname = '${surname1}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
+  `)
   var data = await getdataFromSql(`
   select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name1}' and person.Lastname = '${surname1}'
-  
+  and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}'
   `)
+
+  if (datayear[0].mid_or_final = 'm') {
+    data = await getdataFromSql(`
+    select DISTINCT t_exam_committee.* ,DATE_FORMAT(teach_table.mexam_time, '%H:%i') as start, DATE_FORMAT(teach_table.mexam_time2, '%H:%i') as end ,person.Firstname,person.Lastname from t_exam_committee,person,teach_table where person.Person_id = t_exam_committee.person_id and t_exam_committee.year = teach_table.year and t_exam_committee.semester = teach_table.semester and t_exam_committee.subject_id = teach_table.subject_id and 
+     person.Firstname = '${name1}' and person.Lastname = '${surname1}' and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}' and teach_table.mexam_time != '00:00:00'
+    
+    `)
+  }
+  else {
+    data = await getdataFromSql(`
+    select DISTINCT t_exam_committee.* ,DATE_FORMAT(teach_table.exam_time, '%H:%i') as start, DATE_FORMAT(teach_table.exam_time2, '%H:%i')  as end ,person.Firstname,person.Lastname from t_exam_committee,person,teach_table where person.Person_id = t_exam_committee.person_id and t_exam_committee.year = teach_table.year and t_exam_committee.semester = teach_table.semester and t_exam_committee.subject_id = teach_table.subject_id and 
+     person.Firstname = '${name1}' and person.Lastname = '${surname1}' and t_exam_committee.year = ${datayear[0].year} and t_exam_committee.semester = ${datayear[0].semester} and t_exam_committee.mid_or_final = '${datayear[0].mid_or_final}' and teach_table.exam_time != '00:00:00'
+    
+    `)
+
+  }
 
   if (!data.length) {
     callback('ไม่มีข้อมูลที่ต้องการ')
@@ -3566,7 +3619,7 @@ module.exports.committeecheck = async function (callback) {
 `
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    console.log("exam committee filter");
+    // console.log("exam committee filter");
     pool.query(sql, (err, rows) => {
       if (err) throw err;
       // console.log("The data from users table are: \n", rows);
@@ -3623,11 +3676,11 @@ module.exports.examinstead = async function (req, callback) {
 module.exports.read = function (callback) {
   // คำสั่ง sql
   let sql = `
-  SELECT person.person_id,person.Person_type,person.Office_id,concat(person.Position,' ',person.Firstname,' ',person.Lastname) as name , concat('[',GROUP_CONCAT( JSON_OBJECT( 'year',year,'semester',semester,'mid_or_final',mid_or_final,'exam_date', exam_date, 'exam_time', exam_time, 'building_no',t_exam_committee.building_no, 'room_no',t_exam_committee.room_no ) ),']') AS list FROM person LEFT JOIN t_exam_committee on t_exam_committee.person_id = person.Person_id group by person.Person_id ORDER BY person.Firstname ASC
+  SELECT person.person_id,person.Person_type,person.Office_id,concat(person.Position,' ',person.Firstname,' ',person.Lastname) as name , concat('[',GROUP_CONCAT( JSON_OBJECT( 'year',year,'semester',semester,'mid_or_final',mid_or_final,'exam_date', exam_date, 'exam_time', exam_time, 'building_no',t_exam_committee.building_no, 'room_no',t_exam_committee.room_no ) order by year,semester,mid_or_final,exam_date,exam_time ),']') AS list FROM person LEFT JOIN t_exam_committee on t_exam_committee.person_id = person.Person_id group by person.Person_id ORDER BY person.Firstname ASC ,t_exam_committee.exam_date asc,t_exam_committee.exam_time asc
   `;
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    console.log("exam committee");
+    // console.log("exam committee");
     pool.query(sql, (err, rows) => {
       if (err) throw err;
       // console.log("The data from users table are: \n", rows);
@@ -3649,9 +3702,29 @@ module.exports.exportfile = async function (req, callback) {
 
   if (state == '0') {
 
-    let sql = `SELECT t_exam_room.exam_date as 'ว/ด/ป',IF(t_exam_room.exam_time = 1,"09:30-12:30","13:30-16:30") as เวลา,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,t_exam_room.section as กลุ่ม,t_exam_room.std_num as 'นศ.รวม',t_exam_room.room_no as ห้องสอบ,CONCAT(person.Firstname, ' ', person.Lastname) as ชื่อกรรมการ
-  ,'' as หมายเหตุ FROM t_exam_committee ,subject,t_exam_room,person WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id  and t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}'
- ORDER BY t_exam_room.exam_date ASC, t_exam_room.exam_time ASC, t_exam_room.room_no ASC` // คำสั่ง sql
+    //     let sql = `SELECT t_exam_room.exam_date as 'ว/ด/ป',IF(t_exam_room.exam_time = 1,"09:30-12:30","13:30-16:30") as เวลา,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,t_exam_room.section as กลุ่ม,t_exam_room.std_num as 'นศ.รวม',t_exam_room.room_no as ห้องสอบ,CONCAT(person.Firstname, ' ', person.Lastname) as ชื่อกรรมการ
+    //   ,'' as หมายเหตุ FROM t_exam_committee ,subject,t_exam_room,person WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id  and t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}'
+    //  ORDER BY t_exam_room.exam_date ASC, t_exam_room.exam_time ASC, t_exam_room.room_no ASC` // คำสั่ง sql
+    let sql = null
+
+    if (mid_or_final == 'M') {
+
+      sql = `SELECT DISTINCT t_exam_room.exam_date as 'ว/ด/ป',concat(DATE_FORMAT(teach_table.mexam_time, '%H:%i'),'-',DATE_FORMAT(teach_table.mexam_time2, '%H:%i')
+    ) as เวลา,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,t_exam_room.section as กลุ่ม,t_exam_room.std_num as 'นศ.รวม',t_exam_room.room_no as ห้องสอบ,CONCAT(person.Firstname, ' ', person.Lastname) as ชื่อกรรมการ
+      ,'' as หมายเหตุ FROM t_exam_committee ,subject,t_exam_room,person,teach_table WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id and teach_table.subject_id = t_exam_room.subject_id and teach_table.subject_id = subject.subject_id and t_exam_committee.subject_id = teach_table.subject_id and teach_table.semester = t_exam_committee.semester and teach_table.year = t_exam_committee.year  and
+      t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and teach_table.exam_time != '00:00:00' ORDER BY t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.room_no` // คำสั่ง sql
+
+
+    }
+    else{
+      sql = `SELECT DISTINCT t_exam_room.exam_date as 'ว/ด/ป',concat(DATE_FORMAT(teach_table.exam_time, '%H:%i'),'-',DATE_FORMAT(teach_table.exam_time2, '%H:%i')
+      ) as เวลา,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,t_exam_room.section as กลุ่ม,t_exam_room.std_num as 'นศ.รวม',t_exam_room.room_no as ห้องสอบ,CONCAT(person.Firstname, ' ', person.Lastname) as ชื่อกรรมการ
+        ,'' as หมายเหตุ FROM t_exam_committee ,subject,t_exam_room,person,teach_table WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id and teach_table.subject_id = t_exam_room.subject_id and teach_table.subject_id = subject.subject_id and t_exam_committee.subject_id = teach_table.subject_id and teach_table.semester = t_exam_committee.semester and teach_table.year = t_exam_committee.year  and
+        t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and teach_table.exam_time != '00:00:00' ORDER BY t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.room_no` // คำสั่ง sql
+  
+  
+
+    }
 
     pool.getConnection((err, connection) => {
       if (err) throw err;
@@ -3675,7 +3748,7 @@ module.exports.exportfile = async function (req, callback) {
         // ws.cell(2, 1, 2, 6, true).string('One big merged cell');
 
 
-        var heading = ["ว/ด/ป", "เวลา", "รหัสวิชา", "ชื่อวิชา", "กลุ่ม", "นศ.รวม", "ห้องสอบ", "ชื่อกรรมการ", "หมายเหตุ"]
+        var heading = ["ลำดับ", "เวลา", "รหัสวิชา", "ชื่อวิชา", "กลุ่ม", "นศ.รวม", "ห้องสอบ", "ชื่อกรรมการ", "หมายเหตุ"]
         var dayinweek = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส']
         var month = ['ม.ค', 'ก.พ', 'มี.ค', 'เม.ย', 'พ.ค', 'มิ.ย', 'ก.ค', 'ส.ค', 'ก.ย', 'ต.ค', 'พ.ย', 'ธ.ค']
         //Write Column Title in Excel file
@@ -3708,11 +3781,11 @@ module.exports.exportfile = async function (req, callback) {
           });
           rowIndex++;
         });
-        wb.write('report.xlsx', function (err, stats) {
+        wb.write('report1.xlsx', function (err, stats) {
           if (err) {
             console.error(err);
           } else {
-            callback('report.xlsx')
+            callback('report1.xlsx')
           }
         });
         // callback('data.xlsx')
@@ -3723,7 +3796,48 @@ module.exports.exportfile = async function (req, callback) {
   }
   if (state == '1') {
     var faculty_id = req.body.faculty_id
-    let sql = `SELECT CONCAT(person.Firstname, ' ', person.Lastname) as 'ชื่อ-นามสกุล' ,t_exam_room.exam_date as 'วันที่สอบ',IF(t_exam_room.exam_time = 1,"09:30-12:30","13:30-16:30") as เวลาสอบ,t_exam_committee.subject_id as รหัสวิชา,t_exam_room.room_no as ห้องสอบ,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename ชื่อวิชา,t_exam_committee.faculty_id FROM t_exam_committee ,subject,t_exam_room,person WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id and t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and t_exam_committee.faculty_id = '${faculty_id}' ORDER BY faculty_id,person.Firstname ASC` // คำสั่ง sql
+    // let sql = `SELECT CONCAT(person.Firstname, ' ', person.Lastname) as 'ชื่อ-นามสกุล' ,t_exam_room.exam_date as 'วันที่สอบ',IF(t_exam_room.exam_time = 1,"09:30-12:30","13:30-16:30") as เวลาสอบ,t_exam_committee.subject_id as รหัสวิชา,t_exam_room.room_no as ห้องสอบ,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename ชื่อวิชา,t_exam_committee.faculty_id FROM t_exam_committee ,subject,t_exam_room,person WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id and t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and t_exam_committee.faculty_id = '${faculty_id}' ORDER BY faculty_id,person.Firstname ASC` // คำสั่ง sql
+    let sql = null
+
+    if (mid_or_final == 'M') {
+
+      sql = `SELECT distinct CONCAT(person.Firstname, ' ', person.Lastname) as 'ชื่อ-นามสกุล' ,t_exam_room.exam_date as 'วันที่สอบ',concat(DATE_FORMAT(teach_table.mexam_time, '%H:%i'),'-',DATE_FORMAT(teach_table.mexam_time2, '%H:%i')) as เวลาสอบ,t_exam_committee.subject_id as รหัสวิชา,t_exam_room.room_no as ห้องสอบ,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename ชื่อวิชา,t_exam_committee.faculty_id FROM t_exam_committee ,subject,t_exam_room,person,teach_table 
+      WHERE t_exam_committee.subject_id = subject.subject_id and 
+      t_exam_room.exam_date = t_exam_committee.exam_date and 
+      t_exam_room.exam_time = t_exam_committee.exam_time and 
+      t_exam_room.mid_or_final = t_exam_committee.mid_or_final and 
+      t_exam_room.room_no = t_exam_committee.room_no and 
+      t_exam_room.subject_id = t_exam_committee.subject_id and 
+      t_exam_committee.person_id = person.Person_id and 
+      teach_table.subject_id = t_exam_room.subject_id and 
+      teach_table.subject_id = subject.subject_id and 
+      t_exam_committee.subject_id = teach_table.subject_id and 
+      teach_table.semester = t_exam_committee.semester and 
+      teach_table.year = t_exam_committee.year  and 
+      t_exam_committee.year = ${year} and 
+      t_exam_committee.semester = ${semester} and 
+      t_exam_committee.mid_or_final = '${mid_or_final}' and 
+      t_exam_committee.faculty_id = '${faculty_id}' and 
+      teach_table.exam_time != '00:00:00' 
+      ORDER BY faculty_id,person.Firstname ASC,t_exam_room.exam_date asc,t_exam_room.exam_time asc` // คำสั่ง sql
+
+
+    }
+    else{
+      sql = `SELECT distinct CONCAT(person.Firstname, ' ', person.Lastname) as 'ชื่อ-นามสกุล' ,t_exam_room.exam_date as 'วันที่สอบ',concat(DATE_FORMAT(teach_table.exam_time, '%H:%i'),'-',DATE_FORMAT(teach_table.exam_time2, '%H:%i')) as เวลาสอบ,t_exam_committee.subject_id as รหัสวิชา,t_exam_room.room_no as ห้องสอบ,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename ชื่อวิชา,t_exam_committee.faculty_id FROM t_exam_committee ,subject,t_exam_room,person,teach_table WHERE 
+      t_exam_committee.subject_id = subject.subject_id and 
+      t_exam_room.exam_date = t_exam_committee.exam_date and 
+      t_exam_room.exam_time = t_exam_committee.exam_time and 
+      t_exam_room.mid_or_final = t_exam_committee.mid_or_final and 
+      t_exam_room.room_no = t_exam_committee.room_no and 
+      t_exam_room.subject_id = t_exam_committee.subject_id and 
+      t_exam_committee.person_id = person.Person_id and 
+      teach_table.subject_id = t_exam_room.subject_id and 
+      teach_table.subject_id = subject.subject_id and   teach_table.exam_time != '00:00:00' and
+      t_exam_committee.subject_id = teach_table.subject_id and teach_table.semester = t_exam_committee.semester and teach_table.year = t_exam_committee.year  and t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and t_exam_committee.faculty_id = '${faculty_id}' ORDER BY faculty_id,person.Firstname ASC,t_exam_room.exam_date asc,t_exam_room.exam_time asc` // คำสั่ง sql
+
+    }
+    
     var office = await getdataFromSql(`SELECT Office_id,Office_name FROM t_office where office_id = ${faculty_id}`)
     var officelist = []
     office.map((data) => {
@@ -3743,7 +3857,7 @@ module.exports.exportfile = async function (req, callback) {
 
         const data = rows
         const headingColumnNames = [`ตารางคุมสอบประจำภาคเรียนที่   ${semester}/${year}     (${mid_or_final == 'M' ? 'กลาง' : 'ปลาย'}ภาค)`, `${officelist[0][1]}`, "หมายเหตุ    ตึก 12 (12 ชั้น) รับข้อสอบที่งานสนับสนุนการเรียนการสอน ชั้น 1", "ตึก ME  (เครื่องกล) รับข้อสอบที่หน้าลิฟท์ ชั้น 1", "ตีก HM (เฉลิมพระเกียรติ) รับข้อสอบที่บริเวณโถง ชั้น 1"]
-
+        console.log(mid_or_final);
         //Write Column Title in Excel file
         // ws.cell(1, 2).string(headingColumnNames[0])
         // ws.cell(2, 2).string(headingColumnNames[1])
@@ -3816,11 +3930,11 @@ module.exports.exportfile = async function (req, callback) {
           rowIndex++;
         })
 
-        wb.write('report.xlsx', function (err, stats) {
+        wb.write('report2.xlsx', function (err, stats) {
           if (err) {
             console.error(err);
           } else {
-            callback('report.xlsx')
+            callback('report2.xlsx')
           }
         });
         // callback('data.xlsx')
@@ -3833,7 +3947,7 @@ module.exports.exportfile = async function (req, callback) {
 
 
   }
-  if (state = '2') {
+  if (state == '2') {
     var exam_date = req.body.exam_date
     var exam_time = req.body.exam_time
 
@@ -3927,10 +4041,10 @@ module.exports.exportfile = async function (req, callback) {
             ws.cell(rowIndex, 2, 3, 4, true).string(datain.building_name).style({
               alignment: { // §18.8.1
                 horizontal: 'center'
-              },fill :{
+              }, fill: {
                 type: 'pattern',
                 patternType: 'solid',
-                bgcolor:'#C0C0C0',
+                bgcolor: '#C0C0C0',
                 fgColor: '#C0C0C0',
 
               }
@@ -3946,10 +4060,10 @@ module.exports.exportfile = async function (req, callback) {
                 ws.cell(rowIndex, 2, rowIndex, 4, true).string(datain.building_name).style({
                   alignment: { // §18.8.1
                     horizontal: 'center'
-                  },fill :{
+                  }, fill: {
                     type: 'pattern',
                     patternType: 'solid',
-                    bgcolor:'#C0C0C0',
+                    bgcolor: '#C0C0C0',
                     fgColor: '#C0C0C0',
 
                   }
@@ -3989,11 +4103,11 @@ module.exports.exportfile = async function (req, callback) {
           });
           rowIndex++;
         });
-        wb.write('report.xlsx', function (err, stats) {
+        wb.write('report3.xlsx', function (err, stats) {
           if (err) {
             console.error(err);
           } else {
-            callback('report.xlsx')
+            callback('report3.xlsx')
           }
         });
         // callback('report.xlsx')
@@ -4137,7 +4251,7 @@ module.exports.report_filter = async function (callback) {
   SELECT year,concat('[',GROUP_CONCAT(DISTINCT json_object('semester',semester,'mid_or_final',mid_or_final,'exam_date',exam_date,'exam_time',exam_time,'faculty_id',faculty_id) ORDER BY semester,mid_or_final DESC),']' ) as filter FROM t_exam_committee GROUP by year  `;
   pool.getConnection((err, connection) => {
     if (err) throw err;
-    console.log("exam committee filter");
+    // console.log("exam committee filter");
     pool.query(sql, (err, rows) => {
       if (err) throw err;
       // console.log("The data from users table are: \n", rows);

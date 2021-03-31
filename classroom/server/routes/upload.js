@@ -1,7 +1,7 @@
 const fs = require('fs');
 const csv = require('fast-csv');
 const multer = require('multer');
-const pool = require('./dbconfig')
+const {pool} = require('./dbconfig')
 
 global.__basedir = __dirname;
 

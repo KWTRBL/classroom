@@ -57,13 +57,13 @@ export default class ClassroomData extends Component {
                 <NavDropdown.Item href="/ManageGroup">จัดจำนวนนักศึกษา</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="การจัดการห้องเรียน" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/SpecialCr">จัดห้องเรียนกรณีพิเศษ</NavDropdown.Item>
+                {/* <NavDropdown.Item href="/SpecialCr">จัดห้องเรียนกรณีพิเศษ</NavDropdown.Item> */}
                 <NavDropdown.Item href="/ManageCr">จัดห้องเรียนปกติ</NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>
               <NavDropdown title="เจ้าหน้าที่ฝ่ายอาคารสถานที่" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item>
+                {/* <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item> */}
                 <NavDropdown.Item href="#" onClick={() => this.logout()}>ออกจากระบบ</NavDropdown.Item>
               </NavDropdown>
             </Nav>

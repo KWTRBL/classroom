@@ -80,7 +80,7 @@ export default class ClassroomData extends Component {
                 title="เจ้าหน้าที่วิชาการ"
                 id="collasible-nav-dropdown"
               >
-                <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item>
+                {/* <NavDropdown.Item href="/User">ข้อมูลผู้ใช้</NavDropdown.Item> */}
                 <NavDropdown.Item href="#" onClick={() => this.logout()}>
                   ออกจากระบบ
                 </NavDropdown.Item>

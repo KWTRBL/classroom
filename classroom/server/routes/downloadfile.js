@@ -1,4 +1,4 @@
-const pool = require('./dbconfig')
+const { pool } = require('./dbconfig')
 
 
 module.exports.read = async function (req, callback) {
@@ -51,9 +51,9 @@ module.exports.read = async function (req, callback) {
                 "การจัดห้อง",
             ]
 
-            ws.cell(1,7).string(`ประกาศ คณะวิศวกรรมศาสตร์`)
-            ws.cell(2,6).string(`เรื่อง ตารางเรียน - ตารางสอบ ประจำภาคเรียนที่ ${semester} ปีการศึกษา ${year}`)
-            ws.cell(3,7).string(`ภาควิชา ${curr2_tname}`)
+            ws.cell(1, 7).string(`ประกาศ คณะวิศวกรรมศาสตร์`)
+            ws.cell(2, 6).string(`เรื่อง ตารางเรียน - ตารางสอบ ประจำภาคเรียนที่ ${semester} ปีการศึกษา ${year}`)
+            ws.cell(3, 7).string(`ภาควิชา ${curr2_tname}`)
 
             //Write Column Title in Excel file
             let headingColumnIndex = 1;

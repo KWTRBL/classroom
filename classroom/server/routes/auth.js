@@ -1,5 +1,5 @@
 
-const pool = require('./dbconfig')
+const {pool }= require('./dbconfig')
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken");
 
@@ -52,7 +52,8 @@ module.exports.login = function (req, callback) {
                     callback({
                         message: "login success",
                         token:token,
-                        isLogin:1
+                        isLogin:1,
+                        role:rows[0].role
                     })
                 } else {
                     callback({
@@ -75,14 +76,26 @@ module.exports.login = function (req, callback) {
 
 module.exports.auth = function (req, callback) {
     let isLogin = null
+    let SECRET = "flIkDlSKhujl4vBT41ofPZsYu2zvfqWy" //most important
+
     req.sessionStore.get(req.cookies.session_id,(err,cb) =>{
+        // console.log(cb)
         if(cb == null){
-            isLogin = 0
+            callback({
+                isLogin:0
+            })
+            // isLogin = 0
         }
         else{
             isLogin = 1
+            var decode = jwt.verify(cb.token,SECRET)
+            // console.log(decode.role)
+            callback({
+                role: decode.role,
+                isLogin:isLogin
+            })
+
         }            
-        callback(isLogin)       
     })
 
 }

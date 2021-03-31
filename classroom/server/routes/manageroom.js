@@ -1,4 +1,4 @@
-const pool = require('./dbconfig')
+const {pool} = require('./dbconfig')
 const mysql = require('mysql') // เรียกใช้ mysql
 var  connection = mysql.createPool({   // config ค่าการเชื่อมต่อฐานข้อมูล
     connectionLimit: 100,

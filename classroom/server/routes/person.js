@@ -1,4 +1,4 @@
-const pool = require('./dbconfig')
+const {pool} = require('./dbconfig')
 
 module.exports.read = function (callback) {
 
@@ -41,7 +41,9 @@ module.exports.getfilter = function (callback) {
 }
 
 
-module.exports.delete = function (person_id, callback) {
+
+
+module.exports.delete = function (person_id,callback) {
     let sql = "DELETE FROM person WHERE person.Person_id= ?"  // คำสั่ง sql
     let sql2 = "DELETE FROM t_condition WHERE t_condition.person_id=?"
     pool.getConnection((err, connection) => {

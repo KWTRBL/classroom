@@ -32,9 +32,21 @@ export default class ManageZone extends Component {
       .then((res) => {
         document.getElementById("edittext").innerHTML =
           "<div style='color:red'>" + res.data.message + "</div>";
-
+        console.log(res.data)
         if (res.data.isLogin) {
-          this.props.history.push("/buildingdata");
+          if (res.data.role == 1) {
+            this.props.history.push("/buildingdata");
+
+          }
+          if (res.data.role == 2) {
+            this.props.history.push("/facultydata");
+
+          }
+          if (res.data.role == 3) {
+            this.props.history.push("/buildingdata");
+
+          }
+          // this.props.history.push("/buildingdata");
         }
       })
       .catch((err) => {
@@ -56,8 +68,9 @@ export default class ManageZone extends Component {
       <div>
         <header>
           <div class="title">
-            <h1 id="classroom">Classroom</h1>
-            <h1 id="manage">Management</h1>
+            <h2 id="classroom">Classroom</h2>
+            <h2 id="manage">And Invigilator</h2>
+            <h2 id="manage">Management</h2>
           </div>
           <div class="formLogin">
             <Form onSubmit={this.handleSubmit}>
@@ -65,7 +78,7 @@ export default class ManageZone extends Component {
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
                   required
-                  type="email"
+                  type="text"
                   name="username"
                   placeholder="Enter email"
                   value={this.state.email}

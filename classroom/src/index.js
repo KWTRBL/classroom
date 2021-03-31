@@ -27,28 +27,29 @@ import TeacherteachData from "./Classroom/TeacherteachData"
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './index.css';
+const jwt = require("jsonwebtoken");
 
 
 const AppWithRouter = () => (
   <BrowserRouter basename="/cims">
     <Route exact path="/" component={Login} />
-    <Route exact path="/BuildingData" component={RequireAuth(BuildingData)} />
-    <Route exact path="/ClassroomData" component={RequireAuth(ClassroomData)} />
-    <Route exact path="/AvailableRoom" component={RequireAuth(AvailableRoom)} />
-    <Route exact path="/DownloadData" component={RequireAuth(DownloadData)} />
-    <Route exact path="/ManageGroup" component={RequireAuth(ManageGroup)} />
-    <Route exact path="/SpecialCr" component={RequireAuth(SpecialCr)} />
-    <Route exact path="/ManageZone" component={RequireAuth(ManageZone)} />
-    <Route exact path="/ManageCr" component={RequireAuth(ManageCr)} />
-    <Route exact path="/FacultyData" component={RequireAuth(FacultyData)} />
 
-    <Route exact path="/ConditionIn" component={RequireAuth(ConditionIn)} />
-    <Route exact path="/ManageIn" component={RequireAuth(ManageIn)} />
-    <Route exact path="/ReportIn" component={RequireAuth(ReportIn)} />
+    <Route exact path="/BuildingData" component={RequireAuth(BuildingData,1)} />
+    <Route exact path="/ClassroomData" component={RequireAuth(ClassroomData,1)} />
+    <Route exact path="/AvailableRoom" component={RequireAuth(AvailableRoom,1)} />
+    <Route exact path="/DownloadData" component={RequireAuth(DownloadData,1)} />
+    <Route exact path="/ManageGroup" component={RequireAuth(ManageGroup,1)} />
+    <Route exact path="/SpecialCr" component={RequireAuth(SpecialCr,1)} />
+    <Route exact path="/ManageZone" component={RequireAuth(ManageZone,1)} />
+    <Route exact path="/ManageCr" component={RequireAuth(ManageCr,1)} />
 
-    <Route exact path="/ExchangeIn" component={RequireAuth(ExchangeIn)} />
-    <Route exact path="/InvigilatorData" component={RequireAuth(InvigilatorData)} />
-    <Route exact path="/TeacherteachData" component={RequireAuth(TeacherteachData)} />
+    <Route exact path="/FacultyData" component={RequireAuth(FacultyData,2)} />
+    <Route exact path="/ConditionIn" component={RequireAuth(ConditionIn,2)} />
+    <Route exact path="/ManageIn" component={RequireAuth(ManageIn,2)} />
+    <Route exact path="/ReportIn" component={RequireAuth(ReportIn,2)} />
+    <Route exact path="/ExchangeIn" component={RequireAuth(ExchangeIn,2)} />
+    <Route exact path="/InvigilatorData" component={RequireAuth(InvigilatorData,2)} />
+    <Route exact path="/TeacherteachData" component={RequireAuth(TeacherteachData,2)} />
 
 
   </BrowserRouter>
@@ -58,13 +59,13 @@ const AppWithRouter = () => (
 
 
 
-const RequireAuth = (Component) => {
+const RequireAuth = (Component,value) => {
 
   return class App extends Component {
     constructor(props) {
       super(props)
       this.state = {
-        login: null
+        login: null, role: null
       };
       this.componentWillMount = this.componentWillMount.bind(this);
 
@@ -74,17 +75,33 @@ const RequireAuth = (Component) => {
     async componentWillMount() {
       let result = await axios.get('http://localhost:7777/auth', { withCredentials: true });
       const isLogin = result.data.login
+
+      // var decoded = jwt.verify(token, 'shhhhh');
+      console.log(result.data.role,value)
       this.setState({
-        login: isLogin
+        login: isLogin,
+        role:result.data.role
       })
 
     }
     render() {
+      var role = this.state.role
+      // role = 2
       if (this.state.login == null) {
         return <div></div>
       }
       else if (this.state.login == 1) {
+        if(role == 1 && role != value){
+          return <Redirect to={{ pathname: '/buildingdata', state: { from: this.props.location } }} />
+        }
+        if(role == 2 && role != value){
+          return <Redirect to={{ pathname: '/facultydata', state: { from: this.props.location } }} />
+        }
+        if(role == 3){
+          return <Component {...this.props} />
+        }
         return <Component {...this.props} />
+
       }
       else if (this.state.login == 0) {
         return <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />

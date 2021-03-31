@@ -230,7 +230,7 @@ export default class ReportIn extends Component {
                 responseType: 'arraybuffer',
             })
             .then(response => {
-                console.log("response: ", response)
+                console.log("response: ", response,this.state.state)
                 FileDownload(response.data, `${this.state.filename[this.state.state]}.xlsx`);
             })
             .catch(err => {

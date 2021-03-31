@@ -1,4 +1,4 @@
-const pool = require('./dbconfig')
+const { pool } = require('./dbconfig')
 
 module.exports.read = function (callback){
     let sql = 'SELECT t_room.room_floor ,t_room.building_no, t_availableroom.* FROM t_room,t_availableroom WHERE t_room.room_no = t_availableroom.room_no' 

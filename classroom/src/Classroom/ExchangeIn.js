@@ -228,7 +228,7 @@ export default class ReportIn extends Component {
 
             return (
                 <option name="teachswap1" selected = {this.state.name1index == index} value={index}>
-                    {strdate}   {data.exam_time}
+                    {strdate} {data.start}-{data.end}
                 </option>
             )
         })
@@ -245,7 +245,7 @@ export default class ReportIn extends Component {
 
             return (
                 <option name="teachswap2" value={index} selected = {this.state.name2index == index}>
-                    {strdate} {data.exam_time}
+                    {strdate} {data.start}-{data.end}
                 </option>
             )
         })
@@ -261,7 +261,7 @@ export default class ReportIn extends Component {
             })
             return (
                 <option name="teachinstead" value={index} selected = {this.state.name3index == index}>
-                    {strdate} {data.exam_time}
+                    {strdate} {data.start}-{data.end}
                 </option>
             )
         })
@@ -332,7 +332,7 @@ export default class ReportIn extends Component {
                             </input>
                             <h5 className="yearDLfil">นามสกุล</h5>
                             <input required className="textbox" name="surname4" value={this.state.surname4} onChange={(e) => this.handlechange(e)}>
-                            </input>                        วัน - เวลาที่คุมสอบ
+                            </input>                        
                     </div>
                         <div className="filter btnIn">
                             <Button variant="light" className="btnspace" onClick={() => this.showinsteaddata()}>แสดงข้อมูล</Button>

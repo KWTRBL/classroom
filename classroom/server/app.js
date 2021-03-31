@@ -7,7 +7,7 @@ var session = require("express-session");
 const bcrypt = require("bcrypt");
 var MySQLStore = require("express-mysql-session")(session);
 var cron = require("node-cron");
-
+const path = require('path')
 //import file
 const building = require("./routes/building");
 const classroom = require("./routes/classroom");
@@ -33,11 +33,21 @@ const t_exam_room = require("./routes/t_examroom");
 const t_office = require("./routes/t_office");
 const exam_schedule = require("./routes/exam_schedule");
 const downloadfile = require("./routes/downloadfile");
+const regupdate = require("./routes/regupdate")
 //insert examweekdata every semester
 cron.schedule("0 0 1 1,6,8 *", () => {
   console.log("detect new semester");
   examweek.update();
 });
+
+setInterval(async () => {
+  // console.log('start :', new Date())
+  // await regupdate.read(callback =>{
+  //   console.log('callback :',callback.length)
+  // })
+  // console.log('end :', new Date())
+}
+  , 30000);
 
 var options = {
   host: "localhost",
@@ -77,8 +87,8 @@ app.use(
 
 //login
 app.post("/login", (req, res) => {
-  // Router เวลาเรียกใช้งาน
 
+  // Router เวลาเรียกใช้งาน
   auth.login(req, function (callback) {
     if (callback.message == "login success") {
       const timeout = 60 * 60 * 1000;
@@ -91,19 +101,30 @@ app.post("/login", (req, res) => {
       });
       req.session.save();
     }
+    console.log(callback.role)
     res.send({
       message: callback.message,
       isLogin: callback.isLogin,
+      role: callback.role
     });
   });
 });
 
+
 //authen ของการ login
 app.get("/auth", (req, res) => {
   auth.auth(req, function (callback) {
-    res.status(200).send({
-      login: callback,
-    });
+    if (callback.isLogin == 1) {
+      res.status(200).send({
+        login: callback.isLogin,
+        role: callback.role
+      });
+    } else {
+      res.status(200).send({
+        login: callback,
+      });
+    }
+
   });
 });
 
@@ -544,7 +565,7 @@ app.post("/t_office/insert", (req, res) => {
 //exam_schedule
 app.post("/exam_schedule", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.ownsubject(req,function (callback) {
+  exam_schedule.ownsubject(req, function (callback) {
     res.json(callback);
   });
 });
@@ -552,26 +573,26 @@ app.post("/exam_schedule", (req, res) => {
 
 app.post("/exam_schedule_other", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.othersubject(req,function (callback) {
+  exam_schedule.othersubject(req, function (callback) {
     res.json(callback);
   });
 });
 
 app.get("/exam_committee", (req, res) => {
-    // Router เวลาเรียกใช้งาน
-    exam_schedule.read(function (callback) {
-      res.json(callback);
-    });
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.read(function (callback) {
+    res.json(callback);
   });
+});
 
 
-  app.post("/exam_committee_officer", (req, res) => {
-    // Router เวลาเรียกใช้งาน
-    exam_schedule.officersubject(req,function (callback) {
-      res.json(callback);
-    });
+app.post("/exam_committee_officer", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  exam_schedule.officersubject(req, function (callback) {
+    res.json(callback);
   });
-  //building data delete
+});
+//building data delete
 app.delete("/exam_committee/delete", (req, res) => {
   // Router เวลาเรียกใช้งาน
   exam_schedule.removedata(req, function (callback) {
@@ -587,30 +608,32 @@ app.delete("/exam_committee/delete", (req, res) => {
 app.post("/exam_committee/adddata", (req, res) => {
   // Router เวลาเรียกใช้งาน
   exam_schedule.teacher_exam(req, function (callback) {
-    // console.log(callback);
-    // if (callback) {
-    //   res.send("Success");
-    // } else {
-    //   res.send("Error");
-    // }
+    console.log(callback);
+    if (callback) {
+      res.send("Success");
+    } else {
+      res.send("Error");
+    }
   });
 });
 
-  //downloadfile
+//downloadfile
 app.post("/downloadfile", (req, res) => {
   // Router เวลาเรียกใช้งาน
   downloadfile.read(req, function (callback) {
     console.log('send data :')
-    res.sendFile(callback,{ root: '.' });
+    res.sendFile(callback, { root: '.' });
   });
 });
 
 //exportdata from t_exam_committee
 app.post("/exportfile", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.exportfile(req, function (callback) {
-    console.log('send data :')
-    res.sendFile(callback,{ root: '.' });
+  exam_schedule.exportfile(req, async function (callback) {
+    console.log('send data :', callback)
+    res.sendFile(path.join(__dirname, callback))
+
+    // await res.sendFile(callback, { root: '.' });
   });
 });
 
@@ -619,7 +642,9 @@ app.post("/exportnamefile", (req, res) => {
   // Router เวลาเรียกใช้งาน
   exam_schedule.exportnamefile(req, function (callback) {
     console.log('send data :')
-    res.sendFile(callback,{ root: '.' });
+    // res.sendFile(path.join(__dirname, callback),{ root: '.' })
+
+    res.sendFile(callback, { root: '.' });
   });
 });
 
@@ -649,21 +674,22 @@ app.get("/exam_committee_check", (req, res) => {
 
 app.post("/exam_committee_getdata", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.examdata(req,function (callback) {
-    if(callback == "ไม่มีข้อมูลที่ต้องการ"){
-      res.status(404).send(callback)
-    }else{
-      res.status(200).json(callback);
+  exam_schedule.examdata(req, function (callback) {
+    if (typeof callback == "object") {
+      // console.log(typeof callback)
+      res.status(200).json(callback)
+    } else {
+      res.status(404).send(callback);
     }
   });
 });
 
 app.post("/exam_committee_insteaddata", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.examdatainstead(req,function (callback) {
-    if(callback == "ไม่มีข้อมูลที่ต้องการ"){
+  exam_schedule.examdatainstead(req, function (callback) {
+    if (callback == "ไม่มีข้อมูลที่ต้องการ") {
       res.status(404).send(callback)
-    }else{
+    } else {
       res.status(200).json(callback);
     }
 
@@ -672,10 +698,10 @@ app.post("/exam_committee_insteaddata", (req, res) => {
 
 app.post("/exam_committee_swap", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.swapdata(req,function (callback) {
+  exam_schedule.swapdata(req, function (callback) {
     if (callback == 'swapp failed') {
       res.status(500).send(callback)
-    }else{
+    } else {
       res.status(200).send(callback)
     }
   });
@@ -684,10 +710,10 @@ app.post("/exam_committee_swap", (req, res) => {
 
 app.post("/exam_committee_instead", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  exam_schedule.examinstead(req,function (callback) {
-    if(callback == "success"){
+  exam_schedule.examinstead(req, function (callback) {
+    if (callback == "success") {
       res.status(200).send(callback)
-    }else{
+    } else {
       res.status(500).json(callback);
     }
   });

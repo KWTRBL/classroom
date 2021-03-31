@@ -512,12 +512,12 @@ export default class BuildingData extends Component {
           <Nav />
           <h1 class="state">ข้อมูลตารางสอน</h1>
           <div id="detail">
-            <h5 className="typetitle">รับข้อมูลตารางสอน</h5>
+            {/* <h5 className="typetitle">รับข้อมูลตารางสอน</h5>
             <div className="uploadfile">
               <input type='file' name='fileInput' id="file" accept=".csv" className="updata" onChange={this.handleFileUpload} />
               <Button variant="primary" type="file" onClick={this.handleOpen} className="getFile" size="sm">Submit</Button>
               <br />
-            </div>
+            </div> */}
             <div className="filter">
               <h5 className="yearDLfil">ปีการศึกษา</h5>
               <select className="selectyearDL" onChange={(e) => this.searchYear(e)}>
