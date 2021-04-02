@@ -75,17 +75,17 @@ export default class ManageZone extends Component {
           <div class="formLogin">
             <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>Username</Form.Label>
                 <Form.Control
                   required
                   type="text"
                   name="username"
-                  placeholder="Enter email"
+                  placeholder="username"
                   value={this.state.email}
                   onChange={this.handleInputChange}
                 />
                 <Form.Text id="edittext" className="text-muted">
-                  We'll never share your email with anyone else.
+                  We'll never share your information with anyone else.
                 </Form.Text>
               </Form.Group>
               <Form.Group controlId="formBasicPassword">

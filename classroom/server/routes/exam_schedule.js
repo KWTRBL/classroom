@@ -3712,7 +3712,7 @@ module.exports.exportfile = async function (req, callback) {
       sql = `SELECT DISTINCT t_exam_room.exam_date as 'ว/ด/ป',concat(DATE_FORMAT(teach_table.mexam_time, '%H:%i'),'-',DATE_FORMAT(teach_table.mexam_time2, '%H:%i')
     ) as เวลา,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,t_exam_room.section as กลุ่ม,t_exam_room.std_num as 'นศ.รวม',t_exam_room.room_no as ห้องสอบ,CONCAT(person.Firstname, ' ', person.Lastname) as ชื่อกรรมการ
       ,'' as หมายเหตุ FROM t_exam_committee ,subject,t_exam_room,person,teach_table WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id and teach_table.subject_id = t_exam_room.subject_id and teach_table.subject_id = subject.subject_id and t_exam_committee.subject_id = teach_table.subject_id and teach_table.semester = t_exam_committee.semester and teach_table.year = t_exam_committee.year  and
-      t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and teach_table.exam_time != '00:00:00' ORDER BY t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.room_no` // คำสั่ง sql
+      t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and teach_table.exam_time != '00:00:00' ORDER BY t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.room_no,t_exam_room.subject_id` // คำสั่ง sql
 
 
     }
@@ -3720,7 +3720,7 @@ module.exports.exportfile = async function (req, callback) {
       sql = `SELECT DISTINCT t_exam_room.exam_date as 'ว/ด/ป',concat(DATE_FORMAT(teach_table.exam_time, '%H:%i'),'-',DATE_FORMAT(teach_table.exam_time2, '%H:%i')
       ) as เวลา,t_exam_committee.subject_id as รหัสวิชา,subject.subject_ename as ชื่อวิชา,t_exam_room.section as กลุ่ม,t_exam_room.std_num as 'นศ.รวม',t_exam_room.room_no as ห้องสอบ,CONCAT(person.Firstname, ' ', person.Lastname) as ชื่อกรรมการ
         ,'' as หมายเหตุ FROM t_exam_committee ,subject,t_exam_room,person,teach_table WHERE t_exam_committee.subject_id = subject.subject_id and t_exam_room.exam_date = t_exam_committee.exam_date and t_exam_room.exam_time = t_exam_committee.exam_time and t_exam_room.mid_or_final = t_exam_committee.mid_or_final and t_exam_room.room_no = t_exam_committee.room_no and t_exam_room.subject_id = t_exam_committee.subject_id and t_exam_committee.person_id = person.Person_id and teach_table.subject_id = t_exam_room.subject_id and teach_table.subject_id = subject.subject_id and t_exam_committee.subject_id = teach_table.subject_id and teach_table.semester = t_exam_committee.semester and teach_table.year = t_exam_committee.year  and
-        t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and teach_table.exam_time != '00:00:00' ORDER BY t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.room_no` // คำสั่ง sql
+        t_exam_committee.year = ${year} and t_exam_committee.semester = ${semester} and t_exam_committee.mid_or_final = '${mid_or_final}' and teach_table.exam_time != '00:00:00' ORDER BY t_exam_room.exam_date,t_exam_room.exam_time,t_exam_room.room_no,t_exam_room.subject_id` // คำสั่ง sql
   
   
 
