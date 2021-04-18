@@ -38,10 +38,10 @@ module.exports.read = async function (callback) {
 
     let subjectclassroomdata = await getdataFromClassroomSql(`select * from subject`)
     var subjectlist = subjectclassroomdata.map((data) => {
-        return "'"+data.subject_id +"'"
+        return "'" + data.subject_id + "'"
     })
     let subjectregdata = await getdataFromRegSql(`select * from subject where subject_id not in ( ${[...subjectlist]})`)
-    console.log('subjectregdata : ',subjectregdata.length)
+    console.log('subjectregdata : ', subjectregdata.length)
     for (let index = 0; index < subjectregdata.length; index++) {
         let element = subjectregdata[index];
         var insertdata = await getdataFromClassroomSql(`
@@ -54,10 +54,10 @@ module.exports.read = async function (callback) {
 
     let teacherclassroomdata = await getdataFromClassroomSql(`select * from teacher`)
     var teacherlist = teacherclassroomdata.map((data) => {
-        return "'"+data.teacher_id  +"'"
+        return "'" + data.teacher_id + "'"
     })
     let teacherregdata = await getdataFromRegSql(`select * from teacher where teacher_id   not in ( ${[...teacherlist]})`)
-    console.log('teacherregdata : ',teacherregdata.length)
+    console.log('teacherregdata : ', teacherregdata.length)
     for (let index = 0; index < teacherregdata.length; index++) {
         let element = teacherregdata[index];
         await getdataFromClassroomSql(`
@@ -75,49 +75,50 @@ module.exports.read = async function (callback) {
 
     }
 
-    
-        datalist = []
-        let teacher_teachclassroomdata = await getdataFromClassroomSql(`select * from teacher_teach order by subject_id asc`)
-        let teacher_teachregdata = await getdataFromRegSql(`select * from teacher_teach order by subject_id asc `)
-        teacher_teachregdata.map((data) => {
-            for (let index = 0; index < teacher_teachclassroomdata.length; index++) {
-                const element = teacher_teachclassroomdata[index];
-                if (data.faculty_id == element.faculty_id && data.dept_id == element.dept_id && data.curr_id == element.curr_id && data.curr2_id == element.curr2_id && data.subject_id == element.subject_id && data.semester == element.semester && data.year == element.year && data.class == element.class && data.program == element.program && data.section == element.section && data.teacher_id == element.teacher_id && data.lect_or_prac == element.lect_or_prac) {
-                    datalist.push(data)
-                    break
-                }
-            }
-        })
-    
-        // console.log(teacher_teachclassroomdata.length,teacher_teachregdata.length,datalist.length)
-    
-        for (let index = 0; index < datalist.length; index++) {
-            const element = datalist[index];
-            let len = teacher_teachregdata.length
-            removeItemOnce(teacher_teachregdata, element)
-            if (teacher_teachregdata.length == len - 1) {
-                index --
+
+    datalist = []
+    let teacher_teachclassroomdata = await getdataFromClassroomSql(`select * from teacher_teach order by subject_id asc`)
+    let teacher_teachregdata = await getdataFromRegSql(`select * from teacher_teach order by subject_id asc `)
+    teacher_teachregdata.map((data) => {
+        for (let index = 0; index < teacher_teachclassroomdata.length; index++) {
+            const element = teacher_teachclassroomdata[index];
+            if (data.faculty_id == element.faculty_id && data.dept_id == element.dept_id && data.curr_id == element.curr_id && data.curr2_id == element.curr2_id && data.subject_id == element.subject_id && data.semester == element.semester && data.year == element.year && data.class == element.class && data.program == element.program && data.section == element.section && data.teacher_id == element.teacher_id && data.lect_or_prac == element.lect_or_prac) {
+                datalist.push(data)
+                break
             }
         }
-        console.log('teacher_teachregdata : ',teacher_teachclassroomdata.length,teacher_teachregdata.length,datalist.length)
-        for (let index = 0; index < teacher_teachregdata.length; index++) {
-            let element = teacher_teachregdata[index];
-            // console.log(element)
-            element.time_stamp = typeof element.time_stamp == 'string' ? element.time_stamp : element.time_stamp
-                    .toJSON()
-                    .slice(0, 19)
-                    .replace("T", " ");
+    })
+
+    // console.log(teacher_teachclassroomdata.length,teacher_teachregdata.length,datalist.length)
+
+    for (let index = 0; index < datalist.length; index++) {
+        const element = datalist[index];
+        let len = teacher_teachregdata.length
+        removeItemOnce(teacher_teachregdata, element)
+        if (teacher_teachregdata.length == len - 1) {
+            index--
+        }
+    }
+    console.log('teacher_teachregdata : ', teacher_teachclassroomdata.length, teacher_teachregdata.length, datalist.length)
+    for (let index = 0; index < teacher_teachregdata.length; index++) {
+        let element = teacher_teachregdata[index];
+
+        console.log(element)
+        element.time_stamp = typeof element.time_stamp == 'string' ? element.time_stamp : element.time_stamp
+            .toJSON()
+            .slice(0, 19)
+            .replace("T", " ");
         //     console.log(`
         //     INSERT INTO teacher_teach (faculty_id,dept_id,curr_id,subject_id,semester,year,class,program,section,teacher_id,lect_or_prac,priority,time_stamp,curr2_id)
         //     VALUES ('${element.faculty_id}','${element.dept_id}','${element.curr_id}','${element.subject_id}','${element.semester}','${element.year}','${element.class}','${element.program}','${element.section}','${element.teacher_id}','${element.lect_or_prac}','${element.priority}','${element.time_stamp}','${element.curr2_id}')
         // `)
-            var insertdata = await getdataFromClassroomSql(`
+        var insertdata = await getdataFromClassroomSql(`
                 INSERT INTO teacher_teach (faculty_id,dept_id,curr_id,subject_id,semester,year,class,program,section,teacher_id,lect_or_prac,priority,time_stamp,curr2_id)
                 VALUES ('${element.faculty_id}','${element.dept_id}','${element.curr_id}','${element.subject_id}','${element.semester}','${element.year}','${element.class}','${element.program}','${element.section}','${element.teacher_id}','${element.lect_or_prac}','${element.priority}','${element.time_stamp}','${element.curr2_id}')
             `)
-        }
-    
-        
+    }
+
+
 
 
     datalist = []
@@ -135,7 +136,7 @@ module.exports.read = async function (callback) {
                 .toJSON()
                 .slice(0, 19)
                 .replace("T", " ");
-                data.exam_date = typeof data.exam_date == 'string' ? data.exam_date : data.exam_date
+            data.exam_date = typeof data.exam_date == 'string' ? data.exam_date : data.exam_date
                 .toJSON()
                 .slice(0, 19)
                 .replace("T", " ");
@@ -144,7 +145,7 @@ module.exports.read = async function (callback) {
                 .slice(0, 19)
                 .replace("T", " ");
             // console.log(element)
-            if (data.curr2_id == element.curr2_id && data.subject_id == element.subject_id && data.semester == element.semester && data.year == element.year && data.class == element.class && data.section == element.section && data.limit == element.studentnum && data.teach_day == element.teach_day && data.teach_time == element.teach_time && data.teach_time2 == element.teach_time2 && data.subj_type == element.subj_type   ) {
+            if (data.curr2_id == element.curr2_id && data.subject_id == element.subject_id && data.semester == element.semester && data.year == element.year && data.class == element.class && data.section == element.section && data.limit == element.studentnum && data.teach_day == element.teach_day && data.teach_time == element.teach_time && data.teach_time2 == element.teach_time2 && data.subj_type == element.subj_type) {
                 datalist.push(data)
                 break
             }
@@ -162,11 +163,13 @@ module.exports.read = async function (callback) {
             index--
         }
     }
-    console.log("teach_tableregdata :",teach_tableclassroomdata.length, teach_tableregdata.length, datalist.length)
+    console.log("teach_tableregdata :", teach_tableclassroomdata.length, teach_tableregdata.length, datalist.length)
 
     if (teach_tableclassroomdata.length != teach_tableregdata.length) {
         for (let index = 0; index < teach_tableregdata.length; index++) {
             let element = teach_tableregdata[index];
+
+            // console.log(element)
             element.exam_date = typeof element.exam_date == 'string' ? element.exam_date : element.exam_date
                 .toJSON()
                 .slice(0, 19)
@@ -176,7 +179,7 @@ module.exports.read = async function (callback) {
                 .slice(0, 19)
                 .replace("T", " ");
             // console.log(element)
-                var insertdata = await getdataFromClassroomSql(`
+            var insertdata = await getdataFromClassroomSql(`
                 INSERT INTO teach_table (building_no,class,closed,curr2_id,dept_id,exam_date,exam_day,exam_time,exam_time2,lect_or_prac,mexam_date,mexam_day,mexam_time,mexam_time2,room_no,section,semester,studentnum,subject_id,subj_type,teachtime_str,teach_day,teach_status,teach_time,teach_time2,year)
                 VALUES ('${element.building_no}','${element.class}','${element.closed}','${element.curr2_id}','','${element.exam_date}','${element.exam_day}','${element.exam_time}','${element.exam_time2}','${element.lect_or_prac}','${element.mexam_date}','${element.mexam_day}','${element.mexam_time}','${element.mexam_time2}','${element.room_no}','${element.section}','${element.semester}','${element.limit}','${element.subject_id}','${element.subj_type}','${element.teachtime_str}','${element.teach_day}','','${element.teach_time}','${element.teach_time2}','${element.year}')
             `)
@@ -184,87 +187,92 @@ module.exports.read = async function (callback) {
     }
 
 
-    
-        let t_exam_roomclassroomdata = await getdataFromClassroomSql(`select * from t_exam_room `)
-        let t_exam_roomregdata = await getdataFromRegSql(`select * from t_exam_room  `)
-        var datalist = []
-        t_exam_roomregdata.map((data) => {
-            for (let index = 0; index < t_exam_roomclassroomdata.length; index++) {
-                const element = t_exam_roomclassroomdata[index];
-                if (data.faculty_id == element.faculty_id && data.year == element.year && data.semester == element.semester && data.mid_or_final == element.mid_or_final && data.exam_date.getTime() === element.exam_date.getTime() && data.exam_time == element.exam_time && data.building_no == element.building_no && data.room_no == element.room_no && data.row_type == element.row_type && data.subject_id == element.subject_id && data.section == element.section && data.lect_or_prac == element.lect_or_prac && data.std_num == element.std_num && data.sec_std_sum == element.sec_std_sum) {
-                    datalist.push(data)
-                    break
-                }
-            }
-        })
-    
-        for (let index = 0; index < datalist.length; index++) {
-            const element = datalist[index];
-            let len = t_exam_roomregdata.length
-            removeItemOnce(t_exam_roomregdata, element)
-            if (t_exam_roomregdata.length == len - 1) {
-                index--
+
+    let t_exam_roomclassroomdata = await getdataFromClassroomSql(`select * from t_exam_room `)
+    let t_exam_roomregdata = await getdataFromRegSql(`select * from t_exam_room  `)
+    var datalist = []
+    t_exam_roomregdata.map((data) => {
+        for (let index = 0; index < t_exam_roomclassroomdata.length; index++) {
+            const element = t_exam_roomclassroomdata[index];
+            if (data.faculty_id == element.faculty_id && data.year == element.year && data.semester == element.semester && data.mid_or_final == element.mid_or_final && data.exam_date.getTime() === element.exam_date.getTime() && data.exam_time == element.exam_time && data.building_no == element.building_no && data.room_no == element.room_no && data.row_type == element.row_type && data.subject_id == element.subject_id && data.section == element.section && data.lect_or_prac == element.lect_or_prac && data.std_num == element.std_num && data.sec_std_sum == element.sec_std_sum) {
+                datalist.push(data)
+                break
             }
         }
-        console.log('t_exam_roomregdata : ', t_exam_roomregdata.length)
-        if (t_exam_roomclassroomdata.length != t_exam_roomregdata.length) {
-            for (let index = 0; index < t_exam_roomregdata.length; index++) {
-                let element = t_exam_roomregdata[index];
-                element.exam_date = typeof element.exam_date == 'string' ? element.exam_date : element.exam_date
-                    .toJSON()
-                    .slice(0, 19)
-                    .replace("T", " ");
-                element.save_time = typeof element.save_time == 'string' ? element.save_time : element.save_time
-                    .toJSON()
-                    .slice(0, 19)
-                    .replace("T", " ");
-                var insertdata = await getdataFromClassroomSql(`
+    })
+
+    for (let index = 0; index < datalist.length; index++) {
+        const element = datalist[index];
+        let len = t_exam_roomregdata.length
+        removeItemOnce(t_exam_roomregdata, element)
+        if (t_exam_roomregdata.length == len - 1) {
+            index--
+        }
+    }
+    console.log('t_exam_roomregdata : ', t_exam_roomregdata.length)
+    if (t_exam_roomclassroomdata.length != t_exam_roomregdata.length) {
+        for (let index = 0; index < t_exam_roomregdata.length; index++) {
+            let element = t_exam_roomregdata[index];
+            element.exam_date = typeof element.exam_date == 'string' ? element.exam_date : element.exam_date
+                .toJSON()
+                .slice(0, 19)
+                .replace("T", " ");
+            element.save_time = typeof element.save_time == 'string' ? element.save_time : element.save_time
+                .toJSON()
+                .slice(0, 19)
+                .replace("T", " ");
+            var insertdata = await getdataFromClassroomSql(`
                     INSERT INTO t_exam_room (faculty_id,year,semester,mid_or_final,exam_date,exam_time,building_no,room_no,row_type,subject_id,section,lect_or_prac,std_num,sec_std_sum,save_time)
                     VALUES ('${element.faculty_id}','${element.year}','${element.semester}','${element.mid_or_final}','${element.exam_date}','${element.exam_time}','${element.building_no}','${element.room_no}','${element.row_type}','${element.subject_id}','${element.section}','${element.lect_or_prac}','${element.std_num}','${element.sec_std_sum}','${element.save_time}')
                 `)
-            }
         }
-    
-    
-        let available_room = await getdataFromClassroomSql(`select year,semester from t_availableroom group by year,semester`)
-        let teach_table_year = await getdataFromClassroomSql(`select year,semester from teach_table group by year,semester`)
-        datalist = []
-        teach_table_year.map(data => {
-            for (let index = 0; index < available_room.length; index++) {
-                const element = available_room[index];
-                if (element.year == data.year && element.semester == data.semester) {
-                    datalist.push(data)
-                    break
-                }
-    
+    }
+
+
+    let available_room = await getdataFromClassroomSql(`select year,semester from t_availableroom group by year,semester`)
+    let teach_table_year = await getdataFromClassroomSql(`select year,semester from teach_table group by year,semester`)
+    datalist = []
+    teach_table_year.map(data => {
+        for (let index = 0; index < available_room.length; index++) {
+            const element = available_room[index];
+            if (element.year == data.year && element.semester == data.semester) {
+                datalist.push(data)
+                break
             }
-        })
-        for (let index = 0; index < datalist.length; index++) {
-            const element = datalist[index];
-            let len = teach_table_year.length
-            removeItemOnce(teach_table_year, element)
-            if (teach_table_year.length == len - 1) {
-                index--
-            }
+
         }
-    
-        var roomdata = await getdataFromClassroomSql(`
-            select * from t_availableroom where year = ${available_room[0].year} and semester = ${available_room[0].semester} 
+    })
+    for (let index = 0; index < datalist.length; index++) {
+        const element = datalist[index];
+        let len = teach_table_year.length
+        removeItemOnce(teach_table_year, element)
+        if (teach_table_year.length == len - 1) {
+            index--
+        }
+    }
+
+    // var roomdata = await getdataFromClassroomSql(`
+    //         select distinct * from t_availableroom where year = ${available_room[0].year} and semester = ${available_room[0].semester} 
+    //     `)
+    var roomdata = await getdataFromClassroomSql(`
+            select distinct * from t_room
         `)
-        console.log('teach_table_year : ',teach_table_year.length)
-        for (let index = 0; index < teach_table_year.length; index++) {
-            const element = teach_table_year[index];
-            for (let roomindex = 0; roomindex < roomdata.length; roomindex++) {
-                const roomelement = roomdata[roomindex];
+    console.log('teach_table_year : ', teach_table_year.length)
+    for (let index = 0; index < teach_table_year.length; index++) {
+        const element = teach_table_year[index];
+        for (let roomindex = 0; roomindex < roomdata.length; roomindex++) {
+            const roomelement = roomdata[roomindex];
+            for (let index = 1; index < 8; index++) {
                 var insertdata = await getdataFromClassroomSql(`
                     INSERT INTO t_availableroom (room_no,teach_day,year,semester,morning,noon,evening)
-                    VALUES ('${roomelement.room_no}','${roomelement.teach_day}','${element.year}','${element.semester}','0','0','0')
+                    VALUES ('${roomelement.room_no}','${i}','${element.year}','${element.semester}','0','0','0')
                 `)
             }
         }
+    }
 
-        callback(['success'])
-    
+    callback(['success'])
+
 
 
 }

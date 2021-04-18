@@ -33,10 +33,11 @@ export default class ReportIn extends Component {
             teachswap1: null,
             teachswap2: null,
             teachinstead: [],
-            name1index:null,
-            name2index:null,
-            name3index:null,
-            filename:[]
+            name1index: null,
+            name2index: null,
+            name3index: null,
+            filename: [],
+            showdata: 0
         }
         this.handlechange = this.handlechange.bind(this);
         this.showdata = this.showdata.bind(this)
@@ -91,8 +92,8 @@ export default class ReportIn extends Component {
                 disableswap: false,
                 teachswap1: data1[0],
                 teachswap2: data2[0],
-                name1index:0,
-                name2index:0
+                name1index: 0,
+                name2index: 0
             })
         }).catch(function (error) {
             if (error.response.status == 404) {
@@ -126,7 +127,7 @@ export default class ReportIn extends Component {
                 name3data: data1,
                 disableinstead: false,
                 teachinstead: data1[0],
-                name3index:0
+                name3index: 0
             })
         }).catch(function (error) {
             if (error.response.status == 404) {
@@ -149,11 +150,12 @@ export default class ReportIn extends Component {
             }
         ).then((res) => {
             alert(res.data)
-            window.location.reload(false);
+            this.showdata()
+            // window.location.reload(false);
         }).catch(function (error) {
             if (error.response.status == 500) {
                 alert(error.response.data)
-                window.location.reload(false);
+                // window.location.reload(false);
             }
         });
     }
@@ -177,11 +179,12 @@ export default class ReportIn extends Component {
             }
         ).then((res) => {
             alert(res.data)
-            window.location.reload(false);
+            this.showinsteaddata()
+            // window.location.reload(false);
         }).catch(function (error) {
             if (error.response.status == 500) {
                 alert(error.response.data)
-                window.location.reload(false);
+                // window.location.reload(false);
             }
         });
     }
@@ -190,7 +193,7 @@ export default class ReportIn extends Component {
         const { name, value } = e.target;
         this.setState({
             [name]: this.state.name1data[parseInt(value)],
-            name1index:parseInt(value)
+            name1index: parseInt(value)
         })
 
     }
@@ -199,7 +202,7 @@ export default class ReportIn extends Component {
         const { name, value } = e.target;
         this.setState({
             [name]: this.state.name2data[parseInt(value)],
-            name2index:parseInt(value)
+            name2index: parseInt(value)
         })
 
     }
@@ -208,7 +211,13 @@ export default class ReportIn extends Component {
         const { name, value } = e.target;
         this.setState({
             [name]: this.state.name3data[parseInt(value)],
-            name3index:parseInt(value)
+            name3index: parseInt(value)
+        })
+    }
+
+    handlechangeshowdata = (e) => {
+        this.setState({
+            showdata: !this.state.showdata
         })
     }
 
@@ -227,7 +236,7 @@ export default class ReportIn extends Component {
             })
 
             return (
-                <option name="teachswap1" selected = {this.state.name1index == index} value={index}>
+                <option name="teachswap1" selected={this.state.name1index == index} value={index}>
                     {strdate} {data.start}-{data.end}
                 </option>
             )
@@ -244,7 +253,7 @@ export default class ReportIn extends Component {
             })
 
             return (
-                <option name="teachswap2" value={index} selected = {this.state.name2index == index}>
+                <option name="teachswap2" value={index} selected={this.state.name2index == index}>
                     {strdate} {data.start}-{data.end}
                 </option>
             )
@@ -260,7 +269,7 @@ export default class ReportIn extends Component {
                 weekday: 'short',
             })
             return (
-                <option name="teachinstead" value={index} selected = {this.state.name3index == index}>
+                <option name="teachinstead" value={index} selected={this.state.name3index == index}>
                     {strdate} {data.start}-{data.end}
                 </option>
             )
@@ -273,7 +282,15 @@ export default class ReportIn extends Component {
                     <h1 class="state">แลกวันคุมสอบ และคุมสอบแทน</h1>
 
                     <div id="detail">
-                        <div className="filter content-center">
+                        <div className="filter br" >
+                            <h5 className="Officefil">ประเภท</h5>
+                            <select className="selecttype" onChange={(e) => this.handlechangeshowdata(e)}>
+                                <option value="0">แลกวันคุมสอบ</option>
+                                <option value="1">คุมสอบแทน</option>
+                            </select>
+                        </div>
+
+                        <div className="filter content-center" hidden={this.state.showdata}>
                             <h5 className="yearDLfil"><b> ผู้ขอแลก :</b></h5>
                             <h5 className="yearDLfil">ชื่อ</h5>
                             <input required pattern="^[ก-๏\s]+$" className="textbox" name="name1" value={this.state.name1} onChange={(e) => this.handlechange(e)}>
@@ -286,8 +303,8 @@ export default class ReportIn extends Component {
                                 {optiondata1}
                             </select>
                         </div>
-                        <br />
-                        <div className="filter content-center">
+                        <br hidden={this.state.showdata} />
+                        <div className="filter content-center" hidden={this.state.showdata}>
 
                             <h5 className="yearDLfil"><b>ผู้ให้แลก :</b></h5>
                             <h5 className="yearDLfil">ชื่อ</h5>
@@ -300,46 +317,49 @@ export default class ReportIn extends Component {
                                 {optiondata2}
                             </select>
                         </div>
-                        <div className="filter btnIn">
+                        <div className="filter btnIn" hidden={this.state.showdata}>
                             <Button variant="light" type="submit" className="btnspace" onClick={() => this.showdata()}>แสดงข้อมูล</Button>
                             <Button variant="primary" type="submit" disabled={this.state.disableswap} className="" onClick={() => this.swapdata()}>แลกวันคุมสอบ</Button>
 
                         </div>
+                        <br hidden={this.state.showdata} />
+                        <div>
 
-                        <br />
-                        <div className="filter content-center">
 
+                            <div className="filter content-center" hidden={!this.state.showdata}>
 
-                            <h5 className="yearDLfil"><b>ผู้ขอให้คุมสอบแทน : </b> ชื่อ </h5>
-                            <input className="textbox" name="name3" value={this.state.name3} onChange={(e) => this.handlechange(e)}>
+                                <h5 className="yearDLfil "> <b>ผู้ขอให้คุมสอบแทน : </b></h5>
+                                <h5 className="yearDLfil name"  > ชื่อ </h5>
+                                <input className="textbox" name="name3" value={this.state.name3} onChange={(e) => this.handlechange(e)}>
 
-                            </input>
-                            <h5 className="yearDLfil">นามสกุล</h5>
-                            <input required className="textbox" name="surname3" value={this.state.surname3} onChange={(e) => this.handlechange(e)}>
-                            </input>                        วัน - เวลาที่คุมสอบ
+                                </input>
+                                <h5 className="yearDLfil">นามสกุล</h5>
+                                <input required className="textbox" name="surname3" value={this.state.surname3} onChange={(e) => this.handlechange(e)}>
+                                </input>                        วัน - เวลาที่คุมสอบ
                             <select className="selectExchange" name="teachinstead" onChange={(e) => this.handlechangeinstead(e)} >
-                                {optiondata3}
-                            </select>
+                                    {optiondata3}
+                                </select>
 
+                            </div>
+                            <br />
+                            <div className="filter content-center name2" hidden={!this.state.showdata}>
+
+                                <h5 className="yearDLfil "> <b>ผู้ยินยอมคุมสอบแทน : </b></h5>
+                                <h5 className="yearDLfil name"  > ชื่อ </h5>
+
+                                <input className="textbox" name="name4" value={this.state.name4} onChange={(e) => this.handlechange(e)}>
+
+                                </input>
+                                <h5 className="yearDLfil">นามสกุล</h5>
+                                <input required className="textbox" name="surname4" value={this.state.surname4} onChange={(e) => this.handlechange(e)}>
+                                </input>
+                            </div>
+                            <div className="filter btnIn" hidden={!this.state.showdata}>
+                                <Button variant="light" className="btnspace" onClick={() => this.showinsteaddata()}>แสดงข้อมูล</Button>
+                                <Button variant="primary" disabled={this.state.disableinstead} className="" onClick={() => this.insteaddata()}>คุมสอบแทน</Button>
+
+                            </div>
                         </div>
-                        <br />
-                        <div className="filter content-center">
-
-
-                            <h5 className="yearDLfil"><b> ผู้ยินยอมคุมสอบแทน :</b>  ชื่อ </h5>
-                            <input className="textbox" name="name4" value={this.state.name4} onChange={(e) => this.handlechange(e)}>
-
-                            </input>
-                            <h5 className="yearDLfil">นามสกุล</h5>
-                            <input required className="textbox" name="surname4" value={this.state.surname4} onChange={(e) => this.handlechange(e)}>
-                            </input>                        
-                    </div>
-                        <div className="filter btnIn">
-                            <Button variant="light" className="btnspace" onClick={() => this.showinsteaddata()}>แสดงข้อมูล</Button>
-                            <Button variant="primary" disabled={this.state.disableinstead} className="" onClick={() => this.insteaddata()}>คุมสอบแทน</Button>
-
-                        </div>
-
                         <br />
 
                     </div>

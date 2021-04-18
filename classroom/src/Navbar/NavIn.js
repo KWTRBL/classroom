@@ -54,9 +54,9 @@ export default class ClassroomData extends Component {
                 <NavDropdown.Item href="/InvigilatorData">
                   ข้อมูลบุคลากรในคณะ
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/TeacherteachData">
+                {/* <NavDropdown.Item href="/TeacherteachData">
                   ข้อมูลตารางสอน
-                </NavDropdown.Item>
+                </NavDropdown.Item> */}
               </NavDropdown>
               <NavDropdown title="การจัดการคุมสอบ" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/ConditionIn">

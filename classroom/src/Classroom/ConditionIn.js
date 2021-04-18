@@ -258,11 +258,23 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/facultycondition')
+                    .then(res => {
+        
+                        this.setState({
+                            stdnum: res.data[0].committee_per_student,
+                            oldstdnum: res.data[0].committee_per_student
+                        })
+                        this.disable_stdnumedit()
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
                 })
                 .catch(err => {
                     console.error(err)
                 })
-            window.location.reload(false);
+            // window.location.reload(false);
         }
 
     }
@@ -295,6 +307,25 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week1edit()
+        
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
                 })
                 .catch(err => {
                     console.error(err)
@@ -311,27 +342,48 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week1edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
                 })
                 .catch(err => {
                     console.error(err)
                 })
 
         }
-        window.location.reload(false);
+        // window.location.reload(false);
     }
     //edit week2
     enable_week2edit = () => {
 
         this.setState({
-            editweek2: true
+            editweek2: true,
+        
         })
 
     }
 
-    disable_week2edit = () => {
-
+    disable_week2edit = (index) => {
+        
         this.setState({
             editweek2: false,
+            examweek:JSON.parse(this.state.olddata)
 
         })
 
@@ -348,6 +400,26 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week2edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
+
                 })
                 .catch(err => {
                     console.error(err)
@@ -364,13 +436,33 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week2edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
+
                 })
                 .catch(err => {
                     console.error(err)
                 })
 
         }
-        window.location.reload(false);
+        // window.location.reload(false);
     }
     //edit week3
     enable_week3edit = () => {
@@ -385,6 +477,7 @@ export default class ConditionIn extends Component {
 
         this.setState({
             editweek3: false,
+            examweek:JSON.parse(this.state.olddata)
 
         })
 
@@ -401,6 +494,26 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week3edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
+
                 })
                 .catch(err => {
                     console.error(err)
@@ -417,13 +530,33 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week3edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
+
                 })
                 .catch(err => {
                     console.error(err)
                 })
 
         }
-        window.location.reload(false);
+        // window.location.reload(false);
     }
     //edit week4
     enable_week4edit = () => {
@@ -438,6 +571,7 @@ export default class ConditionIn extends Component {
 
         this.setState({
             editweek4: false,
+            examweek:JSON.parse(this.state.olddata)
 
         })
 
@@ -454,6 +588,26 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week4edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
+
                 })
                 .catch(err => {
                     console.error(err)
@@ -470,13 +624,33 @@ export default class ConditionIn extends Component {
                 })
                 .then(response => {
                     console.log("response: ", response)
+                    axios.get('http://localhost:7777/examweek')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+        
+                        this.setState({
+                            examweek: res.data,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+                        this.disable_week4edit()
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+        
+
                 })
                 .catch(err => {
                     console.error(err)
                 })
 
         }
-        window.location.reload(false);
+        // window.location.reload(false);
     }
 
     deldata_modalclose = () => {
@@ -505,8 +679,10 @@ export default class ConditionIn extends Component {
             <option value={data}>{data}</option>
         )
 
-        const tabledata = this.state.examweek.map((data) => {
+        const tabledata = this.state.examweek.map((data,index) => {
             //edit week1
+            // 0000-00-00
+
             if (this.state.editweek1 == true) {
                 if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
                     return (
@@ -577,6 +753,12 @@ export default class ConditionIn extends Component {
             }
             //edit week2
             if (this.state.editweek2 == true) {
+                if(data.week2_start.substring(0, 10) == '0000-00-00' ){
+                    data.week2_start = `${data.week1_start.substring(0, 4)}-01-01`
+                }
+                if(data.week2_end.substring(0, 10) == '0000-00-00' ){
+                    data.week2_end = `${data.week1_start.substring(0, 4)}-01-01`
+                }
                 if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
                     return (
                         <tbody>
@@ -615,7 +797,7 @@ export default class ConditionIn extends Component {
                                     />
                                 </td>
                                 <td>
-                                    <Button variant="link" onClick={() => this.disable_week2edit()}>ยกเลิก</Button>
+                                    <Button variant="link" onClick={() => this.disable_week2edit(index)}>ยกเลิก</Button>
 
                                     <Button variant="primary" onClick={() => this.confirm_week2edit()} >ยืนยัน</Button>
                                 </td>
@@ -648,7 +830,14 @@ export default class ConditionIn extends Component {
                     )
             }
             //edit week3
+            
             if (this.state.editweek3 == true) {
+                if(data.week3_start.substring(0, 10) == '0000-00-00' ){
+                    data.week3_start = `${data.week1_start.substring(0, 4)}-01-01`
+                }
+                if(data.week3_end.substring(0, 10) == '0000-00-00' ){
+                    data.week3_end = `${data.week1_start.substring(0, 4)}-01-01`
+                }
                 if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
                     return (
                         <tbody>
@@ -720,6 +909,12 @@ export default class ConditionIn extends Component {
             }
             //edit week4
             if (this.state.editweek4 == true) {
+                if(data.week4_start.substring(0, 10) == '0000-00-00' ){
+                    data.week4_start = `${data.week1_start.substring(0, 4)}-01-01`
+                }
+                if(data.week4_end.substring(0, 10) == '0000-00-00' ){
+                    data.week4_end = `${data.week1_start.substring(0, 4)}-01-01`
+                }
                 if (this.state.searchYear == data.year && this.state.searchTerm == data.semester && this.state.searchPart == data.mid_or_final)
                     return (
                         <tbody>

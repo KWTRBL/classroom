@@ -92,7 +92,7 @@ export default class ClassroomData extends Component {
                     building: res.data,
                 })
                 res.data.map((data, index) => {
-                    if (data.building_no == "CCA") {
+                    if (data.building_no == " 7 ชั้น") {
                         this.setState({ building_name: data.building_name })
                     }
                 })
@@ -168,23 +168,53 @@ export default class ClassroomData extends Component {
 
     //handle modal
     handleClose() {
+        
         this.setState({
             show: false
         })
     }
     handleClosesubmit() {
+        axios.get('http://localhost:7777/classroom')
+        .then(res => {
+            const newIds = this.state.editlist.slice()
+            for (var i = 0; i < res.data.length; i++) {
+                newIds[i] = 0
+            }
+            this.setState({
+                name: res.data,
+                editlist: newIds,
+                olddata: JSON.stringify(res.data),
+                showsubmit: false
 
-        this.setState({
-            showsubmit: false
+            })
         })
-        window.location.reload(false);
+        .catch(function (error) {
+            console.log(error);
+        })
+
+        // window.location.reload(false);
     }
 
     handleClosefailed() {
-        this.setState({
-            showfailed: false
+        axios.get('http://localhost:7777/classroom')
+        .then(res => {
+            const newIds = this.state.editlist.slice()
+            for (var i = 0; i < res.data.length; i++) {
+                newIds[i] = 0
+            }
+            this.setState({
+                name: res.data,
+                editlist: newIds,
+                olddata: JSON.stringify(res.data),
+                showfailed: false
+
+            })
         })
-        window.location.reload(false);
+        .catch(function (error) {
+            console.log(error);
+        })
+
+        // window.location.reload(false);
 
     }
 
@@ -288,7 +318,7 @@ export default class ClassroomData extends Component {
             room_status: null
         })
         this.state.building.map((data, index) => {
-            if (data.building_no == "CCA") {
+            if (data.building_no == " 7 ชั้น") {
                 this.setState({ building_name: data.building_name })
             }
         })
@@ -308,13 +338,31 @@ export default class ClassroomData extends Component {
             })
             .then(response => {
                 console.log("response: ", response)
-
+                this.delrow()
+                axios.get('http://localhost:7777/classroom')
+                .then(res => {
+                    const newIds = []
+                    for (var i = 0; i < res.data.length; i++) {
+                        newIds.push(0)
+                    }
+                    this.setState({
+                        name: res.data,
+                        editlist: newIds,
+                        olddata: JSON.stringify(res.data),
+        
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        
+        
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
     //edit data handle
@@ -361,13 +409,30 @@ export default class ClassroomData extends Component {
             })
             .then(response => {
                 console.log("response: ", response)
-
+                axios.get('http://localhost:7777/classroom')
+                .then(res => {
+                    const newIds = this.state.editlist.slice()
+                    for (var i = 0; i < res.data.length; i++) {
+                        newIds[i] = 0
+                    }
+                    this.setState({
+                        name: res.data,
+                        editlist: newIds,
+                        olddata: JSON.stringify(res.data),
+        
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        
+        
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
 
@@ -388,13 +453,13 @@ export default class ClassroomData extends Component {
         const item = this.state.name.filter((member, index) => {
             if (this.state.search == null) {
 
-                this.setState({ search: "CCA", floor_no: 1, building_no: "CCA" })
-                if (member.building_no == "CCA" && (member.room_floor == "1")) {
+                this.setState({ search: " 7 ชั้น", floor_no: 1, building_no: " 7 ชั้น" })
+                if (member.building_no == " 7 ชั้น" && (member.room_floor == "1")) {
                     editjson.push(index)
                     console.log(editjson)
                 }
 
-                return member.building_no == "CCA" && (member.room_floor == "1")
+                return member.building_no == " 7 ชั้น" && (member.room_floor == "1")
             }
             else if ((member.building_no == this.state.search) && (member.room_floor == this.state.floor_no)) {
                 editjson.push(index)
@@ -588,7 +653,7 @@ export default class ClassroomData extends Component {
                         <Modal.Header closeButton>
                             <Modal.Title>Success</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                        <Modal.Body>ลบข้อมูลสำเร็จ</Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>
@@ -597,7 +662,7 @@ export default class ClassroomData extends Component {
                         <Modal.Header closeButton>
                             <Modal.Title>Failed</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                        <Modal.Body>ลบข้อมูลล้มเหลว</Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>

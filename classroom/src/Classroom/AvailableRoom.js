@@ -134,7 +134,7 @@ export default class AvailiableRoom extends Component {
     render() {
         const item = this.state.name.filter((member) => {
             if (this.state.yearsearch == null) {
-                this.setState({ buildingsearch: "CCA", yearsearch: 2555, semestersearch: 1, daysearch: 1, timezone: 1 })
+                this.setState({ buildingsearch: " 7 ชั้น", yearsearch: 2562, semestersearch: 1, daysearch: 1, timezone: 1 })
                 return member.building_no == this.state.buildingsearch && member.year == this.state.yearsearch && member.semester == this.state.semestersearch && member.teach_day == this.state.daysearch
             }
 
@@ -169,7 +169,7 @@ export default class AvailiableRoom extends Component {
 
         let data_num = this.state.name.filter((member) => {
             if (this.state.yearsearch == null) {
-                this.setState({ buildingsearch: "CCA", yearsearch: 2555, semestersearch: 1, daysearch: 1, timezone: 1 })
+                this.setState({ buildingsearch: " 7 ชั้น", yearsearch: 2562, semestersearch: 1, daysearch: 1, timezone: 1 })
                 return member.building_no == this.state.buildingsearch && member.year == this.state.yearsearch && member.semester == this.state.semestersearch && member.teach_day == this.state.daysearch
             }
 

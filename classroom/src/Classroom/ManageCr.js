@@ -67,6 +67,8 @@ export default class BuildingData extends Component {
         this.componentWillMount = this.componentWillMount.bind(this);
         this.pageselectvalue = this.pageselectvalue.bind(this);
 
+        this.manageroom = this.manageroom.bind(this)
+
     }
     //delete row button 
     deletebt = (buildng_no, room_no, index) => {
@@ -80,8 +82,8 @@ export default class BuildingData extends Component {
 
     downloadexcel = () => {
         var curr2_tname = null
-        this.state.curr2.map((data,index) =>{
-            if (this.state.curr2search == data.curr2_id){
+        this.state.curr2.map((data, index) => {
+            if (this.state.curr2search == data.curr2_id) {
                 curr2_tname = data.curr2_tname
             }
         })
@@ -90,7 +92,7 @@ export default class BuildingData extends Component {
                 year: this.state.yearsearch,
                 semester: this.state.semestersearch,
                 curr2_id: this.state.curr2search,
-                curr2_tname : curr2_tname
+                curr2_tname: curr2_tname
             }, {
 
                 responseType: 'arraybuffer',
@@ -265,26 +267,34 @@ export default class BuildingData extends Component {
         this.pageselectvalue(1)
     }
 
-    manageroom = () => {
-        axios
-            .post("http://localhost:7777/manageroom", {
-                data: {
-                    year: this.state.yearsearch,
-                    semester: this.state.semestersearch,
-                    curr2_id: this.state.curr2search,
-                    teach_day: this.state.daysearch,
-                    timeperiod: this.state.starttime
-                }
-            })
-            .then(response => {
-                console.log("response: ", response)
+    manageroom = async () => {
+        console.log('manage room')
+        var data = await axios.post("http://localhost:7777/manageroom", {
+            data: {
+                year: this.state.yearsearch,
+                semester: this.state.semestersearch,
+                curr2_id: this.state.curr2search,
+                teach_day: this.state.daysearch,
+                timeperiod: this.state.starttime
+            }
+        })
+        var teachdata = await axios.get('http://localhost:7777/teachdata')
+        console.log(data)
+        console.log(teachdata)
+        const newIds = []
+        for (var i = 0; i < teachdata.data.length; i++) {
+            newIds.push(0)
+        }
+        this.setState({
+            name: teachdata.data,
+            editlist: newIds,
+            olddata: JSON.stringify(teachdata.data)
 
-                // do something abosut response
-            })
-            .catch(err => {
-                console.error(err)
-            })
-        window.location.reload(false);
+        })
+
+        // window.location.reload(false);
+
+
     }
 
     //enable edit row
@@ -305,7 +315,7 @@ export default class BuildingData extends Component {
     }
 
     //confirm edit data sent to database
-    confirmedit = (index) => {
+    confirmedit = async (index) => {
         let olddata = JSON.parse(this.state.olddata)
 
         console.log(index)
@@ -320,7 +330,7 @@ export default class BuildingData extends Component {
             time = 3
         console.log(time)
 
-        axios
+        var data = await axios
             .post("http://localhost:7777/availableroom/update", {
                 room_no: this.state.name[index].room_no,
                 building_no: this.state.name[index].building_no,
@@ -336,16 +346,29 @@ export default class BuildingData extends Component {
                 oldroom: olddata[index].room_no,
                 section: this.state.name[index].section
             })
-            .then(response => {
-                console.log("response: ", response)
+            // .then(response => {
+            //     console.log("response: ", response)
 
-                // do something about response
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            //     // do something about response
+            // })
+            // .catch(err => {
+            //     console.error(err)
+            // })
 
-        window.location.reload(false);
+        var teachdata = await axios.get('http://localhost:7777/teachdata')
+        console.log(data)
+        console.log(teachdata)
+        const newIds = []
+        for (var i = 0; i < teachdata.data.length; i++) {
+            newIds.push(0)
+        }
+        this.setState({
+            name: teachdata.data,
+            editlist: newIds,
+            olddata: JSON.stringify(teachdata.data)
+        })
+
+        // window.location.reload(false);
 
     }
 
@@ -413,25 +436,49 @@ export default class BuildingData extends Component {
         })
     }
 
-    handleClosesubmit() {
-
+    async handleClosesubmit() {
+        var teachdata = await axios.get('http://localhost:7777/teachdata')
+        const newIds = []
+        for (var i = 0; i < teachdata.data.length; i++) {
+            newIds.push(0)
+        }
         this.setState({
+            name: teachdata.data,
+            editlist: newIds,
+            olddata: JSON.stringify(teachdata.data),
             showsubmit: false
+
+
         })
-        window.location.reload(false);
+
+        // window.location.reload(false);
     }
 
-    handleClosefailed() {
+    async handleClosefailed() {
+        var teachdata = await axios.get('http://localhost:7777/teachdata')
+        const newIds = []
+        for (var i = 0; i < teachdata.data.length; i++) {
+            newIds.push(0)
+        }
         this.setState({
+            name: teachdata.data,
+            editlist: newIds,
+            olddata: JSON.stringify(teachdata.data),
             showfailed: false
+
+
         })
-        window.location.reload(false);
+        // this.setState({
+        //     showfailed: false
+        // })
+        // window.location.reload(false);
 
     }
 
 
 
     render() {
+        console.log('re render')
         var editjson = []
         const buildingcheck = []
         const buildinglist = this.state.available_room.map((data, index) => {
@@ -680,8 +727,11 @@ export default class BuildingData extends Component {
                                 <option value="13:00">บ่าย</option>
                                 <option value="16:30">ค่ำ</option>
                             </select>
-                            <div id="buttonManage">
-                                <Button variant="primary" className="ManageInbtn" onClick={(e) => this.manageroom(e)}>จัดห้อง</Button>
+                            <div id="ManageInbtn">
+                                <Button variant="primary" className="ManageCrbtn" onClick={(e) => this.manageroom(e)}>จัดห้อง</Button>
+                            </div>
+                            <div >
+                                <Button variant="primary" className="downloadbtn" onClick={() => this.downloadexcel()}>Download เอกสาร</Button>
                             </div>
                         </div>
 
@@ -703,10 +753,9 @@ export default class BuildingData extends Component {
                                 {item}
                             </tbody>
                         </Table>
-                        <Button variant="light" className="downloadbtn" onClick={() => this.downloadexcel()}>Download เอกสาร</Button>
-                        <Button variant="light" className="adddata">
+                        {/* <Button variant="light" className="adddata">
                             <img src={addbt} className="addicon" alt="add" />
-                        </Button>
+                        </Button> */}
                         <Pagination
                             activePage={this.state.pageclick}
                             itemsCountPerPage={this.state.itemperpage}
@@ -717,6 +766,7 @@ export default class BuildingData extends Component {
                             onChange={this.pageselectvalue}
 
                         />
+                        {/* <p id="missclass">*วิชาที่จัดห้องเรียนไม่ได้ : 01066737 CONTROL VALVES</p> */}
                     </div>
                 </div>
 
@@ -752,7 +802,7 @@ export default class BuildingData extends Component {
                     <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
                     <Modal.Footer>
                     </Modal.Footer>
-                </Modal>W
+                </Modal>
 
                 <div className="footer">
                     <Foot />

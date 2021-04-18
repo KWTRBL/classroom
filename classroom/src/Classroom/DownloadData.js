@@ -360,13 +360,30 @@ export default class BuildingData extends Component {
       })
       .then(response => {
         console.log("response: ", response)
+        axios.get('http://localhost:7777/teachdata')
+          .then(res => {
+            const newIds = []
+            for (var i = 0; i < res.data.length; i++) {
+              newIds.push(0)
+            }
+            console.log(res.data)
+            this.setState({
+              name: res.data,
+              editlist: newIds,
+              olddata: JSON.stringify(res.data)
+            })
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
 
         // do something about response
       })
       .catch(err => {
         console.error(err)
       })
-    window.location.reload(false);
+    // window.location.reload(false);
 
   }
 
@@ -376,7 +393,7 @@ export default class BuildingData extends Component {
       return data == 1
     })
     if (!result) {
-      const newIds = this.state.editlist.slice() 
+      const newIds = this.state.editlist.slice()
       newIds[index] = 1
       console.log('new editlist', newIds)
       this.setState({ editlist: newIds }) //set the new state
@@ -561,7 +578,7 @@ export default class BuildingData extends Component {
                   <th>ชื่อวิชา</th>
                   <th>กลุ่ม</th>
                   <th>เวลาที่เรียน</th>
-                  <th>สถานะ</th>
+                  <th>จัด/ไม่จัด</th>
                   <th>แก้ไขข้อมูล</th>
                 </tr>
               </thead>

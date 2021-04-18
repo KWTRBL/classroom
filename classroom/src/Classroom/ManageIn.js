@@ -132,9 +132,6 @@ export default class ManageIn extends Component {
       .catch(function (error) {
         console.log(error);
       });
-
-
-
     axios
       .get("http://localhost:7777/exam_committee_check")
       .then((res) => {
@@ -257,13 +254,38 @@ export default class ManageIn extends Component {
         }
       }
     ).then(response => {
+      console.log(response)
+      this.handleClose()
+      axios
+      .get("http://localhost:7777/exam_committee")
+      .then((res) => {
+        // console.log(res.data);
+        var datain = JSON.stringify(res.data[0].list);
+        var jsondata = JSON.parse(res.data[0].list);
+        // console.log(res.data[0].list[91],res.data[0].list[92])
+        // console.log(typeof res.data[0].list,typeof jsondata,jsondata)
+        const newIds = []
+        for (var i = 0; i < res.data.length; i++) {
+          newIds.push(0);
+        }
+        this.setState({
+          editlist: newIds,
+          olddata: JSON.stringify(res.data),
+          exam_committee: res.data,
+          show:false
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
 
       // do something about response
     })
       .catch(err => {
         console.error(err)
       })
-    window.location.reload(false);
+    // window.location.reload(false);
 
 
   }
@@ -282,7 +304,30 @@ export default class ManageIn extends Component {
       }
     ).then((res) => {
       console.log(res.data)
-      window.location.reload(false);
+          axios
+      .get("http://localhost:7777/exam_committee")
+      .then((res) => {
+        // console.log(res.data);
+        var datain = JSON.stringify(res.data[0].list);
+        var jsondata = JSON.parse(res.data[0].list);
+        // console.log(res.data[0].list[91],res.data[0].list[92])
+        // console.log(typeof res.data[0].list,typeof jsondata,jsondata)
+        const newIds = this.state.editlist.slice();
+        for (var i = 0; i < res.data.length; i++) {
+          newIds.push(0);
+        }
+        this.setState({
+          editlist: newIds,
+          olddata: JSON.stringify(res.data),
+          exam_committee: res.data,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+      // window.location.reload(false);
 
     })
     .catch(function (error) {
@@ -629,7 +674,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 1 ? (
-                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+                      result[1] + ' ' + (examlist[1].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
 
                     ) : ''
                   }
@@ -637,7 +682,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 1 ? (
-                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+                      examlist[1].building_no + ' ห้อง ' + examlist[1].room_no
 
                     ) : ''
                   }
@@ -646,7 +691,7 @@ export default class ManageIn extends Component {
                   {
                     examlist.length > 1 ?
                       (
-                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[1])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
@@ -676,7 +721,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 2 ? (
-                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+                      result[2] + ' ' + (examlist[2].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
 
                     ) : ''
                   }
@@ -684,7 +729,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 2 ? (
-                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+                      examlist[2].building_no + ' ห้อง ' + examlist[2].room_no
 
                     ) : ''
                   }
@@ -693,7 +738,7 @@ export default class ManageIn extends Component {
                   {
                     examlist.length > 2 ?
                       (
-                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[2])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
@@ -722,7 +767,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 3 ? (
-                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+                      result[3] + ' ' + (examlist[3].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
 
                     ) : ''
                   }
@@ -730,7 +775,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 3 ? (
-                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+                      examlist[3].building_no + ' ห้อง ' + examlist[3].room_no
 
                     ) : ''
                   }
@@ -739,7 +784,7 @@ export default class ManageIn extends Component {
                   {
                     examlist.length > 3 ?
                       (
-                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[3])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"
@@ -768,7 +813,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 4 ? (
-                      result[0] + ' ' + (examlist[0].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
+                      result[4] + ' ' + (examlist[4].exam_time == 1 ? '09:30-12:30' : '13:30-16:30') 
 
                     ) : ''
                   }
@@ -776,7 +821,7 @@ export default class ManageIn extends Component {
                 <div>
                   {
                     examlist.length > 4 ? (
-                      examlist[0].building_no + ' ห้อง ' + examlist[0].room_no
+                      examlist[4].building_no + ' ห้อง ' + examlist[4].room_no
 
                     ) : ''
                   }
@@ -785,7 +830,7 @@ export default class ManageIn extends Component {
                   {
                     examlist.length > 4 ?
                       (
-                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[0])}>
+                        <Button variant="light" className="deleteIndata"   onClick={() => this.deletebt(examlist[4])}>
                           <img
                             src={deletebt}
                             className="deleteInicon"

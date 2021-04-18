@@ -55,7 +55,7 @@ export default class FacultyData extends Component {
         this.addrow = this.addrow.bind(this);
         this.handleChange_office_id = this.handleChange_office_id.bind(this)
         this.handleChange_office_name = this.handleChange_office_name.bind(this)
-        
+
 
         this.componentWillMount = this.componentWillMount.bind(this);
     }
@@ -67,17 +67,50 @@ export default class FacultyData extends Component {
         })
     }
     handleClosesubmit() {
-        this.setState({
-            showsubmit: false
-        })
-        window.location.reload(false);
+        axios.get('http://localhost:7777/t_office')
+            .then(res => {
+                const newIds = []
+                for (var i = 0; i < res.data.length; i++) {
+                    newIds.push(0)
+                }
+                this.setState({
+                    dept: res.data,
+                    deptid: res.data[0].Office_id,
+                    editlist: newIds,
+                    olddata: JSON.stringify(res.data),
+                    showsubmit: false
+
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        // window.location.reload(false);
     }
 
     handleClosefailed() {
-        this.setState({
-            showfailed: false
-        })
-        window.location.reload(false);
+        axios.get('http://localhost:7777/t_office')
+            .then(res => {
+                const newIds = []
+                for (var i = 0; i < res.data.length; i++) {
+                    newIds.push(0)
+                }
+                this.setState({
+                    dept: res.data,
+                    deptid: res.data[0].Office_id,
+                    editlist: newIds,
+                    olddata: JSON.stringify(res.data),
+                    showfailed: false
+
+                })
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+        // window.location.reload(false);
 
     }
 
@@ -89,7 +122,7 @@ export default class FacultyData extends Component {
     handleChange_office_name(event) {
         this.setState({ Office_name: event.target.value })
     }
-    
+
 
     //delete row input
     delrow = () => {
@@ -141,7 +174,7 @@ export default class FacultyData extends Component {
         newIds[index].Office_name = event.target.value//execute the manipulations
         this.setState({ name: newIds }) //set the new state
         //console.log(event.target.value)
-        
+
     }
     handleChange_editoffice_id(index, event) {
         const newIds = this.state.dept //copy the array
@@ -171,13 +204,30 @@ export default class FacultyData extends Component {
             })
             .then(response => {
                 console.log("response: ", response)
+                axios.get('http://localhost:7777/t_office')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+                        this.setState({
+                            dept: res.data,
+                            deptid: res.data[0].Office_id,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
 
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
 
@@ -194,13 +244,31 @@ export default class FacultyData extends Component {
             })
             .then(response => {
                 console.log("response: ", response)
+                this.delrow()
+                axios.get('http://localhost:7777/t_office')
+                    .then(res => {
+                        const newIds = []
+                        for (var i = 0; i < res.data.length; i++) {
+                            newIds.push(0)
+                        }
+                        this.setState({
+                            dept: res.data,
+                            deptid: res.data[0].Office_id,
+                            editlist: newIds,
+                            olddata: JSON.stringify(res.data)
+                        })
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
 
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
 
@@ -234,7 +302,7 @@ export default class FacultyData extends Component {
                 </td>
             </tr>
         })
-        
+
     }
 
     //enable edit row
@@ -433,7 +501,7 @@ export default class FacultyData extends Component {
                         <Modal.Header closeButton>
                             <Modal.Title>Success</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                        <Modal.Body>ลบข้อมูลสำเร็จ</Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>
@@ -442,7 +510,7 @@ export default class FacultyData extends Component {
                         <Modal.Header closeButton>
                             <Modal.Title>Failed</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                        <Modal.Body>ลบข้อมูลล้มเหลว</Modal.Body>
                         <Modal.Footer>
                         </Modal.Footer>
                     </Modal>

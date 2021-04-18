@@ -50,7 +50,7 @@ export default class ClassroomData extends Component {
                 <NavDropdown.Item href="/BuildingData">ข้อมูลอาคารเรียน</NavDropdown.Item>
                 <NavDropdown.Item href="/ClassroomData">ข้อมูลห้องเรียน</NavDropdown.Item>
                 <NavDropdown.Item href="/AvailableRoom">สถานะการใช้ห้องเรียน</NavDropdown.Item>
-                <NavDropdown.Item href="/ManageZone">แบ่งโซนห้องเรียน</NavDropdown.Item>
+                <NavDropdown.Item href="/ManageZone">อาคารเรียนหลักของแต่ละภาควิชา</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="ตารางสอน" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/DownloadData">ข้อมูลตารางสอน</NavDropdown.Item>

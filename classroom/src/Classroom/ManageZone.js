@@ -12,6 +12,7 @@ import axios from 'axios';
 import { Component } from 'react';
 import { json } from 'body-parser';
 import Pagination from "react-js-pagination";
+import Modal from 'react-bootstrap/Modal'
 import './ManageZone.css'
 
 export default class ManageZone extends Component {
@@ -26,10 +27,18 @@ export default class ManageZone extends Component {
             editlist: [],
             olddata: [],
             building: [],
-            floornum: []
+            floornum: [],
+            curr2_id:null,
+            showsubmit:false
         }
         this.pageselect = this.pageselect.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
+
+
+        //delete row
+        this.deletebt = this.deletebt.bind(this)
+        this.confirmdelete = this.confirmdelete.bind(this);
+
 
         //edit data
         this.enableedit = this.enableedit.bind(this)
@@ -37,6 +46,11 @@ export default class ManageZone extends Component {
         this.confirmedit = this.confirmedit.bind(this)
         this.handleChange_editbuilding_zone = this.handleChange_editbuilding_zone.bind(this)
         this.handleChange_editfloor_zone = this.handleChange_editfloor_zone.bind(this)
+
+        //modal
+        this.handleClose = this.handleClose.bind(this);
+        this.handleClosesubmit = this.handleClosesubmit.bind(this);
+        this.handleClosefailed = this.handleClosefailed.bind(this);
     }
 
     componentWillMount() {
@@ -101,6 +115,66 @@ export default class ManageZone extends Component {
         newIds[index].floor_zone = event.target.value //execute the manipulation
         this.setState({ name: newIds }) //set the new state
     }
+    //handle modal
+    handleClose() {
+        this.setState({
+            show: false
+        })
+    }
+    handleClosesubmit() {
+        axios.get('http://localhost:7777/zonedata')
+        .then(res => {
+
+            const newIds = []
+            for (var i = 0; i < res.data.length; i++) {
+                newIds.push(0)
+            }
+            this.setState({
+                name: res.data,
+                editlist: newIds,
+                olddata: JSON.stringify(res.data),
+                showsubmit: false
+
+            })
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+
+        // this.setState({
+        //     showsubmit: false
+        // })
+        // window.location.reload(false);
+    }
+
+    handleClosefailed() {
+        axios.get('http://localhost:7777/zonedata')
+        .then(res => {
+
+            const newIds = []
+            for (var i = 0; i < res.data.length; i++) {
+                newIds.push(0)
+            }
+            this.setState({
+                name: res.data,
+                editlist: newIds,
+                olddata: JSON.stringify(res.data),
+                showfailed: false
+
+            })
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        // this.setState({
+        //     showfailed: false
+        // })
+        // window.location.reload(false);
+
+    }
+
 
     //edit floornum if maxfloor < floorzone
     editfloor_zone(index, value) {
@@ -108,6 +182,39 @@ export default class ManageZone extends Component {
         const newIds = this.state.name //copy the array
         newIds[index].floor_zone = value //execute the manipulation
         this.setState({ name: newIds }) //set the new state
+    }
+
+    //delete row button 
+    deletebt = (data) => {
+        this.setState({
+            show: true,
+            curr2_id: data
+        })
+    }
+
+    //confirm delete row in table function
+    confirmdelete() {
+        console.log(this.state.curr2_id)
+        axios
+            .post("http://localhost:7777/zonedata/delete", { data: { curr2_id: this.state.curr2_id } })
+            .then(response => {
+                console.log("response: ", response)
+                if (response.data == "Success") {
+                    this.setState({
+                        showsubmit: !this.state.showsubmit
+                    })
+                }
+                else {
+                    this.setState({
+                        showfailed: !this.state.showfailed
+                    })
+                }
+                // do something about response
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        this.handleClose()
     }
 
     //cancel edit row
@@ -124,22 +231,37 @@ export default class ManageZone extends Component {
     confirmedit = (index) => {
         let olddata = JSON.parse(this.state.olddata)
         axios
-            .put("http://localhost:7777/groupdata/update", {
+            .put("http://localhost:7777/zonedata/update", {
 
                 curr2_id: olddata[index].curr2_id,
-                class: olddata[index].class,
-                sec1: this.state.name[index].sec1,
-                sec2: this.state.name[index].sec2,
+                building_zone: this.state.name[index].building_zone,
+                floor_zone: this.state.name[index].floor_zone,
             })
             .then(response => {
                 console.log("response: ", response)
-
+                axios.get('http://localhost:7777/zonedata')
+                .then(res => {
+    
+                    const newIds = []
+                    for (var i = 0; i < res.data.length; i++) {
+                        newIds.push(0)
+                    }
+                    this.setState({
+                        name: res.data,
+                        editlist: newIds,
+                        olddata: JSON.stringify(res.data)
+                    })
+    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
 
@@ -154,6 +276,8 @@ export default class ManageZone extends Component {
             this.setState({ editlist: newIds }) //set the new state
         }
     }
+
+    
 
     render() {
         const item = this.state.name.filter((member) => {
@@ -226,8 +350,8 @@ export default class ManageZone extends Component {
                         <Button variant="light" className="editdata" onClick={() => this.enableedit(index)}>
                             <img src={editbt} className="editicon" alt="edit" />
                         </Button>
-                        <Button variant="light" className="deletedata">
-                            <img src={deletebt} className="deleteicon" alt="delete" />
+                        <Button variant="light" className="deletedata" onClick={() => this.deletebt(data.curr2_id)}>
+                                <img src={deletebt} className="deleteicon" alt="delete" />
                         </Button>
                     </td>
                 </tr>
@@ -248,7 +372,7 @@ export default class ManageZone extends Component {
                 <div className="content-wrap">
 
                     <Nav />
-                    <h1 class="state">แบ่งโซนห้องเรียนแต่ละภาควิชา</h1>
+                    <h1 class="state">อาคารเรียนหลักของแต่ละภาควิชา</h1>
                     <div id="detail">
                         <Table striped responsive className="Crtable">
                             <thead>
@@ -265,9 +389,9 @@ export default class ManageZone extends Component {
                                 }
                             </tbody>
                         </Table>
-                        <Button variant="light" className="adddata">
+                        {/* <Button variant="light" className="adddata">
                             <img src={addbt} className="addicon" alt="add" />
-                        </Button>
+                        </Button> */}
 
                         <Pagination
                             activePage={this.state.pageclick}
@@ -280,7 +404,39 @@ export default class ManageZone extends Component {
 
                         />
                     </div>
-                </div>
+                </div>  
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>คำเตือน</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>คุณแน่ใจหรือไม่ที่จะต้องการลบข้อมูลนี้</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.handleClose}>
+                                ยกเลิก
+                        </Button>
+                            <Button variant="primary" onClick={this.confirmdelete}>
+                                ยืนยัน
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Modal size="sm" show={this.state.showsubmit} onHide={this.handleClosesubmit}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Success</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Modal size="sm" show={this.state.showfailed} onHide={this.handleClosefailed}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Failed</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
                 <div className="footer">
                     <Foot />
                 </div>

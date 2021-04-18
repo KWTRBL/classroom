@@ -17,10 +17,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width:30%;
+    width:500px;
 }
 .selector{
-    width:50%;
+    width:60%;
+}
+#btnDWIn{
+    float: right;
+    flex-direction: row-reverse;
+    margin-top: 10px;
 }
 /*
 .year{

@@ -41,13 +41,13 @@ cron.schedule("0 0 1 1,6,8 *", () => {
 });
 
 setInterval(async () => {
-  // console.log('start :', new Date())
-  // await regupdate.read(callback =>{
-  //   console.log('callback :',callback.length)
-  // })
-  // console.log('end :', new Date())
+  console.log('start :', new Date())
+  await regupdate.read(callback =>{
+    console.log('callback :',callback.length)
+  })
+  console.log('end :', new Date())
 }
-  , 30000);
+  , 86400000);
 
 var options = {
   host: "localhost",
@@ -87,18 +87,15 @@ app.use(
 
 //login
 app.post("/login", (req, res) => {
-
   // Router เวลาเรียกใช้งาน
   auth.login(req, function (callback) {
     if (callback.message == "login success") {
-      const timeout = 60 * 60 * 1000;
-      req.session.cookie.maxAge = timeout;
+      // const timeout = 60 * 60 * 1000;
+      // console.log(req.session.cookie.maxAge)
+      // req.session.cookie.maxAge = timeout;
       req.session.token = callback.token;
-      res.cookie("token", callback.token, { maxAge: timeout, httpOnly: true });
-      res.cookie("session_id", req.sessionID, {
-        maxAge: timeout,
-        httpOnly: true,
-      });
+      res.cookie("token", callback.token, { httpOnly: true });
+      res.cookie("session_id", req.sessionID, { httpOnly: true });
       req.session.save();
     }
     console.log(callback.role)
@@ -121,7 +118,7 @@ app.get("/auth", (req, res) => {
       });
     } else {
       res.status(200).send({
-        login: callback,
+        login: callback.isLogin,
       });
     }
 
@@ -230,6 +227,24 @@ app.get("/zonedata", (req, res) => {
     res.json(callback);
   });
 });
+app.put("/zonedata/update", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  zonedata.update(req, function (callback) {
+    res.send(callback);
+  });
+});
+app.post("/zonedata/delete", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  //console.log(req.body.data.curr2_id)
+  zonedata.delete(req, function (callback) {
+    if (callback) {
+      res.send("Success");
+    } else {
+      res.send("Error");
+    }
+    // res.send(callback);
+  });
+});
 
 //Curriculum Data From teachtable
 app.get("/curriculum", (req, res) => {
@@ -285,11 +300,25 @@ app.put("/groupdata/update", (req, res) => {
     res.send(callback);
   });
 });
+app.post("/groupdata/delete", (req, res) => {
+  // Router เวลาเรียกใช้งาน
+  //console.log(req.body.data.curr2_id)
+  groupdata.delete(req, function (callback) {
+    if (callback) {
+      res.send("Success");
+    } else {
+      res.send("Error");
+    }
+    // res.send(callback);
+  });
+});
+
 
 //Teach Data
 app.get("/teachdata", (req, res) => {
   // Router เวลาเรียกใช้งาน
   teachdata.read(function (callback) {
+
     res.json(callback);
   });
 });
@@ -365,7 +394,9 @@ app.post("/availableroom/delete", (req, res) => {
 //Manage room
 app.post("/manageroom", (req, res) => {
   // Router เวลาเรียกใช้งาน
-  manageroom.read(req, function (callback) {
+  console.log('manage room')
+  manageroom.read(req, async function (callback) {
+    console.log('success')
     res.json(callback);
   });
 });
@@ -597,11 +628,11 @@ app.delete("/exam_committee/delete", (req, res) => {
   // Router เวลาเรียกใช้งาน
   exam_schedule.removedata(req, function (callback) {
     // console.log(callback);
-    // if (callback) {
-    //   res.send("Success");
-    // } else {
-    //   res.send("Error");
-    // }
+    if (callback) {
+      res.send("Success");
+    } else {
+      res.send("Error");
+    }
   });
 });
 

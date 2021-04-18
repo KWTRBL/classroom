@@ -77,18 +77,44 @@ export default class BuildingData extends Component {
         })
     }
     handleClosesubmit() {
+        axios.get('http://localhost:7777/building')
+            .then(res => {
+                const newIds = this.state.editlist.slice()
+                for (var i = 0; i < res.data.length; i++) {
+                    newIds.push(0)
+                }
+                this.setState({
+                    name: res.data,
+                    editlist: newIds,
+                    olddata: JSON.stringify(res.data)
+                })
 
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
         this.setState({
             showsubmit: false
         })
-        window.location.reload(false);
+
+        // window.location.reload(false);
     }
 
     handleClosefailed() {
+        
+        const newIds = this.state.editlist.slice() //copy the array
+        for (var i = 0; i < newIds.length; i++) {
+            newIds[i] = 0
+        }
+        // newIds[index] = 0//execute the manipulations
         this.setState({
+            editlist: newIds,
+            name: JSON.parse(this.state.olddata),
             showfailed: false
-        })
-        window.location.reload(false);
+        }) //set the new state
+
+
+        // window.location.reload(false);
 
     }
 
@@ -136,13 +162,31 @@ export default class BuildingData extends Component {
             })
             .then(response => {
                 console.log("response: ", response)
+                this.delrow()
 
+                axios.get('http://localhost:7777/building')
+                .then(res => {
+                    const newIds = this.state.editlist.slice()
+                    for (var i = 0; i < res.data.length; i++) {
+                        newIds[i] = 0
+                    }
+                    this.setState({
+                        name: res.data,
+                        editlist: newIds,
+                        olddata: JSON.stringify(res.data)
+                    })
+    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+    
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
 
@@ -198,7 +242,7 @@ export default class BuildingData extends Component {
             building_name: null,
             floor_num: null
         })
-        
+
     }
 
     //delete row button 
@@ -256,13 +300,31 @@ export default class BuildingData extends Component {
             })
             .then(response => {
                 console.log("response: ", response)
-
+                axios.get('http://localhost:7777/building')
+                .then(res => {
+                    const newIds = this.state.editlist.slice()
+                    for (var i = 0; i < res.data.length; i++) {
+                        newIds[i] = 0
+                    }
+                    this.setState({
+                        name: res.data,
+                        editlist: newIds,
+                        olddata: JSON.stringify(res.data)
+                    })
+    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+    
                 // do something about response
             })
             .catch(err => {
                 console.error(err)
             })
-        window.location.reload(false);
+
+            console.log('confirm edit')
+        // window.location.reload(false);
 
     }
 

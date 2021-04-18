@@ -1,15 +1,31 @@
 .textbox {
     margin-left: 10px;
     margin-right: 10px;
-
 }
 
+.br{
+    margin-bottom: 30px;
+}
+
+.name{
+    margin-left: 10px;
+}
+
+.name2{
+    margin-right: 170px;
+}
 .state-center {
     position: relative;
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
 
+}
+
+.selecttype{
+    width: 170px;
+    margin-right: 8px;
+    margin-bottom: 2%;
 }
 
 .selectExchange {

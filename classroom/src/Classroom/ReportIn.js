@@ -415,8 +415,8 @@ export default class ReportIn extends Component {
                                 {exam_timedata}
                             </select>
                         </li>
-                        <li>
-                            <Button variant="primary" className="" onClick={() => this.downloadexcel()}>แสดงข้อมูล
+                        <li id="btnDWIn">
+                        <Button variant="primary" className="" onClick={() => this.downloadexcel()}>แสดงข้อมูล
                         </Button>
 
                         </li>

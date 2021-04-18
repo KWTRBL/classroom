@@ -143,6 +143,7 @@ export default class FacultyData extends Component {
     this.setState({ Lastname: event.target.value })
   }
   handleChange_Position(event) {
+    console.log(event.target.value)
     this.setState({ position: event.target.value })
   }
   handleChange_conditionstatus = (event) => {
@@ -157,6 +158,12 @@ export default class FacultyData extends Component {
 
   //insert row confirm 
   confirmdata = () => {
+    if(this.state.Prename == null || this.state.Firstname == null || this.state.Lastname == null|| (this.state.position == null&& this.state.Typesearch == 1 )|| this.state.t_conditionIn == null || this.state.person_id == null ||
+      this.state.Prename == '' || this.state.Firstname == '' || this.state.Lastname == ''|| (this.state.position == '' && this.state.Typesearch == 1)  || this.state.t_conditionIn == '' || this.state.person_id == ''
+      ){
+      alert('กรุณาใส่ข้อมูลให้ครบ')
+      return
+    }
     axios
       .post("http://localhost:7777/t_condition/insert", {
         data: {
@@ -172,23 +179,46 @@ export default class FacultyData extends Component {
         }
       })
       .then(response => {
+        
         console.log("response: ", response)
-
+        this.delrow()
+        axios
+        .get("http://localhost:7777/t_condition")
+        .then((res) => {
+          const newIds = []
+          for (var i = 0; i < res.data.length; i++) {
+            newIds.push(0);
+          }
+          console.log(res.data)
+          this.setState({
+            t_condition: res.data,
+            editlist: newIds,
+            olddata: JSON.stringify(res.data),
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
         // do something about response
       })
       .catch(err => {
         console.error(err)
       })
-    window.location.reload(false);
+    // window.location.reload(false);
 
   }
 
   //show row input for insert  บรรทัดนี้
   addrow = () => {
     //console.log("add")
-    this.setState({
-      office_id_search:"01"
-    })
+    // this.setState({
+    //   office_id_search:"01"
+    // })
+    if(this.state.office_type_search==2){
+      this.setState({
+        Office_id:'50'
+      })
+    }
     const office_check = []
     const office_nameList = this.state.dept.map((tabledata, index) => {
       office_check.push(tabledata.Office_id)
@@ -307,6 +337,7 @@ export default class FacultyData extends Component {
       this.setState({
         position: "",
       })
+      console.log(this.state)
       if(this.state.office_type_search==1){
         return (
           this.setState({
@@ -349,7 +380,7 @@ export default class FacultyData extends Component {
               </td>
               <td>
                 {this.state.dept.map((data) => {
-                  if (this.state.office_id_search == data.Office_id){
+                  if (this.state.deptid == data.Office_id){
                   return (
                     <option selected value={data.Office_id}>{data.Office_name}</option>
                   )
@@ -523,17 +554,53 @@ export default class FacultyData extends Component {
 
 
   handleClosesubmit() {
-    this.setState({
-      showsubmit: false
+    axios
+    .get("http://localhost:7777/t_condition")
+    .then((res) => {
+      const newIds = []
+      for (var i = 0; i < res.data.length; i++) {
+        newIds.push(0);
+      }
+      console.log(res.data)
+      this.setState({
+        t_condition: res.data,
+        editlist: newIds,
+        olddata: JSON.stringify(res.data),
+        showsubmit: false
+      });
     })
-    window.location.reload(false);
+    .catch(function (error) {
+      console.log(error);
+    });
+    // this.setState({
+    //   showsubmit: false
+    // })
+    // window.location.reload(false);
   }
 
   handleClosefailed() {
-    this.setState({
-      showfailed: false
+    axios
+    .get("http://localhost:7777/t_condition")
+    .then((res) => {
+      const newIds = []
+      for (var i = 0; i < res.data.length; i++) {
+        newIds.push(0);
+      }
+      console.log(res.data)
+      this.setState({
+        t_condition: res.data,
+        editlist: newIds,
+        olddata: JSON.stringify(res.data),
+        showfailed: false
+      });
     })
-    window.location.reload(false);
+    .catch(function (error) {
+      console.log(error);
+    });
+    // this.setState({
+    //   showfailed: false
+    // })
+    // window.location.reload(false);
 
   }
 
@@ -542,6 +609,12 @@ export default class FacultyData extends Component {
     this.setState({
       rows: null,
       person_id: null,
+      position:null,
+      Firstname:null,
+      Prename:null,
+      Lastname:null,
+      Office_id:null
+
     })
     //console.log("aa")
   }
@@ -713,6 +786,7 @@ export default class FacultyData extends Component {
       teacher: JSON.parse(this.state.olddata),
     });
     this.pageselectvalue(1);
+    this.delrow();
   };
 
   searchType = (event) => {
@@ -727,6 +801,7 @@ export default class FacultyData extends Component {
     let keyword = event.target.value;
     this.setState({
       office_type: 1,
+      office_type_search: '1',
       deptid: "01",
       person_type_search: keyword,
       Typesearch: parseInt(keyword),
@@ -735,6 +810,7 @@ export default class FacultyData extends Component {
 
     });
     this.pageselectvalue(1);
+    this.delrow();
   };
 
   searchOfficeType = (event) => {
@@ -754,6 +830,7 @@ export default class FacultyData extends Component {
       teacher: JSON.parse(this.state.olddata),
     });
     this.pageselectvalue(1);
+    this.delrow();
   };
 
   handleOpen(index) {
@@ -853,7 +930,7 @@ export default class FacultyData extends Component {
         Firstname: this.state.t_condition[index].Firstname,
         Lastname: this.state.t_condition[index].Lastname,
         Position: this.state.t_condition[index].position,
-        Office_id: this.state.t_condition[index].Office_id,
+        Office_id: this.state.t_condition[index].faculty_id,
         condition_status: this.state.t_condition[index].condition_status,
         person_id: this.state.t_condition[index].person_id,
         building_no: this.state.t_condition[index].building_no,
@@ -869,11 +946,30 @@ export default class FacultyData extends Component {
       })
       .then((response) => {
         console.log("response: ", response);
+        axios
+        .get("http://localhost:7777/t_condition")
+        .then((res) => {
+          const newIds = []
+          for (var i = 0; i < res.data.length; i++) {
+            newIds.push(0);
+          }
+          console.log(res.data)
+          this.setState({
+            t_condition: res.data,
+            editlist: newIds,
+            olddata: JSON.stringify(res.data),
+            show:false
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
       })
       .catch((err) => {
         console.error(err);
       });
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   handleChangeWeek_1_toggle = (event, data) => {
@@ -944,15 +1040,15 @@ export default class FacultyData extends Component {
     const office_check = []
     var office_id_data = this.state.t_condition.filter((data, index) => {
       if (index == this.state.condition_index) {
-        console.log('data edit', index)
+        // console.log('data edit', index)
         return data.faculty_id
       }
     }
     )
-    console.log(office_id_data)
+    // console.log(office_id_data)
     const office_nameList = this.state.dept.map((tabledata, index) => {
       office_check.push(tabledata.Office_id)
-      console.log(office_id_data)
+      // console.log(office_id_data)
       let officedata = office_id_data.length == 0 ? '9999' : office_id_data[0].faculty_id
       if (tabledata.Office_id >= 50)
         return <option value={tabledata.Office_id} selected={officedata == tabledata.Office_id} >{tabledata.Office_name}</option>
@@ -1800,8 +1896,8 @@ export default class FacultyData extends Component {
                 hidden={this.state.Typesearch % 2}
                 onChange={(e) => this.searchOfficeType(e)}
               >
-                <option value="1"> ภาควิชา </option>
-                <option value="2"> สำนักงานคณบดี </option>
+                <option value="1" selected = {this.state.office_type_search=='1'}> ภาควิชา </option>
+                <option value="2" selected = {this.state.office_type_search=='2'} > สำนักงานคณบดี </option>
               </select>
 
               <h5
@@ -1897,7 +1993,7 @@ export default class FacultyData extends Component {
                       </h5>
                     </div>
 
-                    <div className="filter">
+                    {/* <div className="filter">
                       <h5 className="yearDLfil">เงื่อนไขอาคาร</h5>
                       <select
                         className="selectbuilding"
@@ -1929,7 +2025,7 @@ export default class FacultyData extends Component {
                           }
                         )}
                       </select>
-                    </div>
+                    </div> */}
                     <div className="filter">
                       <h5 className="yearDLfil">คุมสอบวิชาตัวเอง</h5>
                       <Form>
@@ -2936,7 +3032,7 @@ export default class FacultyData extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Success</Modal.Title>
           </Modal.Header>
-          <Modal.Body>บันทึกข้อมูลสำเร็จ</Modal.Body>
+          <Modal.Body>ลบข้อมูลสำเร็จ</Modal.Body>
           <Modal.Footer>
           </Modal.Footer>
         </Modal>
@@ -2945,7 +3041,7 @@ export default class FacultyData extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Failed</Modal.Title>
           </Modal.Header>
-          <Modal.Body>บันทึกข้อมูลล้มเหลว</Modal.Body>
+          <Modal.Body>ลบข้อมูลล้มเหลว</Modal.Body>
           <Modal.Footer>
           </Modal.Footer>
         </Modal>

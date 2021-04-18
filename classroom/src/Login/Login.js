@@ -18,6 +18,8 @@ export default class ManageZone extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+
+
   handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -64,6 +66,7 @@ export default class ManageZone extends Component {
   }
 
   render() {
+    console.log(this.props.location.pathname)
     return (
       <div>
         <header>

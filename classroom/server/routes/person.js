@@ -34,7 +34,7 @@ module.exports.getfilter = function (callback) {
             callback(rows)
             connection.release(); // return the connection to pool
 
-            console.log("avbbb")
+            // console.log("avbbb")
         });
     });
 

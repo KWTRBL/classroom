@@ -39,3 +39,19 @@ module.exports.update = function(req,callback){
 
 
 }
+module.exports.delete = function (req,callback) {
+    let curr2_id = req.body.data.curr2_id
+    let classdata = req.body.data.class
+    let sql = "UPDATE t_section SET sec1 = 0, sec2 = 0, sec3 = 0 WHERE curr2_id = ? and class = ?"  // คำสั่ง sql
+    pool.getConnection( (err, connection) => {
+        if (err) throw err;
+        console.log('connected as id ' + connection.threadId);
+        pool.query(sql,[curr2_id,classdata], async (err, rows) => {
+            if (err) throw err;
+            //console.log('The data from users table are: \n', rows);
+            callback(rows.affectedRows)
+            connection.release(); // return the connection to pool
+            
+        });
+    });
+}

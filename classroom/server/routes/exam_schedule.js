@@ -87,7 +87,7 @@ module.exports.ownsubject = async function (req, callback) {
   // var semester = 2;
   // var mid_or_final = "M";
   // var faculty_id = "05";
-  var returndata = null;
+  // var returndata = null;
   //คำนวนจำนวนครั้งที่แต่ละคนต้องคุม
 
   // var facultylist = []
@@ -151,7 +151,7 @@ module.exports.ownsubject = async function (req, callback) {
   Examweeklist[7] = examweekdata.week4_end;
 
   //เก็บวันสอบ
-  var Examdaylist = [];
+  var Examdaylist = []; // [[],[],[],[]]
   for (let i = 0; i < Examweeklist.length / 2; i++) {
     var dateArray = getDates(
       new Date(Examweeklist[2 * i]),
@@ -172,7 +172,9 @@ module.exports.ownsubject = async function (req, callback) {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       // console.log("element : ", element);
+
       var day = new Date(element[0]);
+      //[date,examtime]
       // console.log('data ',day.getUTCDate())
       // console.log(new Intl.DateTimeFormat('en-US', options).format(day));
       // แปลงปีให้เป็น คศ แล้วค่อยแปลงกลับ
@@ -201,9 +203,9 @@ module.exports.ownsubject = async function (req, callback) {
     // console.log(subjectList)
     // console.log(' ')
     // }
-    if (teacherdata.person_id == "10521") {
-      console.log('length ', subjectList.length)
-    }
+    // if (teacherdata.person_id == "10521") {
+    //   console.log('length ', subjectList.length)
+    // }
     if (!subjectList.length) {
       await getdataFromSql(`
         UPDATE t_condition
@@ -214,6 +216,7 @@ module.exports.ownsubject = async function (req, callback) {
 
     //หาวันที่ไม่ว่าง
     var notfreedayinweek = [];
+    //[]
     notfreedayinweek[0] =
       teacherdata.freetime_week1 != "" ?
         teacherdata.freetime_week1.split(",") :
@@ -253,12 +256,10 @@ module.exports.ownsubject = async function (req, callback) {
         const examday = dayInweekExamdata[dayindex];
 
         // for ตามวันที่ไม่ว่าง
-
         for (
           let notfreeindex = 0; notfreeindex < notfreedayinweekdata.length; notfreeindex++
         ) {
           const notfreeday = notfreedayinweekdata[notfreeindex].split("x"); //[2,1]
-
           if (
             daysInWeek[notfreeday[0] - 1] == examday[0] && notfreeday[1] == examday[1]
           ) {
@@ -432,6 +433,7 @@ module.exports.ownsubject = async function (req, callback) {
 
 
     }
+
     //เอาข้อมูลวันที่มีสอบมาใส่ใหม่
     await getdataFromSql(`
       UPDATE t_condition
@@ -955,6 +957,7 @@ module.exports.othersubject = async function (req, callback) {
         // list วิชามา
         for (let subjectindex = 0; subjectindex < subjectList.length; subjectindex++) {
           let subject = subjectList[subjectindex];
+          
           var checkday = false
           //list day มา 
           for (let dayindex = 0; dayindex < Day.length; dayindex++) {
@@ -3445,7 +3448,9 @@ module.exports.removedata = function (req, callback) {
     if (err) throw err;
     console.log("exam committee");
     pool.query(sql, (err, rows) => {
-      if (err) throw err;
+      if (err){
+        callback(0)
+      };
       console.log("The data from users table are: \n", rows);
       // callback(rows);
       connection.release(); // return the connection to pool
@@ -3464,14 +3469,13 @@ module.exports.examdata = async function (req, callback) {
   // name = name.split(' ')
 
   var datayear = await getdataFromSql(`
-  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name1}' and person.Lastname = '${surname1}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
+  select person.Firstname,person.Lastname,t_exam_committee.year,t_exam_committee.semester,t_exam_committee.mid_or_final from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name1}' and person.Lastname = '${surname1}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
   `)
   var data1year = await getdataFromSql(`
-  select person.Firstname,person.Lastname,t_exam_committee.* from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name2}' and person.Lastname = '${surname2}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
-  
+  select person.Firstname,person.Lastname,t_exam_committee.year,t_exam_committee.semester,t_exam_committee.mid_or_final from t_exam_committee,person where person.Person_id = t_exam_committee.person_id and person.Firstname = '${name2}' and person.Lastname = '${surname2}' order by t_exam_committee.year desc,t_exam_committee.semester desc ,t_exam_committee.mid_or_final asc limit 1 
   `)
 
-  // console.log(datayear[0].year,data1year[0].year,datayear[0].semester,data1year[0].semester)
+  console.log(datayear[0].year,data1year[0].year,datayear[0].semester,data1year[0].semester)
   if (datayear[0].year != data1year[0].year || datayear[0].semester != data1year[0].semester || datayear[0].mid_or_final != data1year[0].mid_or_final) {
     callback('ไม่สามารถแลกวันคุมสอบได้')
     return
@@ -3754,17 +3758,19 @@ module.exports.exportfile = async function (req, callback) {
         //Write Column Title in Excel file
         let headingColumnIndex = 1;
         heading.forEach(headingdata => {
-          ws.cell(3, headingColumnIndex++)
-            .string(headingdata)
+          ws.cell(3, headingColumnIndex++).string(headingdata)
         });
         // //Write Data in Excel file
         let rowIndex = 4;
+        
         data.forEach(record => {
           let columnIndex = 1;
           Object.keys(record).forEach(columnName => {
+            
             if (Object.prototype.toString.call(record[columnName]) === "[object Date]") {
               // console.log('isdate')
               let daydata = record[columnName]
+              
               daydata.setFullYear(daydata.getFullYear() - 543)
               let dateinweek = dayinweek[daydata.getDay()]
               let daystr = daydata.getDate()

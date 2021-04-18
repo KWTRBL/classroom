@@ -32,14 +32,14 @@ const jwt = require("jsonwebtoken");
 
 const AppWithRouter = () => (
   <BrowserRouter basename="/cims">
-    <Route exact path="/" component={Login} />
+    <Route exact path="/" component={RequireAuth(Login,0)} />
 
     <Route exact path="/BuildingData" component={RequireAuth(BuildingData,1)} />
     <Route exact path="/ClassroomData" component={RequireAuth(ClassroomData,1)} />
     <Route exact path="/AvailableRoom" component={RequireAuth(AvailableRoom,1)} />
     <Route exact path="/DownloadData" component={RequireAuth(DownloadData,1)} />
     <Route exact path="/ManageGroup" component={RequireAuth(ManageGroup,1)} />
-    <Route exact path="/SpecialCr" component={RequireAuth(SpecialCr,1)} />
+    {/* <Route exact path="/SpecialCr" component={RequireAuth(SpecialCr,1)} /> */}
     <Route exact path="/ManageZone" component={RequireAuth(ManageZone,1)} />
     <Route exact path="/ManageCr" component={RequireAuth(ManageCr,1)} />
 
@@ -49,7 +49,7 @@ const AppWithRouter = () => (
     <Route exact path="/ReportIn" component={RequireAuth(ReportIn,2)} />
     <Route exact path="/ExchangeIn" component={RequireAuth(ExchangeIn,2)} />
     <Route exact path="/InvigilatorData" component={RequireAuth(InvigilatorData,2)} />
-    <Route exact path="/TeacherteachData" component={RequireAuth(TeacherteachData,2)} />
+    {/* <Route exact path="/TeacherteachData" component={RequireAuth(TeacherteachData,2)} /> */}
 
 
   </BrowserRouter>
@@ -74,10 +74,12 @@ const RequireAuth = (Component,value) => {
 
     async componentWillMount() {
       let result = await axios.get('http://localhost:7777/auth', { withCredentials: true });
-      const isLogin = result.data.login
 
-      // var decoded = jwt.verify(token, 'shhhhh');
-      console.log(result.data.role,value)
+      const isLogin = result.data.login
+      if(isLogin == 0){
+        result.data.role = 0
+      }
+      // console.log(result.data.role,value,isLogin,this.props.location.pathname,typeof this.props.location.pathname)
       this.setState({
         login: isLogin,
         role:result.data.role
@@ -86,11 +88,21 @@ const RequireAuth = (Component,value) => {
     }
     render() {
       var role = this.state.role
-      // role = 2
       if (this.state.login == null) {
         return <div></div>
       }
       else if (this.state.login == 1) {
+        if(this.props.location.pathname == '/'){
+          if (role == 1) {
+            return <Redirect to={{ pathname: '/buildingdata', state: { from: this.props.location } }} />
+          }
+          if (role == 2) {
+            return <Redirect to={{ pathname: '/facultydata', state: { from: this.props.location } }} />
+          }
+          if (role == 3) {
+            return <Redirect to={{ pathname: '/buildingdata', state: { from: this.props.location } }} />
+          }
+        }
         if(role == 1 && role != value){
           return <Redirect to={{ pathname: '/buildingdata', state: { from: this.props.location } }} />
         }
@@ -101,12 +113,13 @@ const RequireAuth = (Component,value) => {
           return <Component {...this.props} />
         }
         return <Component {...this.props} />
-
       }
-      else if (this.state.login == 0) {
+      else if (this.state.login == 0 && this.props.location.pathname != '/') {
         return <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
       }
-
+      else if (this.state.login == 0 && this.props.location.pathname == '/') {
+        return <Component {...this.props} />
+      }
     }
   }
 
