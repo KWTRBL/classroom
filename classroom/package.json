@@ -39,7 +39,7 @@
     "react-scripts": "3.4.1",
     "redis": "^3.0.2",
     "sql-importer": "^1.0.3",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "react-scripts start",
